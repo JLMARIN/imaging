@@ -20,7 +20,7 @@ def set_resolution( *args ):
  
 def read_settings():
 	print "resolution = " , int(vc.get(cv2.CAP_PROP_FRAME_WIDTH)), "x" , int(vc.get(cv2.CAP_PROP_FRAME_HEIGHT)), " / FPS = " , vc.get(cv2.CAP_PROP_FPS)
-    #print "codec = " , vc.get(cv2.CAP_P,ROP_FOURCC)
+    #print "codec = " , vc.get(cv2.CAP_PROP_FOURCC)
     #print "format = " , vc.get(cv2.CAP_PROP_FORMAT)
     #print "brightness = " , vc.get(cv2.CAP_PROP_BRIGHTNESS)
 
