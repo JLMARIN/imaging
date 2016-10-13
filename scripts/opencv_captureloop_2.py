@@ -17,9 +17,15 @@ resolutions = [(320, 240),
 frame = 0
 
 def set_resolution(*args):
-
     vc.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, args[0][0])   # set frame width in pixels
     vc.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, args[0][1])  # set frame height in pixels
+
+def setup():
+    set_resolution(resolutions[9])
+
+    #vc.set(cv2.cv.CV_CAP_PROP_AUTO_EXPOSURE, 1)   # enable manual exposure control
+    #vc.set(cv2.cv.CV_CAP_PROP_EXPOSURE, 20)   # set exposure
+    #vc.set(cv2.cv.CV_CAP_PROP_BRIGHTNESS, 15)   # set brightness
 
 def capture_frame():    
     capture_frame.count += 1    
@@ -33,8 +39,8 @@ if __name__ == '__main__':
     vc = cv2.VideoCapture(0)
 
     if vc.isOpened():
-        # set resolution
-        set_resolution(resolutions[9])
+        # configure camera
+        setup()
         
         print "Starting..."
         rt = RepeatedTimer(1, capture_frame)
