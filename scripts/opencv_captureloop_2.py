@@ -1,4 +1,6 @@
 import cv2
+from customTimer import RepeatedTimer
+from time import sleep
 
 # define list of resolution tuples in format (width,height)
 resolutions = [(320, 240),
@@ -12,12 +14,19 @@ resolutions = [(320, 240),
                (2048, 1536),
                (2592, 1944)]
 
+frame = 0
 
 def set_resolution(*args):
 
     vc.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, args[0][0])   # set frame width in pixels
     vc.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, args[0][1])  # set frame height in pixels
 
+def capture_frame():    
+    capture_frame.count += 1    
+    cv2.imwrite("frame%04d.jpg" % capture_frame.count, frame)
+    print "captured frame " + str(capture_frame.count)
+
+capture_frame.count = 0
 
 if __name__ == '__main__':
 
@@ -25,21 +34,21 @@ if __name__ == '__main__':
 
     if vc.isOpened():
         # set resolution
-        set_resolution(resolutions[5])
+        set_resolution(resolutions[9])
+        
+        print "Starting..."
+        rt = RepeatedTimer(1, capture_frame)
 
-        count = 0
-
-        while count < 20:
-            retval, frame = vc.read()
-            cv2.imwrite("frame%04d.jpg" % count, frame)
-
-            if cv2.waitKey(1) & 0xFF == ord('q'):  # exit on 'q'
-                break
-
-            count += 1
+        try:        
+            while True:                       
+                retval, frame = vc.read()
+        except KeyboardInterrupt:
+            print "loop interrupted!"        
+        
+        rt.stop()
 
         vc.release()
         cv2.destroyAllWindows()
 
-        print "program exit"
+    print "program exit"
 

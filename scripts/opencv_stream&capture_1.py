@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     if vc.isOpened():
         # set resolution
-        set_resolution(resolutions[8])
+        set_resolution(resolutions[5])
 
         count = 0
 
