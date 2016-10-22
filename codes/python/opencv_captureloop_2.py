@@ -21,7 +21,7 @@ def set_resolution(*args):
     vc.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, args[0][1])  # set frame height in pixels
 
 def setup():
-    set_resolution(resolutions[9])
+    set_resolution(resolutions[8])
 
     #vc.set(cv2.cv.CV_CAP_PROP_AUTO_EXPOSURE, 1)   # enable manual exposure control
     #vc.set(cv2.cv.CV_CAP_PROP_EXPOSURE, 20)   # set exposure
@@ -29,7 +29,7 @@ def setup():
 
 def capture_frame():    
     capture_frame.count += 1    
-    cv2.imwrite("frame%04d.jpg" % capture_frame.count, frame)
+    cv2.imwrite("pics/frame%04d.jpg" % capture_frame.count, frame)
     print "captured frame " + str(capture_frame.count)
 
 capture_frame.count = 0

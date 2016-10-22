@@ -19,18 +19,18 @@ resolutions = [(320, 240),
 frame = 0
 
 def set_resolution(*args):
-    vc.set(cv2.CAP_PROP_FRAME_WIDTH, args[0][0])   # set frame width in pixels
-    vc.set(cv2.CAP_PROP_FRAME_HEIGHT, args[0][1])  # set frame height in pixels
+    vc.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, args[0][0])   # set frame width in pixels
+    vc.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, args[0][1])  # set frame height in pixels
 
 def setup():
     set_resolution(resolutions[8])
 
-    command = 'v4l2-ctl -d /dev/video0 -c brightness=13,exposure_auto=1,exposure_absolute=20'
+    command = 'v4l2-ctl -d /dev/video0 -c brightness=15,exposure_auto=1,exposure_absolute=20'
     subprocess.call([command], shell=True)
 
 def capture_frame():    
     capture_frame.count += 1    
-    cv2.imwrite("frame%04d.jpg" % capture_frame.count, frame)
+    cv2.imwrite("pics/frame%04d.jpg" % capture_frame.count, frame)
     print "captured frame " + str(capture_frame.count)
 
 capture_frame.count = 0
