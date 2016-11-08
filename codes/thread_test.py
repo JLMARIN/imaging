@@ -1,8 +1,10 @@
 from customTimer import RepeatedTimer
 from time import sleep
 
+
 def hello():
     print "hello!"
+
 
 if __name__ == '__main__':
 
@@ -13,4 +15,3 @@ if __name__ == '__main__':
         sleep(5)
     finally:
         rt.stop()
-

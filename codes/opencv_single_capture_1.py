@@ -28,6 +28,6 @@ if __name__ == '__main__':
         set_resolution(resolutions[8])
 
         retval, frame = vc.read()
-        cv2.imwrite("pencv_image.jpg", frame)
+        cv2.imwrite("opencv_image.jpg", frame)
 
     vc.release()

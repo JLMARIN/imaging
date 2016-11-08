@@ -1,16 +1,16 @@
 import cv2
 
-# define list of resolution tuples in format (width,height)
-resolutions = [(320, 240),
-               (640, 480),
-               (800, 600),
-               (1024, 768),
-               (1280, 720),
-               (1280, 1024),
-               (1600, 1200),
-               (1920, 1080),
-               (2048, 1536),
-               (2592, 1944)]
+# define resolution tuple in format (width,height). Uncomment the desired resolution
+# resolution = (320, 240)
+# resolution = (640, 480)
+# resolution = (800, 600)
+# resolution = (1024, 768)
+# resolution = (1280, 720)
+resolution = (1280, 1024)
+# resolution = (1600, 1200)
+# resolution = (1920, 1080)
+# resolution = (2048, 1536)
+# resolution = (2592, 1944)
 
 
 def set_resolution(*args):
@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     if vc.isOpened():
         # set resolution
-        set_resolution(resolutions[5])
+        set_resolution(resolution)
 
         count = 0
 
