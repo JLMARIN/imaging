@@ -1,5 +1,10 @@
 import cv2
+import glob
+import sys
+import time
+import os
 from customTimer import RepeatedTimer
+from time import sleep
 
 # define resolution tuple in format (width,height). Uncomment the desired resolution
 # resolution = (320, 240)
@@ -13,7 +18,23 @@ from customTimer import RepeatedTimer
 resolution = (2048, 1536)
 # resolution = (2592, 1944)
 
-frame = 0
+frame = len(glob.glob('*.jpg'))
+
+
+class Tee:
+    def __init__(self, out1, out2):
+        self.out1 = out1
+        self.out2 = out2
+
+    def write(self, *args, **kwargs):
+        self.out1.write(*args, **kwargs)
+        self.out2.write(*args, **kwargs)
+
+
+def setup_logger():
+    timestr = time.strftime("%Y%m%d-%H%M%S")
+    file_name = os.path.splitext(sys.argv[0])[0]
+    sys.stdout = Tee(open("logs/" + file_name + "-" + timestr + ".txt", "w"), sys.stdout)
 
 
 def set_resolution(*args):
@@ -40,6 +61,8 @@ if __name__ == '__main__':
     if vc.isOpened():
         # configure camera
         setup()
+        # configure logger
+        setup_logger()
 
         print "Starting..."
         rt = RepeatedTimer(1, capture_frame)
