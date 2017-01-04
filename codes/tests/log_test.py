@@ -18,7 +18,7 @@ class Tee:
 def setup_logger():
     timestr = time.strftime("%Y%m%d-%H%M%S")
     file_name = os.path.splitext(sys.argv[0])[0]
-    sys.stdout = Tee(open("logs/" + file_name + "-" + timestr + ".txt", "w"), sys.stdout)
+    sys.stdout = Tee(open("logs/" + timestr + "-" + file_name + ".txt", "w"), sys.stdout)
 
 
 def hello():
@@ -29,10 +29,12 @@ if __name__ == '__main__':
 
     setup_logger()
 
-    print "Starting..."
+    print "> starting...  [" + str(time.strftime("%Y%m%d-%H%M%S")) + "]"
     rt = RepeatedTimer(1, hello)
 
     try:
         sleep(5)
     finally:
         rt.stop()
+
+    print "> program exit [" + str(time.strftime("%Y%m%d-%H%M%S")) + "]"

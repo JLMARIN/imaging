@@ -18,7 +18,8 @@ from time import sleep
 resolution = (2048, 1536)
 # resolution = (2592, 1944)
 
-frame = len(glob.glob('*.jpg'))
+# define global name 'frame' before using
+frame = 0
 
 
 class Tee:
@@ -34,7 +35,7 @@ class Tee:
 def setup_logger():
     timestr = time.strftime("%Y%m%d-%H%M%S")
     file_name = os.path.splitext(sys.argv[0])[0]
-    sys.stdout = Tee(open("logs/" + file_name + "-" + timestr + ".txt", "w"), sys.stdout)
+    sys.stdout = Tee(open("logs/" + timestr + "-" + file_name + ".txt", "w"), sys.stdout)
 
 
 def set_resolution(*args):
@@ -48,15 +49,18 @@ def setup():
 
 def capture_frame():
     capture_frame.count += 1
-    cv2.imwrite("pics/frame%04d.jpg" % capture_frame.count, frame)
-    print "captured frame " + str(capture_frame.count)
+    capture_frame.name_count += 1
+    cv2.imwrite("pics/frame%04d.jpg" % capture_frame.name_count, frame)
+    print "captured frame " + str(capture_frame.count) + " -> saved as: frame%04d.jpg" % capture_frame.name_count
 
 
 capture_frame.count = 0
+# get number of jpg files in pics folder to avoid rewriting
+capture_frame.name_count = len(glob.glob('pics/*.jpg'))
 
 if __name__ == '__main__':
 
-    vc = cv2.VideoCapture(0)
+    vc = cv2.VideoCapture(1)
 
     if vc.isOpened():
         # configure camera
@@ -64,7 +68,8 @@ if __name__ == '__main__':
         # configure logger
         setup_logger()
 
-        print "Starting..."
+        print "> starting...  [" + str(time.strftime("%Y%m%d-%H%M%S")) + "]"
+        print "> found " + str(capture_frame.name_count) + " image files in pics folder"
         rt = RepeatedTimer(1, capture_frame)
 
         try:
@@ -78,4 +83,4 @@ if __name__ == '__main__':
         vc.release()
         cv2.destroyAllWindows()
 
-    print "program exit"
+    print "> program exit [" + str(time.strftime("%Y%m%d-%H%M%S")) + "]"

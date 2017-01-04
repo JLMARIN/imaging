@@ -1,6 +1,11 @@
 import cv2
-from customTimer import RepeatedTimer
+import glob
+import sys
+import time
+import os
 import subprocess
+from customTimer import RepeatedTimer
+from time import sleep
 
 # define resolution tuple in format (width,height). Uncomment the desired resolution
 # resolution = (320, 240)
@@ -14,7 +19,24 @@ import subprocess
 resolution = (2048, 1536)
 # resolution = (2592, 1944)
 
+# define global name 'frame' before using
 frame = 0
+
+
+class Tee:
+    def __init__(self, out1, out2):
+        self.out1 = out1
+        self.out2 = out2
+
+    def write(self, *args, **kwargs):
+        self.out1.write(*args, **kwargs)
+        self.out2.write(*args, **kwargs)
+
+
+def setup_logger():
+    timestr = time.strftime("%Y%m%d-%H%M%S")
+    file_name = os.path.splitext(sys.argv[0])[0]
+    sys.stdout = Tee(open("logs/" + timestr + "-" + file_name + ".txt", "w"), sys.stdout)
 
 
 def set_resolution(*args):
@@ -25,26 +47,34 @@ def set_resolution(*args):
 def setup():
     set_resolution(resolution)
 
+    # configure camera settings using v4l2-ctl as a shell command
     command = 'v4l2-ctl -d /dev/video0 -c brightness=15,exposure_auto=1,exposure_absolute=20'
     subprocess.call([command], shell=True)
 
 
 def capture_frame():
     capture_frame.count += 1
-    cv2.imwrite("pics/frame%04d.jpg" % capture_frame.count, frame)
-    print "captured frame " + str(capture_frame.count)
+    capture_frame.name_count += 1
+    cv2.imwrite("pics/frame%04d.jpg" % capture_frame.name_count, frame)
+    print "captured frame " + str(capture_frame.count) + " -> saved as: frame%04d.jpg" % capture_frame.name_count
 
 
 capture_frame.count = 0
+# get number of jpg files in pics folder to avoid rewriting
+capture_frame.name_count = len(glob.glob('pics/*.jpg'))
 
 if __name__ == '__main__':
-    vc = cv2.VideoCapture(0)
+
+    vc = cv2.VideoCapture(1)
 
     if vc.isOpened():
         # configure camera
         setup()
+        # configure logger
+        setup_logger()
 
-        print "Starting..."
+        print "> starting...  [" + str(time.strftime("%Y%m%d-%H%M%S")) + "]"
+        print "> found " + str(capture_frame.name_count) + " image files in pics folder"
         rt = RepeatedTimer(1, capture_frame)
 
         try:
@@ -58,4 +88,4 @@ if __name__ == '__main__':
         vc.release()
         cv2.destroyAllWindows()
 
-    print "program exit"
+    print "> program exit [" + str(time.strftime("%Y%m%d-%H%M%S")) + "]"
