@@ -65,7 +65,7 @@ capture_frame.name_count = len(glob.glob('pics/*.jpg'))
 
 if __name__ == '__main__':
 
-    vc = cv2.VideoCapture(1)
+    vc = cv2.VideoCapture(0)
 
     if vc.isOpened():
         # configure camera
