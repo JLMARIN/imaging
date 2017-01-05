@@ -77,11 +77,11 @@ if __name__ == '__main__':
 
     # read config file
     Config = ConfigParser.ConfigParser()
-    Config.read("config_test.ini")
+    Config.read("config.ini")
 
     dev_id = ConfigSectionMap("TargetCamera")['dev_id']
 
-    vc = cv2.VideoCapture(dev_id)
+    vc = cv2.VideoCapture(int(dev_id))
 
     if vc.isOpened():
         # configure camera

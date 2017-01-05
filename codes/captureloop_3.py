@@ -4,8 +4,8 @@ import sys
 import time
 import os
 import subprocess
+import ConfigParser
 from customTimer import RepeatedTimer
-from time import sleep
 
 # define resolution tuple in format (width,height). Uncomment the desired resolution
 # resolution = (320, 240)
@@ -31,6 +31,20 @@ class Tee:
     def write(self, *args, **kwargs):
         self.out1.write(*args, **kwargs)
         self.out2.write(*args, **kwargs)
+
+
+def ConfigSectionMap(section):
+    dict1 = {}
+    options = Config.options(section)
+    for option in options:
+        try:
+            dict1[option] = Config.get(section, option)
+            if dict1[option] == -1:
+                print "skip: %s" % option
+        except:
+            print "exception on %s!" % option
+            dict1[option] = None
+    return dict1
 
 
 def setup_logger():
@@ -63,9 +77,16 @@ capture_frame.count = 0
 # get number of jpg files in pics folder to avoid rewriting
 capture_frame.name_count = len(glob.glob('pics/*.jpg'))
 
+
 if __name__ == '__main__':
 
-    vc = cv2.VideoCapture(0)
+    # read config file
+    Config = ConfigParser.ConfigParser()
+    Config.read("config.ini")
+
+    dev_id = ConfigSectionMap("TargetCamera")['dev_id']
+
+    vc = cv2.VideoCapture(int(dev_id))
 
     if vc.isOpened():
         # configure camera
