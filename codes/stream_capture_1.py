@@ -1,4 +1,7 @@
 import cv2
+import time
+import subprocess
+import ConfigParser
 
 # define resolution tuple in format (width,height). Uncomment the desired resolution
 # resolution = (320, 240)
@@ -13,19 +16,68 @@ resolution = (1280, 1024)
 # resolution = (2592, 1944)
 
 
+def ConfigSectionMap(section):
+    dict1 = {}
+    options = Config.options(section)
+    for option in options:
+        try:
+            dict1[option] = Config.get(section, option)
+            if dict1[option] == -1:
+                print "skip: %s" % option
+        except:
+            print "exception on %s!" % option
+            dict1[option] = None
+    return dict1
+
+
 def set_resolution(*args):
 
     vc.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, args[0][0])   # set frame width in pixels
     vc.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, args[0][1])  # set frame height in pixels
+    print "camera settings update:"
+    print "    @resolution=" + str(args[0][0]) + 'x' + str(args[0][1])
+
+
+def setup(device, chg_set_flag):
+    set_resolution(resolution)
+
+    if chg_set_flag is True:
+        # retrieve camera configuration values from config.ini file
+        brt = ConfigSectionMap("CameraSettings")['brightness']
+        exp_auto = ConfigSectionMap("CameraSettings")['exposure_auto']
+        exp_abs = ConfigSectionMap("CameraSettings")['exposure_absolute']
+
+        # configure camera settings using v4l2-ctl as a shell command
+        command = 'v4l2-ctl' \
+                  + ' -d /dev/video' + str(device) \
+                  + ' -c brightness=' + str(brt) \
+                  + ',exposure_auto=' + str(exp_auto) \
+                  + ',exposure_absolute=' + str(exp_abs)
+
+        # execute shell command
+        subprocess.call([command], shell=True)
+
+        print "    @brightness=" + str(brt)
+        print "    @exposure_auto=" + str(exp_auto)
+        print "    @exposure_absolute=" + str(exp_abs)
 
 
 if __name__ == '__main__':
 
-    vc = cv2.VideoCapture(0)
+    # read config file
+    Config = ConfigParser.ConfigParser()
+    Config.read("config.ini")
+
+    dev_id = int(ConfigSectionMap("TargetCamera")['dev_id'])
+    chg_set = ConfigSectionMap("CameraSettings")['chg_set']
+
+    vc = cv2.VideoCapture(dev_id)
 
     if vc.isOpened():
-        # set resolution
-        set_resolution(resolution)
+        print "> starting...  [" + str(time.strftime("%Y%m%d-%H%M%S")) + "]"
+
+        # configure camera
+        setup(dev_id, chg_set)
 
         count = 0
 
@@ -37,13 +89,15 @@ if __name__ == '__main__':
 
             key = cv2.waitKey(1)
             if key & 0xFF == ord('s'):
-                out = cv2.imwrite("frame%04d.jpg" % count, frame)
+                out = cv2.imwrite("pics/stream_capture%04d.jpg" % count, frame)
+                print "captured frame " + str(count)
                 count += 1
 
             if key & 0xFF == ord('q'):
+                print "loop interrupted!"
                 break
 
         vc.release()
         cv2.destroyAllWindows()
 
-    print "program exit"
+    print "> program exit [" + str(time.strftime("%Y%m%d-%H%M%S")) + "]"

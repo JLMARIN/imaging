@@ -3,6 +3,7 @@ import glob
 import sys
 import time
 import os
+import subprocess
 import ConfigParser
 from customTimer import RepeatedTimer
 
@@ -57,8 +58,28 @@ def set_resolution(*args):
     vc.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, args[0][1])  # set frame height in pixels
 
 
-def setup():
+def setup(device, chg_set_flag):
     set_resolution(resolution)
+
+    if chg_set_flag is True:
+        # retrieve camera configuration values from config.ini file
+        brt = ConfigSectionMap("CameraSettings")['brightness']
+        exp_auto = ConfigSectionMap("CameraSettings")['exposure_auto']
+        exp_abs = ConfigSectionMap("CameraSettings")['exposure_absolute']
+
+        # configure camera settings using v4l2-ctl as a shell command
+        command = 'v4l2-ctl' \
+                  + ' -d /dev/video' + str(device) \
+                  + ' -c brightness=' + str(brt) \
+                  + ',exposure_auto=' + str(exp_auto) \
+                  + ',exposure_absolute=' + str(exp_abs)
+
+        # execute shell command
+        subprocess.call([command], shell=True)
+
+        print "    @brightness=" + str(brt)
+        print "    @exposure_auto=" + str(exp_auto)
+        print "    @exposure_absolute=" + str(exp_abs)
 
 
 def capture_frame():
@@ -79,17 +100,19 @@ if __name__ == '__main__':
     Config = ConfigParser.ConfigParser()
     Config.read("config.ini")
 
-    dev_id = ConfigSectionMap("TargetCamera")['dev_id']
+    dev_id = int(ConfigSectionMap("TargetCamera")['dev_id'])
+    chg_set = ConfigSectionMap("CameraSettings")['chg_set']
 
-    vc = cv2.VideoCapture(int(dev_id))
+    vc = cv2.VideoCapture(dev_id)
 
     if vc.isOpened():
+        print "> starting...  [" + str(time.strftime("%Y%m%d-%H%M%S")) + "]"
+
         # configure camera
-        setup()
+        setup(dev_id, chg_set)
         # configure logger
         setup_logger()
 
-        print "> starting...  [" + str(time.strftime("%Y%m%d-%H%M%S")) + "]"
         print "> found " + str(capture_frame.name_count) + " image files in pics folder"
         rt = RepeatedTimer(1, capture_frame)
 
