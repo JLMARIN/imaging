@@ -7,7 +7,7 @@ if __name__ == '__main__':
     tree = ET.parse("config_test.xml")
     config = tree.getroot()
 
-    Name = config.find("section1/name")
+    Name = config.find('section1/name')
     Age = config.find('section1/age')
     Color = config.find('section2/color')
 
