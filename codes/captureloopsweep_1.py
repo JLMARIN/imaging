@@ -7,17 +7,17 @@ import subprocess
 import ConfigParser
 from customTimer import RepeatedTimer
 
-# define resolution tuple in format (width,height). Uncomment the desired resolution
-# resolution = (320, 240)
-# resolution = (640, 480)
-# resolution = (800, 600)
-# resolution = (1024, 768)
-# resolution = (1280, 720)
-# resolution = (1280, 1024)
-# resolution = (1600, 1200)
-# resolution = (1920, 1080)
-resolution = (2048, 1536)
-# resolution = (2592, 1944)
+# define resolution tuples in format (width,height)
+res_320_240 = (320, 240)
+res_640_480 = (640, 480)
+res_800_600 = (800, 600)
+res_1024_768 = (1024, 768)
+res_1280_720 = (1280, 720)
+res_1280_1024 = (1280, 1024)
+res_1600_1200 = (1600, 1200)
+res_1920_1080 = (1920, 1080)
+res_2048_1536 = (2048, 1536)
+res_2592_1944 = (2592, 1944)
 
 # define global name 'frame' before using
 frame = 0
@@ -58,15 +58,10 @@ def set_resolution(*args):
     vc.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, args[0][1])  # set frame height in pixels
 
 
-def setup(device, chg_set_flag):
-    set_resolution(resolution)
+def setup(device, res, setFlag, brt, exp_auto, exp_abs):
+    set_resolution(res)
 
-    if chg_set_flag is True:
-        # retrieve camera configuration values from config.ini file
-        brt = ConfigSectionMap("CameraSettings")['brightness']
-        exp_auto = ConfigSectionMap("CameraSettings")['exposure_auto']
-        exp_abs = ConfigSectionMap("CameraSettings")['exposure_absolute']
-
+    if setFlag is True:
         # configure camera settings using v4l2-ctl as a shell command
         command = 'v4l2-ctl' \
                   + ' -d /dev/video' + str(device) \
@@ -101,7 +96,16 @@ if __name__ == '__main__':
     Config.read("config.ini")
 
     dev_id = int(ConfigSectionMap("TargetCamera")['dev_id'])
-    chg_set = ConfigSectionMap("CameraSettings")['chg_set']
+
+    setup(dev_id, res_2048_1536, False, 0, 0, 0)
+    setup(dev_id, res_2592_1944, True, 15, 1, 20)
+    setup(dev_id, res_2592_1944, True, 10, 1, 20)
+    setup(dev_id, res_2592_1944, True, 15, 1, 10)
+    setup(dev_id, res_2592_1944, True, 10, 1, 10)
+    setup(dev_id, res_2048_1536, True, 15, 1, 20)
+    setup(dev_id, res_2048_1536, True, 10, 1, 20)
+    setup(dev_id, res_2048_1536, True, 15, 1, 10)
+    setup(dev_id, res_2048_1536, True, 10, 1, 10)
 
     vc = cv2.VideoCapture(dev_id)
 
@@ -110,11 +114,20 @@ if __name__ == '__main__':
         setup_logger()
 
         print "> starting...  [" + str(time.strftime("%Y%m%d-%H%M%S")) + "]"
-
-        # configure camera
-        setup(dev_id, chg_set)
-
         print "> found " + str(capture_frame.name_count) + " image files in pics folder"
+
+        # =============> video capture section
+        setup(dev_id, res_2592_1944, False, 0, 0, 0)
+
+        print "> starting video capture"
+        t_end = time.time() + 240
+
+        while time.time() < t_end:
+
+        # =============> end of video capture section
+
+        print "> starting picture capture"
+
         rt = RepeatedTimer(1, capture_frame)
 
         try:

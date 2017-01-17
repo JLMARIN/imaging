@@ -1,0 +1,9 @@
+<config>
+    <CameraSettings>
+    	<dev_id>1</dev_id>
+    	<chg_set>False</chg_set>
+    	<brightness>15</brightness>
+    	<exposure_auto>1</exposure_auto>
+    	<exposure_absolute>20</exposure_absolute>
+    </CameraSettings>
+</config>
