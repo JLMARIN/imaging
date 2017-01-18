@@ -1,7 +1,7 @@
 import cv2
 import time
 import subprocess
-import ConfigParser
+import xml.etree.ElementTree as ET
 
 # define resolution tuple in format (width,height). Uncomment the desired resolution
 # resolution = (320, 240)
@@ -14,20 +14,6 @@ resolution = (1280, 1024)
 # resolution = (1920, 1080)
 # resolution = (2048, 1536)
 # resolution = (2592, 1944)
-
-
-def ConfigSectionMap(section):
-    dict1 = {}
-    options = Config.options(section)
-    for option in options:
-        try:
-            dict1[option] = Config.get(section, option)
-            if dict1[option] == -1:
-                print "skip: %s" % option
-        except:
-            print "exception on %s!" % option
-            dict1[option] = None
-    return dict1
 
 
 def set_resolution(*args):
@@ -43,9 +29,9 @@ def setup(device, chg_set_flag):
 
     if chg_set_flag is True:
         # retrieve camera configuration values from config.ini file
-        brt = ConfigSectionMap("CameraSettings")['brightness']
-        exp_auto = ConfigSectionMap("CameraSettings")['exposure_auto']
-        exp_abs = ConfigSectionMap("CameraSettings")['exposure_absolute']
+        brt = int(config.find('CameraSettings/brightness').text)
+        exp_auto = int(config.find('CameraSettings/exposure_auto').text)
+        exp_abs = int(config.find('CameraSettings/exposure_absolute').text)
 
         # configure camera settings using v4l2-ctl as a shell command
         command = 'v4l2-ctl' \
@@ -64,12 +50,12 @@ def setup(device, chg_set_flag):
 
 if __name__ == '__main__':
 
-    # read config file
-    Config = ConfigParser.ConfigParser()
-    Config.read("config.ini")
+    # read config xml file
+    tree = ET.parse("config.xml")
+    config = tree.getroot()
 
-    dev_id = int(ConfigSectionMap("TargetCamera")['dev_id'])
-    chg_set = ConfigSectionMap("CameraSettings")['chg_set']
+    dev_id = int(config.find('CameraSettings/dev_id').text)
+    chg_set = int(config.find('CameraSettings/chg_set').text)
 
     vc = cv2.VideoCapture(dev_id)
 
