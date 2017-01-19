@@ -26,7 +26,8 @@ frame = 0
 
 # define array of counter values for camera settings update
 inc = 10
-pic_interval = [inc,
+pic_interval = [0,
+                inc,
                 2 * inc,
                 3 * inc,
                 4 * inc,
@@ -37,7 +38,7 @@ pic_interval = [inc,
                 9 * inc,
                 10 * inc]
 
-video_duration = 30
+video_duration = 10
 
 
 class Tee:
@@ -83,13 +84,23 @@ def setup(device, res, setFlag, brt, exp_auto, exp_abs):
 
 
 def capture_frame():
-    capture_frame.count += 1
-    capture_frame.name_count += 1
-    cv2.imwrite("pics/frame%04d.jpg" % capture_frame.name_count, frame)
-    print "captured frame " + str(capture_frame.count) + " -> saved as: frame%04d.jpg" % capture_frame.name_count
+    if capture_frame.flag is True:
+        capture_frame.count += 1
+        capture_frame.name_count += 1
+        cv2.imwrite("pics/frame%04d.jpg" % capture_frame.name_count, frame)
+        print "captured frame " + str(capture_frame.count) + " -> saved as: frame%04d.jpg" % capture_frame.name_count
+        capture_frame.check = True
+    else:
+        capture_frame.delay += 1
+        if capture_frame.delay == 6:
+            capture_frame.flag = True
+            capture_frame.delay = 0
 
 
 capture_frame.count = 0
+capture_frame.delay = 0
+capture_frame.flag = False
+capture_frame.check = True
 # get number of jpg files in pics folder to avoid rewriting
 capture_frame.name_count = len(glob.glob('pics/*.jpg'))
 
@@ -121,6 +132,8 @@ if __name__ == '__main__':
 
         setup(dev_id, res_1280_1024, False, 0, 0, 0)
 
+        print "> recording..."
+
         t_end = time.time() + video_duration
 
         while time.time() < t_end:
@@ -135,43 +148,51 @@ if __name__ == '__main__':
 
         print "> starting picture capture"
 
-        setup(dev_id, res_2592_1944, False, 0, 0, 0)
-
         rt = RepeatedTimer(1, capture_frame)
 
         try:
             while True:
                 retval, frame = vc.read()
-                if capture_frame.count == pic_interval[0]:
-                    setup(dev_id, res_2048_1536, False, 0, 0, 0)
 
-                if capture_frame.count == pic_interval[1]:
-                    setup(dev_id, res_2592_1944, True, 10, 1, 20)
-                if capture_frame.count == pic_interval[2]:
-                    setup(dev_id, res_2048_1536, True, 10, 1, 20)
+                if capture_frame.count in pic_interval and capture_frame.check is True:
+                    if capture_frame.count == pic_interval[0]:
+                        setup(dev_id, res_2592_1944, False, 0, 0, 0)
+                    if capture_frame.count == pic_interval[1]:
+                        setup(dev_id, res_2048_1536, False, 0, 0, 0)
 
-                if capture_frame.count == pic_interval[3]:
-                    setup(dev_id, res_2592_1944, True, 8, 1, 20)
-                if capture_frame.count == pic_interval[4]:
-                    setup(dev_id, res_2048_1536, True, 8, 1, 20)
+                    if capture_frame.count == pic_interval[2]:
+                        setup(dev_id, res_2592_1944, True, 10, 1, 20)
+                    if capture_frame.count == pic_interval[3]:
+                        setup(dev_id, res_2048_1536, True, 10, 1, 20)
 
-                if capture_frame.count == pic_interval[5]:
-                    setup(dev_id, res_2592_1944, True, 10, 1, 10)
-                if capture_frame.count == pic_interval[6]:
-                    setup(dev_id, res_2048_1536, True, 10, 1, 10)
+                    if capture_frame.count == pic_interval[4]:
+                        setup(dev_id, res_2592_1944, True, 8, 1, 20)
+                    if capture_frame.count == pic_interval[5]:
+                        setup(dev_id, res_2048_1536, True, 8, 1, 20)
 
-                if capture_frame.count == pic_interval[7]:
-                    setup(dev_id, res_2592_1944, True, 8, 1, 10)
-                if capture_frame.count == pic_interval[8]:
-                    setup(dev_id, res_2048_1536, True, 8, 1, 10)
+                    if capture_frame.count == pic_interval[6]:
+                        setup(dev_id, res_2592_1944, True, 10, 1, 10)
+                    if capture_frame.count == pic_interval[7]:
+                        setup(dev_id, res_2048_1536, True, 10, 1, 10)
 
-                if capture_frame.count == pic_interval[9]:
-                    print "> picture capture finished"
-                    break
+                    if capture_frame.count == pic_interval[8]:
+                        setup(dev_id, res_2592_1944, True, 8, 1, 10)
+                    if capture_frame.count == pic_interval[9]:
+                        setup(dev_id, res_2048_1536, True, 8, 1, 10)
+
+                    if capture_frame.count == pic_interval[10]:
+                        break
+
+                    capture_frame.flag = False
+                    capture_frame.check = False
+                    print "> configuring..."
+
         except KeyboardInterrupt:
             print "loop interrupted!"
 
         rt.stop()
+
+        print "> picture capture finished"
 
         vc.release()
         video.release()
