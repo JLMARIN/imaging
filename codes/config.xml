@@ -13,7 +13,18 @@
 				@ step		1
 				@ default	8
     	-->
-    	<brightness>15</brightness>
+    	<brightness>8</brightness>
+    	<!--
+			pixel_format:
+				@ type		string
+				@ options	MJPG
+							YUYV
+							RGB3
+							BGR3
+							YU12
+							YV12
+    	-->
+    	<pixel_format>MJPG</pixel_format>
     	<!--
 			exposure_auto:
 				@ type		menu

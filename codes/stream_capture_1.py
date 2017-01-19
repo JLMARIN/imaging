@@ -24,28 +24,32 @@ def set_resolution(*args):
     print "    @resolution=" + str(args[0][0]) + 'x' + str(args[0][1])
 
 
-def setup(device, chg_set_flag):
+def setup(device):
     set_resolution(resolution)
 
-    if chg_set_flag is True:
-        # retrieve camera configuration values from config.ini file
-        brt = int(config.find('CameraSettings/brightness').text)
-        exp_auto = int(config.find('CameraSettings/exposure_auto').text)
-        exp_abs = int(config.find('CameraSettings/exposure_absolute').text)
+    # retrieve camera configuration values from config.ini file
+    brt = int(config.find('CameraSettings/brightness').text)
+    exp_auto = int(config.find('CameraSettings/exposure_auto').text)
+    exp_abs = int(config.find('CameraSettings/exposure_absolute').text)
 
-        # configure camera settings using v4l2-ctl as a shell command
-        command = 'v4l2-ctl' \
-                  + ' -d /dev/video' + str(device) \
-                  + ' -c brightness=' + str(brt) \
-                  + ',exposure_auto=' + str(exp_auto) \
-                  + ',exposure_absolute=' + str(exp_abs)
+    # configure camera settings using v4l2-ctl as a shell command
+    command = 'v4l2-ctl' \
+              + ' -d /dev/video' + str(device) \
+              + ' -c brightness=' + str(brt) \
+              + ',exposure_auto=' + str(exp_auto) \
 
-        # execute shell command
-        subprocess.call([command], shell=True)
+    if exp_auto == 1:
+        command = command + ',exposure_absolute=' + str(exp_abs)
 
-        print "    @brightness=" + str(brt)
-        print "    @exposure_auto=" + str(exp_auto)
+    # execute shell command
+    subprocess.call([command], shell=True)
+
+    print "    @brightness=" + str(brt)
+    print "    @exposure_auto=" + str(exp_auto)
+    if exp_auto == 1:
         print "    @exposure_absolute=" + str(exp_abs)
+    else:
+        print "    @exposure_absolute=N/A"
 
 
 if __name__ == '__main__':
@@ -55,7 +59,6 @@ if __name__ == '__main__':
     config = tree.getroot()
 
     dev_id = int(config.find('CameraSettings/dev_id').text)
-    chg_set = int(config.find('CameraSettings/chg_set').text)
 
     vc = cv2.VideoCapture(dev_id)
 
@@ -63,7 +66,7 @@ if __name__ == '__main__':
         print "> starting...  [" + str(time.strftime("%Y%m%d-%H%M%S")) + "]"
 
         # configure camera
-        setup(dev_id, chg_set)
+        setup(dev_id)
 
         count = 0
 

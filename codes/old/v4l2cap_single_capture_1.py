@@ -13,15 +13,16 @@
 # purpose, without any conditions, unless such conditions are
 # required by law.
 
-import Image
+#import Image
+from PIL import Image
 import select
 import v4l2capture
 
 # Open the video device.
-video = v4l2capture.Video_device("/dev/video0")
+video = v4l2capture.Video_device("/dev/video1")
 
 # Configure size and format for the device
-size_x, size_y = video.set_format(2048, 1536)
+size_x, size_y = video.set_format(2592, 1944, fourcc='MJPG')
 
 # Create a buffer to store image data in. This must be done before
 # calling 'start' if v4l2capture is compiled with libv4l2. Otherwise
@@ -38,9 +39,11 @@ video.start()
 # Wait for the device to fill the buffer.
 select.select((video,), (), ())
 
-# The rest is easy
+# Read frame and close video
 image_data = video.read()
 video.close()
-image = Image.fromstring("RGB", (size_x, size_y), image_data)
+
+# Save frame to file
+image = Image.frombytes("YCbCr", (size_x, size_y), image_data)
 image.save("v4l2cap_image.jpg")
 print "Saved v4l2cap_image.jpg (Size: " + str(size_x) + " x " + str(size_y) + ")"

@@ -46,28 +46,34 @@ def set_resolution(*args):
     print "    @resolution=" + str(args[0][0]) + 'x' + str(args[0][1])
 
 
-def setup(device, chg_set_flag):
-    set_resolution(resolution)
+def setup(device, width, height, pxlformat, brt, exp_auto, exp_abs):
+    #set_resolution(resolution)
+    # configure camera settings using v4l2-ctl shell commands
 
-    if chg_set_flag is True:
-        # retrieve camera configuration values from config.ini file
-        brt = int(config.find('CameraSettings/brightness').text)
-        exp_auto = int(config.find('CameraSettings/exposure_auto').text)
-        exp_abs = int(config.find('CameraSettings/exposure_absolute').text)
+    # build command
+    command = 'v4l2-ctl' \
+              + ' -d /dev/video' + str(device) \
+              + ' --set-fmt-video=width=' + str(width) \
+              + ',height=' + str(height) \
+              + ',pixelformat=' + pxlformat \
+              + ' -c brightness=' + str(brt) \
+              + ',exposure_auto=' + str(exp_auto) \
 
-        # configure camera settings using v4l2-ctl as a shell command
-        command = 'v4l2-ctl' \
-                  + ' -d /dev/video' + str(device) \
-                  + ' -c brightness=' + str(brt) \
-                  + ',exposure_auto=' + str(exp_auto) \
-                  + ',exposure_absolute=' + str(exp_abs)
+    if exp_auto == 1:
+        command = command + ',exposure_absolute=' + str(exp_abs)
 
-        # execute shell command
-        subprocess.call([command], shell=True)
+    # execute shell command
+    subprocess.call([command], shell=True)
 
-        print "    @brightness=" + str(brt)
-        print "    @exposure_auto=" + str(exp_auto)
+    print "camera settings update:"
+    print "    @resolution=" + str(width) + 'x' + str(height)
+    print "    @pixel_format=" + pxlformat
+    print "    @brightness=" + str(brt)
+    print "    @exposure_auto=" + str(exp_auto)
+    if exp_auto == 1:
         print "    @exposure_absolute=" + str(exp_abs)
+    else:
+        print "    @exposure_absolute=N/A"
 
 
 def capture_frame():
@@ -88,8 +94,12 @@ if __name__ == '__main__':
     tree = ET.parse("config.xml")
     config = tree.getroot()
 
-    dev_id = int(config.find('CameraSettings/dev_id').text)
-    chg_set = int(config.find('CameraSettings/chg_set').text)
+    # read camera settings from configuration xml file
+    dev_id      =   int(config.find('CameraSettings/dev_id').text)
+    pxl_fmt     =   config.find('CameraSettings/pixel_format').text
+    brt         =   int(config.find('CameraSettings/brightness').text)
+    exp_auto    =   int(config.find('CameraSettings/exposure_auto').text)
+    exp_abs     =   int(config.find('CameraSettings/exposure_absolute').text)
 
     vc = cv2.VideoCapture(dev_id)
 
@@ -100,9 +110,10 @@ if __name__ == '__main__':
         print "> starting...  [" + str(time.strftime("%Y%m%d-%H%M%S")) + "]"
 
         # configure camera
-        setup(dev_id, chg_set)
-
+        setup(dev_id, resolution[0], resolution[1], 'MJPG', brt, exp_auto, exp_abs)
+        
         print "> found " + str(capture_frame.name_count) + " image files in pics folder"
+        
         rt = RepeatedTimer(1, capture_frame)
 
         try:
