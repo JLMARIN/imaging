@@ -1,9 +1,38 @@
 <config>
     <CameraSettings>
+    	<!--
+			plug camera and type 'ls /dev' and find the corresponding
+			dev/videox device where x is the index (dev_id)
+    	-->
     	<dev_id>1</dev_id>
-    	<chg_set>0</chg_set>
+    	<!--
+			brightness:
+				@ type		int
+				@ min		0
+				@ max		15
+				@ step		1
+				@ default	8
+    	-->
     	<brightness>15</brightness>
-    	<exposure_auto>1</exposure_auto>
+    	<!--
+			exposure_auto:
+				@ type		menu
+				@ min		0
+				@ max		3
+				@ default	3
+				@ options	1:manual mode
+							3:aperture priority mode
+    	-->
+    	<exposure_auto>3</exposure_auto>
+    	<!--
+			exposure_absolute:
+				@ type		int
+				@ min		4
+				@ max		5000
+				@ step		1
+				@ default	625
+				@ note		used only when exposure_auto=1
+    	-->
     	<exposure_absolute>20</exposure_absolute>
     </CameraSettings>
 </config>

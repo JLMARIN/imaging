@@ -25,7 +25,7 @@ dev_id = 0
 frame = 0
 
 # define array of counter values for camera settings update
-inc = 10
+inc = 5
 pic_interval = [0,
                 inc,
                 2 * inc,
@@ -64,23 +64,27 @@ def set_resolution(*args):
     print "    @resolution=" + str(args[0][0]) + 'x' + str(args[0][1])
 
 
-def setup(device, res, setFlag, brt, exp_auto, exp_abs):
+def setup(device, res, brt, exp_auto, exp_abs):
     set_resolution(res)
 
-    if setFlag is True:
-        # configure camera settings using v4l2-ctl as a shell command
-        command = 'v4l2-ctl' \
-                  + ' -d /dev/video' + str(device) \
-                  + ' -c brightness=' + str(brt) \
-                  + ',exposure_auto=' + str(exp_auto) \
-                  + ',exposure_absolute=' + str(exp_abs)
+    # configure camera settings using v4l2-ctl as a shell command
+    command = 'v4l2-ctl' \
+              + ' -d /dev/video' + str(device) \
+              + ' -c brightness=' + str(brt) \
+              + ',exposure_auto=' + str(exp_auto) \
 
-        # execute shell command
-        subprocess.call([command], shell=True)
+    if exp_auto == 1:
+        command = command + ',exposure_absolute=' + str(exp_abs)
 
-        print "    @brightness=" + str(brt)
-        print "    @exposure_auto=" + str(exp_auto)
+    # execute shell command
+    subprocess.call([command], shell=True)
+
+    print "    @brightness=" + str(brt)
+    print "    @exposure_auto=" + str(exp_auto)
+    if exp_auto == 1:
         print "    @exposure_absolute=" + str(exp_abs)
+    else:
+        print "    @exposure_absolute=N/A"
 
 
 def capture_frame():
@@ -130,7 +134,7 @@ if __name__ == '__main__':
 
         print "> starting video capture"
 
-        setup(dev_id, res_1280_1024, False, 0, 0, 0)
+        setup(dev_id, res_1280_1024, 8, 3, 0)
 
         print "> recording..."
 
@@ -156,29 +160,29 @@ if __name__ == '__main__':
 
                 if capture_frame.count in pic_interval and capture_frame.check is True:
                     if capture_frame.count == pic_interval[0]:
-                        setup(dev_id, res_2592_1944, False, 0, 0, 0)
+                        setup(dev_id, res_2592_1944, 8, 3, 0)
                     if capture_frame.count == pic_interval[1]:
-                        setup(dev_id, res_2048_1536, False, 0, 0, 0)
+                        setup(dev_id, res_2048_1536, 8, 3, 0)
 
                     if capture_frame.count == pic_interval[2]:
-                        setup(dev_id, res_2592_1944, True, 10, 1, 20)
+                        setup(dev_id, res_2592_1944, 10, 1, 20)
                     if capture_frame.count == pic_interval[3]:
-                        setup(dev_id, res_2048_1536, True, 10, 1, 20)
+                        setup(dev_id, res_2048_1536, 10, 1, 20)
 
                     if capture_frame.count == pic_interval[4]:
-                        setup(dev_id, res_2592_1944, True, 8, 1, 20)
+                        setup(dev_id, res_2592_1944, 8, 1, 20)
                     if capture_frame.count == pic_interval[5]:
-                        setup(dev_id, res_2048_1536, True, 8, 1, 20)
+                        setup(dev_id, res_2048_1536, 8, 1, 20)
 
                     if capture_frame.count == pic_interval[6]:
-                        setup(dev_id, res_2592_1944, True, 10, 1, 10)
+                        setup(dev_id, res_2592_1944, 10, 1, 10)
                     if capture_frame.count == pic_interval[7]:
-                        setup(dev_id, res_2048_1536, True, 10, 1, 10)
+                        setup(dev_id, res_2048_1536, 10, 1, 10)
 
                     if capture_frame.count == pic_interval[8]:
-                        setup(dev_id, res_2592_1944, True, 8, 1, 10)
+                        setup(dev_id, res_2592_1944, 8, 1, 10)
                     if capture_frame.count == pic_interval[9]:
-                        setup(dev_id, res_2048_1536, True, 8, 1, 10)
+                        setup(dev_id, res_2048_1536, 8, 1, 10)
 
                     if capture_frame.count == pic_interval[10]:
                         break
@@ -191,8 +195,6 @@ if __name__ == '__main__':
             print "loop interrupted!"
 
         rt.stop()
-
-        print "> picture capture finished"
 
         vc.release()
         video.release()
