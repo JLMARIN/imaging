@@ -25,7 +25,7 @@ dev_id = 0
 frame = 0
 
 # define array of counter values for camera settings update
-inc = 5
+inc = 60
 pic_interval = [0,
                 inc,
                 2 * inc,
@@ -38,7 +38,7 @@ pic_interval = [0,
                 9 * inc,
                 10 * inc]
 
-video_duration = 10
+video_duration = 180
 
 
 class Tee:
@@ -129,12 +129,12 @@ if __name__ == '__main__':
         # =============> video capture section
 
         # Define the codec and create VideoWriter object
-        fourcc = cv2.cv.CV_FOURCC('X', 'V', 'I', 'D')
-        video = cv2.VideoWriter('video.avi', fourcc, 25.0, res_1280_1024)
-
         print "> starting video capture"
 
         setup(dev_id, res_1280_1024, 8, 3, 0)
+
+        fourcc = cv2.cv.CV_FOURCC('X', 'V', 'I', 'D')
+        video = cv2.VideoWriter('video.avi', fourcc, 25.0, res_1280_1024)
 
         print "> recording..."
 

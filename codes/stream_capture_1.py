@@ -24,15 +24,11 @@ def set_resolution(*args):
     print "    @resolution=" + str(args[0][0]) + 'x' + str(args[0][1])
 
 
-def setup(device):
+def setup(device, brt, exp_auto, exp_abs):
     set_resolution(resolution)
+    # configure camera settings using v4l2-ctl shell commands
 
-    # retrieve camera configuration values from config.ini file
-    brt = int(config.find('CameraSettings/brightness').text)
-    exp_auto = int(config.find('CameraSettings/exposure_auto').text)
-    exp_abs = int(config.find('CameraSettings/exposure_absolute').text)
-
-    # configure camera settings using v4l2-ctl as a shell command
+    # build command
     command = 'v4l2-ctl' \
               + ' -d /dev/video' + str(device) \
               + ' -c brightness=' + str(brt) \
@@ -58,7 +54,11 @@ if __name__ == '__main__':
     tree = ET.parse("config.xml")
     config = tree.getroot()
 
-    dev_id = int(config.find('CameraSettings/dev_id').text)
+    # read camera settings from configuration xml file
+    dev_id      =   int(config.find('CameraSettings/dev_id').text)
+    brt         =   int(config.find('CameraSettings/brightness').text)
+    exp_auto    =   int(config.find('CameraSettings/exposure_auto').text)
+    exp_abs     =   int(config.find('CameraSettings/exposure_absolute').text)
 
     vc = cv2.VideoCapture(dev_id)
 
@@ -66,7 +66,7 @@ if __name__ == '__main__':
         print "> starting...  [" + str(time.strftime("%Y%m%d-%H%M%S")) + "]"
 
         # configure camera
-        setup(dev_id)
+        setup(dev_id, brt, exp_auto, exp_abs)
 
         count = 0
 

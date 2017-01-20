@@ -1,4 +1,3 @@
-import cv2
 import glob
 import sys
 import time
@@ -39,20 +38,15 @@ def setup_logger():
     sys.stdout = Tee(open("logs/" + timestr + "-" + file_name + ".txt", "w"), sys.stdout)
 
 
-def set_resolution(*args):
-    vc.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, args[0][0])   # set frame width in pixels
-    vc.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, args[0][1])  # set frame height in pixels
-    print "camera settings update:"
-    print "    @resolution=" + str(args[0][0]) + 'x' + str(args[0][1])
-
-
-def setup(device, brt, exp_auto, exp_abs):
-    set_resolution(resolution)
+def setup(device, width, height, pxlformat, brt, exp_auto, exp_abs):
     # configure camera settings using v4l2-ctl shell commands
 
     # build command
     command = 'v4l2-ctl' \
               + ' -d /dev/video' + str(device) \
+              + ' --set-fmt-video=width=' + str(width) \
+              + ',height=' + str(height) \
+              + ',pixelformat=' + pxlformat \
               + ' -c brightness=' + str(brt) \
               + ',exposure_auto=' + str(exp_auto) \
 
@@ -62,6 +56,9 @@ def setup(device, brt, exp_auto, exp_abs):
     # execute shell command
     subprocess.call([command], shell=True)
 
+    print "camera settings update:"
+    print "    @resolution=" + str(width) + 'x' + str(height)
+    print "    @pixel_format=" + pxlformat
     print "    @brightness=" + str(brt)
     print "    @exposure_auto=" + str(exp_auto)
     if exp_auto == 1:
@@ -70,16 +67,15 @@ def setup(device, brt, exp_auto, exp_abs):
         print "    @exposure_absolute=N/A"
 
 
-def capture_frame():
-    capture_frame.count += 1
-    capture_frame.name_count += 1
-    cv2.imwrite("pics/frame%04d.jpg" % capture_frame.name_count, frame)
-    print "captured frame " + str(capture_frame.count) + " -> saved as: frame%04d.jpg" % capture_frame.name_count
+def timer():
+    timer.flag = True
 
 
-capture_frame.count = 0
+timer.flag = False
+
+frame_count = 0
 # get number of jpg files in pics folder to avoid rewriting
-capture_frame.name_count = len(glob.glob('pics/*.jpg'))
+frame_name_count = len(glob.glob('pics/*.jpg'))
 
 
 if __name__ == '__main__':
@@ -90,34 +86,40 @@ if __name__ == '__main__':
 
     # read camera settings from configuration xml file
     dev_id      =   int(config.find('CameraSettings/dev_id').text)
+    pxl_fmt     =   config.find('CameraSettings/pixel_format').text
     brt         =   int(config.find('CameraSettings/brightness').text)
     exp_auto    =   int(config.find('CameraSettings/exposure_auto').text)
     exp_abs     =   int(config.find('CameraSettings/exposure_absolute').text)
 
-    vc = cv2.VideoCapture(dev_id)
+    # configure logger
+    setup_logger()
 
-    if vc.isOpened():
-        # configure logger
-        setup_logger()
+    print "> starting...  [" + str(time.strftime("%Y%m%d-%H%M%S")) + "]"
 
-        print "> starting...  [" + str(time.strftime("%Y%m%d-%H%M%S")) + "]"
+    # configure camera
+    setup(dev_id, resolution[0], resolution[1], 'MJPG', brt, exp_auto, exp_abs)
+    
+    print "> found " + str(frame_name_count) + " image files in pics folder"
+    
+    rt = RepeatedTimer(1, timer)
 
-        # configure camera
-        setup(dev_id, brt, exp_auto, exp_abs)
-        
-        print "> found " + str(capture_frame.name_count) + " image files in pics folder"
-        
-        rt = RepeatedTimer(1, capture_frame)
+    try:
+        while True:
+            if timer.flag is True:
+                timer.flag = False
+                frame_count += 1
+                frame_name_count += 1
 
-        try:
-            while True:
-                retval, frame = vc.read()
-        except KeyboardInterrupt:
-            print "loop interrupted!"
+                filename = "pics/frame%04d.jpg" % frame_name_count
+                command = "fswebcam -r 2592x1944 -d /dev/video1 " + str(filename)
+                # execute shell command
+                subprocess.call([command], shell=True)
+                
+                print "captured frame " + str(frame_count) + " -> saved as: frame%04d.jpg" % frame_name_count
 
-        rt.stop()
+    except KeyboardInterrupt:
+        print "loop interrupted!"
 
-        vc.release()
-        cv2.destroyAllWindows()
+    rt.stop()
 
     print "> program exit [" + str(time.strftime("%Y%m%d-%H%M%S")) + "]"
