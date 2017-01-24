@@ -7,7 +7,7 @@ import subprocess
 import xml.etree.ElementTree as ET
 from customTimer import RepeatedTimer
 
-# define resolution tuples in format (width,height)
+# define resolution tuples in format (width, height)
 res_320_240 = (320, 240)
 res_640_480 = (640, 480)
 res_800_600 = (800, 600)
@@ -38,7 +38,8 @@ pic_interval = [0,
                 9 * inc,
                 10 * inc]
 
-video_duration = 180
+video_on = False
+video_duration = 30
 
 
 class Tee:
@@ -129,24 +130,26 @@ if __name__ == '__main__':
         # =============> video capture section
 
         # Define the codec and create VideoWriter object
-        print "> starting video capture"
+        if video_on is True:        
+            print "> starting video capture"
 
-        setup(dev_id, res_1280_1024, 8, 3, 0)
+            #setup(dev_id, res_1280_1024, 8, 3, 0)
+            setup(dev_id, res_640_480, 8, 3, 0)
 
-        fourcc = cv2.cv.CV_FOURCC('X', 'V', 'I', 'D')
-        video = cv2.VideoWriter('video.avi', fourcc, 25.0, res_1280_1024)
+            fourcc = cv2.cv.CV_FOURCC('X', 'V', 'I', 'D')
+            video = cv2.VideoWriter('video.avi', fourcc, 25.0, res_1280_1024)
 
-        print "> recording..."
+            print "> recording..."
 
-        t_end = time.time() + video_duration
+            t_end = time.time() + video_duration
 
-        while time.time() < t_end:
-            # read frame
-            retval, frame = vc.read()
-            # write frame
-            video.write(frame)
+            while time.time() < t_end:
+                # read frame
+                retval, frame = vc.read()
+                # write frame
+                video.write(frame)
 
-        print "> video capture finished"
+            print "> video capture finished"
 
         # =============> end of video capture section
 

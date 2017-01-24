@@ -35,7 +35,7 @@
 				@ options	1:manual mode
 							3:aperture priority mode
     	-->
-    	<exposure_auto>1</exposure_auto>
+    	<exposure_auto>3</exposure_auto>
     	<!--
 			exposure_absolute:
 				@ type		int
