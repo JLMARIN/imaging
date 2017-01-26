@@ -1,0 +1,31 @@
+> starting...  [20170126-100158]
+camera settings update:
+    @resolution=2592x1944
+    @brightness=8
+    @exposure_auto=3
+    @exposure_absolute=N/A
+> found 0 image files in pics folder
+captured frame 1 -> saved as: frame0001.jpg
+captured frame 2 -> saved as: frame0002.jpg
+captured frame 3 -> saved as: frame0003.jpg
+captured frame 4 -> saved as: frame0004.jpg
+captured frame 5 -> saved as: frame0005.jpg
+captured frame 6 -> saved as: frame0006.jpg
+captured frame 7 -> saved as: frame0007.jpg
+captured frame 8 -> saved as: frame0008.jpg
+captured frame 9 -> saved as: frame0009.jpg
+captured frame 10 -> saved as: frame0010.jpg
+captured frame 11 -> saved as: frame0011.jpg
+captured frame 12 -> saved as: frame0012.jpg
+captured frame 13 -> saved as: frame0013.jpg
+captured frame 14 -> saved as: frame0014.jpg
+captured frame 15 -> saved as: frame0015.jpg
+captured frame 16 -> saved as: frame0016.jpg
+captured frame 17 -> saved as: frame0017.jpg
+captured frame 18 -> saved as: frame0018.jpg
+captured frame 19 -> saved as: frame0019.jpg
+captured frame 20 -> saved as: frame0020.jpg
+captured frame 21 -> saved as: frame0021.jpg
+captured frame 22 -> saved as: frame0022.jpg
+loop interrupted!
+> program exit [20170126-100229]

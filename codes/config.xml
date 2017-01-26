@@ -45,6 +45,6 @@
 				@ default	625
 				@ note		used only when exposure_auto=1
     	-->
-    	<exposure_absolute>20</exposure_absolute>
+    	<exposure_absolute>4</exposure_absolute>
     </CameraSettings>
 </config>

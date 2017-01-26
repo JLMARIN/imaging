@@ -25,7 +25,7 @@ dev_id = 0
 frame = 0
 
 # define array of counter values for camera settings update
-inc = 60
+inc = 10
 pic_interval = [0,
                 inc,
                 2 * inc,
@@ -130,10 +130,10 @@ if __name__ == '__main__':
         # =============> video capture section
 
         # Define the codec and create VideoWriter object
-        if video_on is True:        
+        if video_on is True:
             print "> starting video capture"
 
-            #setup(dev_id, res_1280_1024, 8, 3, 0)
+            # setup(dev_id, res_1280_1024, 8, 3, 0)
             setup(dev_id, res_640_480, 8, 3, 0)
 
             fourcc = cv2.cv.CV_FOURCC('X', 'V', 'I', 'D')

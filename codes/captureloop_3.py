@@ -1,3 +1,6 @@
+from PIL import Image
+import select
+import v4l2capture
 import glob
 import sys
 import time
@@ -38,15 +41,23 @@ def setup_logger():
     sys.stdout = Tee(open("logs/" + timestr + "-" + file_name + ".txt", "w"), sys.stdout)
 
 
-def setup(device, width, height, pxlformat, brt, exp_auto, exp_abs):
-    # configure camera settings using v4l2-ctl shell commands
+def set_resolution(*args):
+    size_x, size_y = video.set_format(args[0][0], args[0][1])
+    print "camera settings update:"
+    print "    @resolution=" + str(size_x) + 'x' + str(size_y)
 
+
+def setup(device, brt, exp_auto, exp_abs):
+    # stop video capture if on before updating camera settings
+    video.stop()
+
+    # change camera resolution
+    set_resolution(resolution)
+
+    # configure camera settings using v4l2-ctl shell commands
     # build command
     command = 'v4l2-ctl' \
               + ' -d /dev/video' + str(device) \
-              + ' --set-fmt-video=width=' + str(width) \
-              + ',height=' + str(height) \
-              + ',pixelformat=' + pxlformat \
               + ' -c brightness=' + str(brt) \
               + ',exposure_auto=' + str(exp_auto) \
 
@@ -56,9 +67,6 @@ def setup(device, width, height, pxlformat, brt, exp_auto, exp_abs):
     # execute shell command
     subprocess.call([command], shell=True)
 
-    print "camera settings update:"
-    print "    @resolution=" + str(width) + 'x' + str(height)
-    print "    @pixel_format=" + pxlformat
     print "    @brightness=" + str(brt)
     print "    @exposure_auto=" + str(exp_auto)
     if exp_auto == 1:
@@ -66,16 +74,39 @@ def setup(device, width, height, pxlformat, brt, exp_auto, exp_abs):
     else:
         print "    @exposure_absolute=N/A"
 
+    print "configuring..."
 
-def timer():
-    timer.flag = True
+    # Create a buffer to store image data in. This must be done before
+    # calling 'start' if v4l2capture is compiled with libv4l2. Otherwise
+    # raises IOError.
+    video.create_buffers(10)
+
+    # Send the buffer to the device. Some devices require this to be done
+    # before calling 'start'.
+    video.queue_all_buffers()
+
+    # Start the device. This lights the LED if it's a camera that has one.
+    video.start()
+
+    # Wait for the device to fill the buffer.
+    select.select((video,), (), ())
 
 
-timer.flag = False
+def capture_frame():
+    capture_frame.count += 1
+    capture_frame.name_count += 1
 
-frame_count = 0
+    image_data = video.read_and_queue()
+
+    image = Image.frombytes("RGB", (resolution[0], resolution[1]), image_data)
+    image.save("pics/frame%04d.jpg" % capture_frame.name_count)
+
+    print "captured frame " + str(capture_frame.count) + " -> saved as: frame%04d.jpg" % capture_frame.name_count
+
+
+capture_frame.count = 0
 # get number of jpg files in pics folder to avoid rewriting
-frame_name_count = len(glob.glob('pics/*.jpg'))
+capture_frame.name_count = len(glob.glob('pics/*.jpg'))
 
 
 if __name__ == '__main__':
@@ -85,11 +116,12 @@ if __name__ == '__main__':
     config = tree.getroot()
 
     # read camera settings from configuration xml file
-    dev_id      =   int(config.find('CameraSettings/dev_id').text)
-    pxl_fmt     =   config.find('CameraSettings/pixel_format').text
-    brt         =   int(config.find('CameraSettings/brightness').text)
-    exp_auto    =   int(config.find('CameraSettings/exposure_auto').text)
-    exp_abs     =   int(config.find('CameraSettings/exposure_absolute').text)
+    dev_id = int(config.find('CameraSettings/dev_id').text)
+    brt = int(config.find('CameraSettings/brightness').text)
+    exp_auto = int(config.find('CameraSettings/exposure_auto').text)
+    exp_abs = int(config.find('CameraSettings/exposure_absolute').text)
+
+    video = v4l2capture.Video_device("/dev/video" + str(dev_id))
 
     # configure logger
     setup_logger()
@@ -97,29 +129,21 @@ if __name__ == '__main__':
     print "> starting...  [" + str(time.strftime("%Y%m%d-%H%M%S")) + "]"
 
     # configure camera
-    setup(dev_id, resolution[0], resolution[1], 'MJPG', brt, exp_auto, exp_abs)
-    
-    print "> found " + str(frame_name_count) + " image files in pics folder"
-    
-    rt = RepeatedTimer(1, timer)
+    setup(dev_id, brt, exp_auto, exp_abs)
+
+    print "> found " + str(capture_frame.name_count) + " image files in pics folder"
+
+    rt = RepeatedTimer(1, capture_frame)
 
     try:
         while True:
-            if timer.flag is True:
-                timer.flag = False
-                frame_count += 1
-                frame_name_count += 1
-
-                filename = "pics/frame%04d.jpg" % frame_name_count
-                command = "fswebcam -r 2592x1944 -d /dev/video1 " + str(filename)
-                # execute shell command
-                subprocess.call([command], shell=True)
-                
-                print "captured frame " + str(frame_count) + " -> saved as: frame%04d.jpg" % frame_name_count
-
+            # image_data = video.read_and_queue()
+            pass
     except KeyboardInterrupt:
         print "loop interrupted!"
 
     rt.stop()
+
+    video.close()
 
     print "> program exit [" + str(time.strftime("%Y%m%d-%H%M%S")) + "]"

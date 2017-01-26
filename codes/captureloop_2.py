@@ -89,10 +89,10 @@ if __name__ == '__main__':
     config = tree.getroot()
 
     # read camera settings from configuration xml file
-    dev_id      =   int(config.find('CameraSettings/dev_id').text)
-    brt         =   int(config.find('CameraSettings/brightness').text)
-    exp_auto    =   int(config.find('CameraSettings/exposure_auto').text)
-    exp_abs     =   int(config.find('CameraSettings/exposure_absolute').text)
+    dev_id = int(config.find('CameraSettings/dev_id').text)
+    brt = int(config.find('CameraSettings/brightness').text)
+    exp_auto = int(config.find('CameraSettings/exposure_auto').text)
+    exp_abs = int(config.find('CameraSettings/exposure_absolute').text)
 
     vc = cv2.VideoCapture(dev_id)
 
@@ -104,9 +104,9 @@ if __name__ == '__main__':
 
         # configure camera
         setup(dev_id, brt, exp_auto, exp_abs)
-        
+
         print "> found " + str(capture_frame.name_count) + " image files in pics folder"
-        
+
         rt = RepeatedTimer(1, capture_frame)
 
         try:
