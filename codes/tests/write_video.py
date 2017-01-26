@@ -27,7 +27,7 @@ set_resolution(resolution)
 
 # Define the codec and create VideoWriter object
 fourcc = cv2.cv.CV_FOURCC('X', 'V', 'I', 'D')
-video = cv2.VideoWriter('video.avi', fourcc, 25.0, resolution)
+video = cv2.VideoWriter('video.avi', fourcc, 15.0, resolution)
 
 while(vc.isOpened()):
     ret, frame = vc.read()
