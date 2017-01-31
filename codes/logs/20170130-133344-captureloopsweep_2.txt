@@ -1,0 +1,48 @@
+> starting...  [20170130-133344]
+> found 0 image files in pics folder
+> starting picture capture
+camera settings update:
+    @resolution=2592x1944
+    @brightness=8
+    @exposure_auto=3
+    @exposure_absolute=N/A
+configuring...
+captured frame 1 -> saved as: frame0001.jpg
+captured frame 2 -> saved as: frame0002.jpg
+captured frame 3 -> saved as: frame0003.jpg
+captured frame 4 -> saved as: frame0004.jpg
+captured frame 5 -> saved as: frame0005.jpg
+camera settings update:
+    @resolution=2048x1536
+    @brightness=8
+    @exposure_auto=3
+    @exposure_absolute=N/A
+configuring...
+captured frame 6 -> saved as: frame0006.jpg
+captured frame 7 -> saved as: frame0007.jpg
+captured frame 8 -> saved as: frame0008.jpg
+captured frame 9 -> saved as: frame0009.jpg
+captured frame 10 -> saved as: frame0010.jpg
+camera settings update:
+    @resolution=2592x1944
+    @brightness=8
+    @exposure_auto=1
+    @exposure_absolute=4
+configuring...
+captured frame 11 -> saved as: frame0011.jpg
+captured frame 12 -> saved as: frame0012.jpg
+captured frame 13 -> saved as: frame0013.jpg
+captured frame 14 -> saved as: frame0014.jpg
+captured frame 15 -> saved as: frame0015.jpg
+camera settings update:
+    @resolution=2048x1536
+    @brightness=13
+    @exposure_auto=1
+    @exposure_absolute=4
+configuring...
+captured frame 16 -> saved as: frame0016.jpg
+captured frame 17 -> saved as: frame0017.jpg
+captured frame 18 -> saved as: frame0018.jpg
+captured frame 19 -> saved as: frame0019.jpg
+captured frame 20 -> saved as: frame0020.jpg
+> program exit [20170130-133427]

@@ -137,7 +137,6 @@ if __name__ == '__main__':
 
     try:
         while True:
-            # image_data = video.read_and_queue()
             pass
     except KeyboardInterrupt:
         print "loop interrupted!"
