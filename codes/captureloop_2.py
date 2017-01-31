@@ -16,8 +16,8 @@ from customTimer import RepeatedTimer
 # resolution = (1280, 1024)
 # resolution = (1600, 1200)
 # resolution = (1920, 1080)
-# resolution = (2048, 1536)
-resolution = (2592, 1944)
+resolution = (2048, 1536)
+# resolution = (2592, 1944)
 
 # define global name 'frame' before using
 frame = 0
