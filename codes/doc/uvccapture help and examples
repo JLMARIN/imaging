@@ -1,0 +1,32 @@
+uvccapture version 0.4
+Usage is: uvccapture [options]
+
+Options:
+
+-v             Verbose
+-o<filename>   Output filename(default: snap.jpg)
+-d<device>     V4L2 Device(default: /dev/video0)
+-x<width>      Image Width(must be supported by device)(>960 activates YUYV capture)
+-y<height>     Image Height(must be supported by device)(>720 activates YUYV capture)
+-c<command>    Command to run after each image capture(executed as <command> <output_filename>)
+-t<integer>    Take continuous shots with <integer> seconds between them (0 for single shot)
+-q<percentage> JPEG Quality Compression Level (activates YUYV capture)
+-r             Use read instead of mmap for image capture
+-w             Wait for capture command to finish before starting next capture
+-m             Toggles capture mode to YUYV capture
+
+Camera Settings:
+
+-B<integer>    Brightness
+-C<integer>    Contrast
+-S<integer>    Saturation
+-G<integer>    Gain
+
+
+Online help: http://manpages.ubuntu.com/manpages/precise/en/man1/uvccapture.1.html
+
+Examples:
+
+# take one frame
+
+uvccapture -v -m -d/dev/video1 -x2592 -y1944 -q85 -o./pics/$(date +\%Y\%m\%d\%H\%M).jpeg

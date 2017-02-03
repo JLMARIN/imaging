@@ -90,7 +90,6 @@ def setup(device, brt, exp_auto, exp_abs):
 
     # Wait for the device to fill the buffer.
     select.select((video,), (), ())
-    #time.sleep(3)
 
 
 def capture_frame():
