@@ -67,7 +67,7 @@ output=./sessions/$timestamp/$timestamp\_%4d.jpg
 # filter expression
 filter="fps=$fps, drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf: fontsize=30: text='frame_$timestamp\_%{eif\:n+1\:d}': x=0: y=h-(1*lh): fontcolor=white: box=1: boxcolor=0x00000999"
 
-FFREPORT=file=sessions/$timestamp/$timestamp.log:level=32
+export FFREPORT=file=sessions/$timestamp/$timestamp.log:level=32
 
 # ==================================================================================
 # create session folder
@@ -99,6 +99,7 @@ if [ -v video_codec ]; then
 	-i $device \
 	-qscale:v $compression \
 	-vf "$filter" \
+	-report \
 	$output
 else
 	exec ffmpeg -f v4l2 \
@@ -109,5 +110,3 @@ else
 	-report \
 	$output
 fi
-
-#FFREPORT=file=ffreport.log:level=32
