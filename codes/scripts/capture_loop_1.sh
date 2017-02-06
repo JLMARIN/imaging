@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Usage: capture_loop
+# Usage: capture_loop_1
 
 #-----------------------------------------------------------------------------------
 # Configures a UVC compatible device and captures frames
@@ -11,7 +11,7 @@
 #	- ffmpeg ('$ sudo apt-get install ffmpeg')
 #
 # Remember to give execute permission to the script by:
-# $ chmod +x /path/to/update.sh
+# $ chmod +x /path/to/script.sh
 #-----------------------------------------------------------------------------------
 
 # ==================================================================================
@@ -19,7 +19,7 @@
 # ==================================================================================
 
 # target device (name may be different). Check with '$ v4l2-ctl --list-devices'
-device=/dev/video1
+device=/dev/video3
 
 # video format. Check with '$ ffmpeg -f v4l2 -list_formats all -i /dev/video1'
 #video_codec=mjpeg
@@ -76,7 +76,7 @@ timestamp=$(date +"%y%m%d-%H%M%S")
 output=./sessions/$timestamp/$timestamp\_%4d.jpg
 
 # filter expression
-filter="fps=$fps, drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf: fontsize=30: text='frame_$timestamp\_%{eif\:n+1\:d}': x=0: y=h-(1*lh): fontcolor=white: box=1: boxcolor=0x00000999"
+filter="fps=$fps, drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf: fontsize=30: text='$timestamp\_%{eif\:n+1\:d}': x=0: y=h-(1*lh): fontcolor=white: box=1: boxcolor=0x00000999"
 #filter="fps=$fps"
 
 # configure log file

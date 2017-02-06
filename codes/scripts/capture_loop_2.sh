@@ -1,67 +1,47 @@
 #!/bin/bash
 
-# Usage: capture_loop
+# Usage: capture_loop_2
 
 #-----------------------------------------------------------------------------------
 # Configures a UVC compatible device and captures frames
 # at a certain rate while saving them in a local folder.
+# This version takes input arguments in order to configure
+# the camera
+#
+# ARG 1 : target device
+# ARG 2 : frame size
+# ARG 3 : brightness
+# ARG 4 : exposure_auto
+# ARG 5 : exposure_absolute
+# ARG 6 : number of frames
+# ARG 7 : folder name
 #
 # Two programs are needed for this script:
 #	- v4l-utils ('$ sudo apt-get install v4l-utils')
 #	- ffmpeg ('$ sudo apt-get install ffmpeg')
 #
 # Remember to give execute permission to the script by:
-# $ chmod +x /path/to/update.sh
+# $ chmod +x /path/to/script.sh
 #-----------------------------------------------------------------------------------
 
 # ==================================================================================
 # define camera configuration variables
 # ==================================================================================
 
-# target device (name may be different). Check with '$ v4l2-ctl --list-devices'
-device=/dev/video1
-
-# video format. Check with '$ ffmpeg -f v4l2 -list_formats all -i /dev/video1'
-#video_codec=mjpeg
-
-# frame sizes. Check with '$ ffmpeg -f v4l2 -list_formats all -i /dev/video1'.
-# Uncomment the desired resolution
-#resolution=320x240
-#resolution=640x480
-#resolution=800x600
-#resolution=1024x768
-#resolution=1280x720
-#resolution=1280x1024
-#resolution=1600x1200
-#resolution=1920x1080
-#resolution=2048x1536
-resolution=2592x1944
-
-# camera settings. Check options and values with '$ v4l2-ctl -d /dev/video1 --list-ctrls'
-
-#	brightness:
-#		@ type		int
-#		@ min		0
-#		@ max		15
-#		@ step		1
-#		@ default	8
-brightness=8
-#	exposure_auto:
-#		@ type		menu
-#		@ min		0
-#		@ max		3
-#		@ default	3
-#		@ options	1:manual mode
-#		 			3:aperture priority mode
-exposure_auto=3
-#	exposure_absolute:
-#		@ type		int
-#		@ min		4
-#		@ max		5000
-#		@ step		1
-#		@ default	625
-#		@ note		used only when exposure_auto=1
-exposure_absolute=4
+# ARG 1 : target device
+device=$1
+# ARG 2 : frame size
+resolution=$2
+# ARG 3 : brightness
+brightness=$3
+# ARG 4 : exposure_auto
+exposure_auto=$4
+# ARG 5 : exposure_absolute
+exposure_absolute=$5
+# ARG 6 : number of frames
+num_frames=$6
+# ARG 7 : folder name
+out_folder=$7
 
 # video quantizer scale. Sets the quality of the video and is a number from 2-31,
 # with 1 being highest quality/largest filesize and 31 being the lowest
@@ -73,19 +53,14 @@ fps=1
 
 # timestamp and output name for files
 timestamp=$(date +"%y%m%d-%H%M%S")
-output=./sessions/$timestamp/$timestamp\_%4d.jpg
+output=./sessions/$out_folder/$timestamp\_%4d.jpg
 
 # filter expression
-filter="fps=$fps, drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf: fontsize=30: text='frame_$timestamp\_%{eif\:n+1\:d}': x=0: y=h-(1*lh): fontcolor=white: box=1: boxcolor=0x00000999"
+filter="fps=$fps, drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf: fontsize=30: text='$timestamp\_%{eif\:n+1\:d}': x=0: y=h-(1*lh): fontcolor=white: box=1: boxcolor=0x00000999"
 #filter="fps=$fps"
 
 # configure log file
-export FFREPORT=file=sessions/$timestamp/$timestamp.log:level=32
-
-# ==================================================================================
-# create session folder
-# ==================================================================================
-mkdir -p sessions/$timestamp
+export FFREPORT=file=sessions/$out_folder/$timestamp.log:level=32
 
 # ==================================================================================
 # run v4l2-ctl to configure camera settings
@@ -105,21 +80,11 @@ fi
 # ==================================================================================
 # run ffmpeg and start a loop to capture and save images
 # ==================================================================================
-if [ -v video_codec ]; then
-	exec ffmpeg -f v4l2 \
-	-vcodec $video_codec \
-	-s $resolution \
-	-i $device \
-	-qscale:v $compression \
-	-vf "$filter" \
-	-report \
-	$output
-else
-	exec ffmpeg -f v4l2 \
-	-s $resolution \
-	-i $device \
-	-qscale:v $compression \
-	-vf "$filter" \
-	-report \
-	$output
-fi
+exec ffmpeg -f v4l2 \
+-s $resolution \
+-i $device \
+-vframes $num_frames \
+-qscale:v $compression \
+-vf "$filter" \
+-report \
+$output
