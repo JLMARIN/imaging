@@ -23,7 +23,7 @@
 # ==================================================================================
 
 # target device (name may be different). Check with '$ v4l2-ctl --list-devices'
-device=/dev/video1
+device=/dev/video3
 
 # number of frames per loop
 num_frames=15
@@ -43,52 +43,18 @@ mkdir -p sessions/$output_folder
 # run loops
 # ==================================================================================
 
-#-----------------------------------------------------------------------------------
-# define local settings
-resolution=2592x1944
-brightness=8
-exposure_auto=3
-exposure_absolute=4
-
-# run loop
-./capture_loop_2.sh "$device" "$resolution" "$brightness" "$exposure_auto" "$exposure_absolute" "$num_frames" "$output_folder" 
-#-----------------------------------------------------------------------------------
-
-sleep 3
+# $ ./capture_loop_2.sh [device] [resolution] [brightness] [exposure_auto] [exposure_absolute] [number of frames] [output folder]
 
 #-----------------------------------------------------------------------------------
-# define local settings
-resolution=2592x1944
-brightness=8
-exposure_auto=1
-exposure_absolute=4
-
-# run loop
-./capture_loop_2.sh "$device" "$resolution" "$brightness" "$exposure_auto" "$exposure_absolute" "$num_frames" "$output_folder" 
+./capture_loop_2.sh "$device" 2592x1944 8 3 4 "$num_frames" "$output_folder"
+sleep 2
 #-----------------------------------------------------------------------------------
-
-sleep 3
-
+./capture_loop_2.sh "$device" 2592x1944 8 1 4 "$num_frames" "$output_folder"
+sleep 2
 #-----------------------------------------------------------------------------------
-# define local settings
-resolution=2048x1536
-brightness=8
-exposure_auto=3
-exposure_absolute=4
-
-# run loop
-./capture_loop_2.sh "$device" "$resolution" "$brightness" "$exposure_auto" "$exposure_absolute" "$num_frames" "$output_folder" 
+./capture_loop_2.sh "$device" 2048x1536 8 3 4 "$num_frames" "$output_folder"
+sleep 2
 #-----------------------------------------------------------------------------------
-
-sleep 3
-
-#-----------------------------------------------------------------------------------
-# define local settings
-resolution=2048x1536
-brightness=8
-exposure_auto=1
-exposure_absolute=40
-
-# run loop
-./capture_loop_2.sh "$device" "$resolution" "$brightness" "$exposure_auto" "$exposure_absolute" "$num_frames" "$output_folder" 
+./capture_loop_2.sh "$device" 2048x1536 8 1 40 "$num_frames" "$output_folder"
+sleep 2
 #-----------------------------------------------------------------------------------
