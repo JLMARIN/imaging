@@ -66,4 +66,4 @@ Examples:
 
 # take one frame
 
-fswebcam -d /dev/video1 -p MJPEG -r 2592x1944 --jpeg 85 ./pics/$(date +\%Y\%m\%d\%H\%M).jpeg
+fswebcam -d /dev/video1 -p MJPEG -r 2592x1944 --jpeg 85 $(date +\%Y\%m\%d\%H\%M).jpeg

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Usage: capture_loop_2
+# Usage: capture_loop
 
 #-----------------------------------------------------------------------------------
 # Configures a UVC compatible device and captures frames
@@ -21,10 +21,21 @@
 # target device (name may be different). Check with '$ v4l2-ctl --list-devices'
 device=/dev/video1
 
-# video format and frame sizes. Check with '$ ffmpeg -f v4l2 -list_formats all -i /dev/video1'
+# video format. Check with '$ ffmpeg -f v4l2 -list_formats all -i /dev/video1'
 #video_codec=mjpeg
-width=2592
-height=1944
+
+# frame sizes. Check with '$ ffmpeg -f v4l2 -list_formats all -i /dev/video1'.
+# Uncomment the desired resolution
+#resolution=320x240
+#resolution=640x480
+#resolution=800x600
+#resolution=1024x768
+#resolution=1280x720
+#resolution=1280x1024
+#resolution=1600x1200
+#resolution=1920x1080
+#resolution=2048x1536
+resolution=2592x1944
 
 # camera settings. Check options and values with '$ v4l2-ctl -d /dev/video1 --list-ctrls'
 
@@ -66,7 +77,9 @@ output=./sessions/$timestamp/$timestamp\_%4d.jpg
 
 # filter expression
 filter="fps=$fps, drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf: fontsize=30: text='frame_$timestamp\_%{eif\:n+1\:d}': x=0: y=h-(1*lh): fontcolor=white: box=1: boxcolor=0x00000999"
+#filter="fps=$fps"
 
+# configure log file
 export FFREPORT=file=sessions/$timestamp/$timestamp.log:level=32
 
 # ==================================================================================
@@ -95,7 +108,7 @@ fi
 if [ -v video_codec ]; then
 	exec ffmpeg -f v4l2 \
 	-vcodec $video_codec \
-	-s $width\x$height \
+	-s $resolution \
 	-i $device \
 	-qscale:v $compression \
 	-vf "$filter" \
@@ -103,7 +116,7 @@ if [ -v video_codec ]; then
 	$output
 else
 	exec ffmpeg -f v4l2 \
-	-s $width\x$height \
+	-s $resolution \
 	-i $device \
 	-qscale:v $compression \
 	-vf "$filter" \

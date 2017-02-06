@@ -137,4 +137,6 @@ ffmpeg -f video4linux2 -i /dev/video1 -vf fps=1/30 test%3d.jpeg
 
 # take frames every second using mjpeg codec and jpeg compression set to 5
 
-ffmpeg -f v4l2 -i /dev/video1 -vcodec mjpeg -s 2592x1944 -qscale:v 5 -vf fps=1 ./pics/test%3d.jpeg
+ffmpeg -f v4l2 -i /dev/video1 -vcodec mjpeg -s 2592x1944 -qscale:v 5 -vf fps=1 test%3d.jpeg
+
+ffmpeg -f v4l2 -s 2592x1944 -i /dev/video1 -vframes 5 -qscale:v 5 -vf fps=1 test%3d.jpeg
