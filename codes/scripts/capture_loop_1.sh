@@ -19,10 +19,10 @@
 # ==================================================================================
 
 # target device (name may be different). Check with '$ v4l2-ctl --list-devices'
-device=/dev/video3
+device=/dev/video0
 
 # video format. Check with '$ ffmpeg -f v4l2 -list_formats all -i /dev/video1'
-#video_codec=mjpeg
+video_codec=mjpeg
 
 # frame sizes. Check with '$ ffmpeg -f v4l2 -list_formats all -i /dev/video1'.
 # Uncomment the desired resolution
