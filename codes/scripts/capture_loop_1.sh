@@ -19,13 +19,16 @@
 # ==================================================================================
 
 # target device (name may be different). Check with '$ v4l2-ctl --list-devices'
-device=/dev/video0
+device=/dev/video3
 
 # video format. Check with '$ ffmpeg -f v4l2 -list_formats all -i /dev/video1'
-video_codec=mjpeg
+# or '$ v4l2-ctl -d /dev/video1 --list-formats-ext' for extended information.
+# Uncomment the desired option
+input_format=mjpeg
+#input_format=yuyv422
 
 # frame sizes. Check with '$ ffmpeg -f v4l2 -list_formats all -i /dev/video1'.
-# Uncomment the desired resolution
+# Uncomment the desired option
 #resolution=320x240
 #resolution=640x480
 #resolution=800x600
@@ -38,6 +41,9 @@ video_codec=mjpeg
 resolution=2592x1944
 
 # camera settings. Check options and values with '$ v4l2-ctl -d /dev/video1 --list-ctrls'
+
+# default settings: 	brightness=8	/	exposure_auto=3		/	exposure_absoulte=N/A
+# custom settings 1: 	brightness=12	/	exposure_auto=1		/	exposure_absoulte=15
 
 #	brightness:
 #		@ type		int
@@ -61,7 +67,7 @@ exposure_auto=3
 #		@ step		1
 #		@ default	625
 #		@ note		used only when exposure_auto=1
-exposure_absolute=4
+exposure_absolute=15
 
 # video quantizer scale. Sets the quality of the video and is a number from 2-31,
 # with 1 being highest quality/largest filesize and 31 being the lowest
@@ -76,8 +82,8 @@ timestamp=$(date +"%y%m%d-%H%M%S")
 output=./sessions/$timestamp/$timestamp\_%4d.jpg
 
 # filter expression
-filter="fps=$fps, drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf: fontsize=30: text='$timestamp\_%{eif\:n+1\:d}': x=0: y=h-(1*lh): fontcolor=white: box=1: boxcolor=0x00000999"
-#filter="fps=$fps"
+#filter="fps=$fps, drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf: fontsize=30: text='$timestamp\_%{eif\:n+1\:d}': x=0: y=h-(1*lh): fontcolor=white: box=1: boxcolor=0x00000999"
+filter="fps=$fps"
 
 # configure log file
 export FFREPORT=file=sessions/$timestamp/$timestamp.log:level=32
@@ -105,21 +111,12 @@ fi
 # ==================================================================================
 # run ffmpeg and start a loop to capture and save images
 # ==================================================================================
-if [ -v video_codec ]; then
-	exec ffmpeg -f v4l2 \
-	-vcodec $video_codec \
-	-s $resolution \
-	-i $device \
-	-qscale:v $compression \
-	-vf "$filter" \
-	-report \
-	$output
-else
-	exec ffmpeg -f v4l2 \
-	-s $resolution \
-	-i $device \
-	-qscale:v $compression \
-	-vf "$filter" \
-	-report \
-	$output
-fi
+
+exec ffmpeg -f v4l2 \
+-input_format $input_format \
+-s $resolution \
+-i $device \
+-qscale:v $compression \
+-vf "$filter" \
+-report \
+$output

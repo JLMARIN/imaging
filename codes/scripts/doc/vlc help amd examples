@@ -376,3 +376,19 @@ To get exhaustive help, use '-H'.
 Examples:
 
 vlc -I dummy v4l2:///dev/video1 --video-filter scene --no-audio --scene-path ./pics --scene-prefix image_prefix --scene-format png vlc://quit --run-time=1
+
+vlc v4l2:///dev/video3:width=2592:height=1944:chroma=MJPG -V dummy --intf=dummy --dummy-quiet --video-filter=scene --no-audio --scene-path=./sessions --scene-format=jpeg --scene-prefix=snap --scene-replace --run-time=1 --scene-ratio=24 vlc://quit
+
+cvlc v4l2:///dev/video3:width=2592:height=1944:chroma=MJPG -V dummy --video-filter=scene --no-audio --scene-path=./sessions --scene-format=jpeg --scene-prefix=snap --scene-replace --run-time=1 vlc://quit
+
+cvlc v4l2:// -V image --image-out-ratio 100 --image-out-prefix Img --run-time 40 vlc://quit 2> /dev/video3
+
+
+
+cvlc v4l2:///dev/video3 -V dummy --intf=dummy --video-filter scene --no-audio --scene-path ./sessions --scene-prefix image_prefix --scene-format jpeg vlc://quit --run-time=1
+
+
+
+cvlc v4l2:///dev/video3:width=2592:height=1944 -V dummy --intf=dummy --video-filter scene --no-audio --scene-path ./sessions --scene-prefix image_prefix --scene-format jpeg vlc://quit --run-time=1
+
+cvlc v4l2:///dev/video3:width=2592:height=1944 --video-filter scene --no-audio --scene-path ./sessions --scene-prefix image_prefix --scene-format jpeg vlc://quit --run-time=1

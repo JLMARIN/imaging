@@ -1,0 +1,111 @@
+streamer grabs image(s), records movies and sound
+
+usage: streamer [ options ]
+
+general options:
+  -h          print this help text
+  -q          quiet operation
+  -d          enable debug output
+  -p n        use n compression threads    [1]
+  -w seconds  wait before grabbing         [0]
+
+video options:
+  -o file     video/movie file name
+  -f format   specify video format
+  -c device   specify video4linux device   [/dev/video0]
+  -D driver   specify video4linux driver   [libv4l]
+  -r fps      frame rate                   [10.000]
+  -s size     specify size                 [320x240]
+
+  -t times    number of frames or hh:mm:ss [1]
+  -b buffers  specify # of buffers         [16]
+  -j quality  quality for mjpeg or jpeg    [75]
+  -n tvnorm   set pal/ntsc/secam
+  -i input    set video source
+  -a          don't unmute/mute v4l device.
+
+audio options:
+  -O file     wav file name
+  -F format   specify audio format
+  -C device   specify dsp device           [/dev/dsp]
+  -R rate     sample rate                  [44100]
+
+
+movie writers:
+  files - multiple image files
+    video formats:
+      ppm     24 bit TrueColor (BE: rgb)   [ppm]
+      pgm     8 bit StaticGray             [pgm]
+      jpeg    JPEG (JFIF)                  [jpeg]
+    audio formats:
+      mono8   8bit mono                    [wav]
+      mono16  16bit mono (LE)              [wav]
+      stereo  16bit stereo (LE)            [wav]
+
+  raw - single file, raw video data
+    video formats:
+      rgb     24 bit TrueColor (BE: rgb)   [raw]
+      gray    8 bit StaticGray             [raw]
+      422     16 bit YUV 4:2:2 (packed, YUYV) [raw]
+      422p    16 bit YUV 4:2:2 (planar)    [raw]
+      4mpeg   yuv4mpeg (mpeg2enc >= 1.6)   [yuv]
+      4mpeg-o yuv4mpeg (old mpeg2enc)      [yuv]
+    audio formats:
+      mono8   8bit mono                    [wav]
+      mono16  16bit mono (LE)              [wav]
+      stereo  16bit stereo (LE)            [wav]
+
+  avi - Microsoft AVI (RIFF) format
+    video formats:
+      rgb15   15 bit TrueColor (LE)        [avi]
+      rgb24   24 bit TrueColor (LE: bgr)   [avi]
+      mjpeg   MJPEG (AVI)                  [avi]
+      jpeg    JPEG (JFIF)                  [avi]
+    audio formats:
+      mono8   8bit mono                    [avi]
+      mono16  16bit mono (LE)              [avi]
+      stereo  16bit stereo (LE)            [avi]
+
+If you want to capture to multiple image files you should include some
+digits into the movie filename (foo0000.jpeg for example), streamer will
+use the digit block to enumerate the image files.
+
+For file formats which can hold *both* audio and video (like AVI and
+QuickTime) the -O option has no effect.
+
+streamer will use the file extension of the output file name to figure
+which format to use.  You need the -f/-F options only if the extension
+allows more than one format.
+
+Examples:
+  capture a single frame:
+    streamer -o foobar.ppm
+
+  capture ten frames, two per second:
+    streamer -t 10 -r 2 -o foobar00.jpeg
+
+  record 30 seconds stereo sound:
+    streamer -t 0:30 -O soundtrack.wav -F stereo
+
+  record a quicktime movie with sound:
+    streamer -t 0:30 -o movie.mov -f jpeg -F mono16
+
+  build mpeg movies using mjpegtools + compressed avi file:
+    streamer -t 0:30 -s 352x240 -r 24 -o movie.avi -f mjpeg -F stereo
+    lav2wav +p movie.avi | mp2enc -o audio.mp2
+    lav2yuv +p movie.avi | mpeg2enc -o video.m1v
+    mplex audio.mp2 video.m1v -o movie.mpg
+
+  build mpeg movies using mjpegtools + raw, uncompressed video:
+    streamer -t 0:30 -s 352x240 -r 24 -o video.yuv -O audio.wav -F stereo
+    mp2enc -o audio.mp2 < audio.wav
+    mpeg2enc -o video.m1v < video.yuv
+    mplex audio.mp2 video.m1v -o movie.mpg
+
+-- 
+(c) 1998-2001 Gerd Knorr <kraxel@bytesex.org>
+
+
+Examples:
+
+streamer -d -D libv4l -c /dev/video3 -s 2592x1944 -f jpeg -j 80 -t 10 -r 1 -o test000.jpeg
