@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Usage: capture_loop_1
+# Usage: capture_loop_3
 
 #-----------------------------------------------------------------------------------
 # Configures a UVC compatible device and captures frames
@@ -8,7 +8,7 @@
 #
 # Two programs are needed for this script:
 #	- v4l-utils ('$ sudo apt-get install v4l-utils')
-#	- ffmpeg ('$ sudo apt-get install ffmpeg')
+#	- streamer ('$ sudo apt-get install streamer')
 #
 # Remember to give execute permission to the script by:
 # $ chmod +x /path/to/script.sh
@@ -21,13 +21,14 @@
 # target device (name may be different). Check with '$ v4l2-ctl --list-devices'
 device=/dev/video0
 
-# video format. Check with '$ ffmpeg -f v4l2 -list_formats all -i /dev/video1'
-# or '$ v4l2-ctl -d /dev/video1 --list-formats-ext' for extended information.
-# Uncomment the desired option
-input_format=mjpeg
-#input_format=yuyv422
+# driver to use for communicatin with device
+driver=libv4l
 
-# frame sizes. Check with '$ ffmpeg -f v4l2 -list_formats all -i /dev/video1'.
+# video format. Check with '$ v4l2-ctl -d /dev/video1 --list-formats'.
+# Uncomment the desired option
+input_format=jpeg
+
+# frame sizes. Check with '$ v4l2-ctl -d /dev/video1 --list-formats-ext'.
 # Uncomment the desired option
 #resolution=320x240
 #resolution=640x480
@@ -69,24 +70,17 @@ exposure_auto=3
 #		@ note		used only when exposure_auto=1
 exposure_absolute=15
 
-# video quantizer scale. Sets the quality of the video and is a number from 2-31,
-# with 1 being highest quality/largest filesize and 31 being the lowest
-# quality/smallest filesize. The range 2-5 is a good balance.
-compression=5
+# image quality. Sets the quality of the image and is a number from 0-100,
+# with 100 being highest quality/largest filesize and 0 being the lowest
+# quality/smallest filesize. Default is 75
+quality=80
 
 # frames per second
 fps=1
 
 # timestamp and output name for files
 timestamp=$(date +"%y%m%d-%H%M%S")
-output=./sessions/$timestamp/$timestamp\_%4d.jpg
-
-# filter expression
-#filter="fps=$fps, drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf: fontsize=30: text='$timestamp\_%{eif\:n+1\:d}': x=0: y=h-(1*lh): fontcolor=white: box=1: boxcolor=0x00000999"
-filter="fps=$fps"
-
-# configure log file
-export FFREPORT=file=sessions/$timestamp/$timestamp.log:level=32
+output=./sessions/$timestamp/$timestamp\_0000.jpeg
 
 # ==================================================================================
 # create session folder
@@ -109,14 +103,16 @@ else
 fi
 
 # ==================================================================================
-# run ffmpeg and start a loop to capture and save images
+# run streamer and start a loop to capture and save images
 # ==================================================================================
 
-exec ffmpeg -f v4l2 \
--input_format $input_format \
+exec streamer \
+-D $driver \
+-c $device \
 -s $resolution \
--i $device \
--qscale:v $compression \
--vf "$filter" \
--report \
-$output
+-f $input_format \
+-t 1000 \
+-j $quality \
+-r $fps \
+-o $output
+
