@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# Usage: capture_loop_1
+# Usage: record_video_1
 
 #-----------------------------------------------------------------------------------
-# Configures a UVC compatible device and captures frames
-# at a certain rate while saving them in a local folder.
+# Configures a UVC compatible device and records a video
+# while saving it in a local folder.
 #
 # Two programs are needed for this script:
 #	- v4l-utils ('$ sudo apt-get install v4l-utils')
-#	- ffmpeg ('$ sudo apt-get install ffmpeg')
+#	- streamer ('$ sudo apt-get install streamer')
 #
 # Remember to give execute permission to the script by:
 # $ chmod +x /path/to/script.sh
@@ -22,12 +22,11 @@
 device=$1
 
 # driver to use for communication with device
-driver=v4l2
+driver=libv4l
 
 # video format. Check with '$ v4l2-ctl -d /dev/video1 --list-formats'.
 # Uncomment the desired option
-input_format=mjpeg
-#input_format=yuyv422
+input_format=jpeg
 
 # frame sizes. Check with '$ v4l2-ctl -d /dev/video1 --list-formats-ext'.
 # Uncomment the desired option
@@ -36,10 +35,10 @@ input_format=mjpeg
 #resolution=800x600
 #resolution=1024x768
 #resolution=1280x720
-#resolution=1280x1024
+resolution=1280x1024
 #resolution=1600x1200
 #resolution=1920x1080
-resolution=2048x1536
+#resolution=2048x1536
 #resolution=2592x1944
 
 # camera settings. Check options and values with '$ v4l2-ctl -d /dev/video1 --list-ctrls'
@@ -71,29 +70,17 @@ exposure_auto=3
 #		@ note		used only when exposure_auto=1
 exposure_absolute=15
 
-# video quantizer scale. Sets the quality of the video and is a number from 2-31,
-# with 1 being highest quality/largest filesize and 31 being the lowest
-# quality/smallest filesize. The range 2-5 is a good balance.
-compression=2
-
-# frames per second
-fps=1
+# record time in m:ss format
+rec_time=0:30
 
 # timestamp and output name for files
 timestamp=$(date +"%y%m%d-%H%M%S")
-output=./sessions/$timestamp\_ffmpeg/$timestamp\_%4d.jpeg
-
-# filter expression
-#filter="fps=$fps, drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf: fontsize=30: text='$timestamp\_%{eif\:n+1\:d}': x=0: y=h-(1*lh): fontcolor=white: box=1: boxcolor=0x00000999"
-filter="fps=$fps"
-
-# configure log file
-export FFREPORT=file=sessions/$timestamp\_ffmpeg/$timestamp.log:level=32
+output=./sessions/$timestamp\_streamer/$timestamp\_.avi
 
 # ==================================================================================
 # create session folder
 # ==================================================================================
-mkdir -p sessions/$timestamp\_ffmpeg
+mkdir -p sessions/$timestamp\_streamer
 
 # ==================================================================================
 # run v4l2-ctl to configure camera settings
@@ -102,24 +89,23 @@ if (( "$exposure_auto" == 3 )); then
 # 	exposure_auto: 3 (aperture priority mode)
 	v4l2-ctl -d $device \
 	-c brightness=$brightness,exposure_auto=$exposure_auto
-	echo \>\>\> camera configuration: brightness=$brightness, exposure_auto=$exposure_auto
+	echo camera configuration: brightness=$brightness, exposure_auto=$exposure_auto
 else
 # 	exposure_auto: 1 (manual mode)
 	v4l2-ctl -d $device \
 	-c brightness=$brightness,exposure_auto=$exposure_auto,exposure_absolute=$exposure_absolute
-	echo \>\>\> camera configuration: brightness=$brightness, exposure_auto=$exposure_auto, exposure_absolute=$exposure_absolute
+	echo camera configuration: brightness=$brightness, exposure_auto=$exposure_auto, exposure_absolute=$exposure_absolute
 fi
 
 # ==================================================================================
-# run ffmpeg and start a loop to capture and save images
+# run streamer and record video
 # ==================================================================================
 
-exec ffmpeg \
--f $driver \
--input_format $input_format \
+exec streamer \
+-D $driver \
+-c $device \
 -s $resolution \
--i $device \
--qscale:v $compression \
--vf "$filter" \
--report \
-$output
+-f $input_format \
+-t $rec_time \
+-b 30 \
+-o $output

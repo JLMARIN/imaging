@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Usage: capture_sweep
+# Usage: capture_sweep_2
 
 #-----------------------------------------------------------------------------------
 # Configures a UVC compatible device and captures frames
@@ -9,9 +9,9 @@
 #
 # Two programs are needed for this script:
 #	- v4l-utils ('$ sudo apt-get install v4l-utils')
-#	- ffmpeg ('$ sudo apt-get install ffmpeg')
+#	- streamer ('$ sudo apt-get install streamer')
 #
-# A sub-script named capture_loop_2.sh is used for each
+# A sub-script named capture_loop_2b.sh is used for each
 # loop call
 #
 # Remember to give execute permission to the script by:
@@ -23,16 +23,19 @@
 # ==================================================================================
 
 # target device (name may be different). Check with '$ v4l2-ctl --list-devices'
-device=/dev/video3
+device=$1
+
+# duration of the video recording in m:ss format
+rec_time=0:30
 
 # number of frames per loop
-num_frames=15
+num_frames=20
 
 # timestamp
 timestamp=$(date +"%y%m%d-%H%M%S")
 
 # output folder
-output_folder=$timestamp\_sweep
+output_folder=$timestamp\_streamer_sweep
 
 # ==================================================================================
 # create session folder
@@ -43,18 +46,13 @@ mkdir -p sessions/$output_folder
 # run loops
 # ==================================================================================
 
-# $ ./capture_loop_2.sh [device] [resolution] [brightness] [exposure_auto] [exposure_absolute] [number of frames] [output folder]
+# $ ./record_video_1b.sh [device] [resolution] [brightness] [exposure_auto] [exposure_absolute] [recording time]   [output folder]
+# $ ./capture_loop_2b.sh [device] [resolution] [brightness] [exposure_auto] [exposure_absolute] [number of frames] [output folder]
 
 #-----------------------------------------------------------------------------------
-./capture_loop_2.sh "$device" 2592x1944 8 3 4 "$num_frames" "$output_folder"
-sleep 2
+./record_video_1b.sh "$device" 1280x1024 8 3 4 "$rec_time" "$output_folder"
 #-----------------------------------------------------------------------------------
-./capture_loop_2.sh "$device" 2592x1944 8 1 4 "$num_frames" "$output_folder"
-sleep 2
+./capture_loop_2b.sh "$device" 2048x1536 8 3 4 "$num_frames" "$output_folder"
 #-----------------------------------------------------------------------------------
-./capture_loop_2.sh "$device" 2048x1536 8 3 4 "$num_frames" "$output_folder"
-sleep 2
-#-----------------------------------------------------------------------------------
-./capture_loop_2.sh "$device" 2048x1536 8 1 40 "$num_frames" "$output_folder"
-sleep 2
+./capture_loop_2b.sh "$device" 2048x1536 12 1 20 "$num_frames" "$output_folder"
 #-----------------------------------------------------------------------------------
