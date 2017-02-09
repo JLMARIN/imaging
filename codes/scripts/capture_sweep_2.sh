@@ -26,10 +26,10 @@
 device=$1
 
 # duration of the video recording in m:ss format
-rec_time=0:30
+rec_time=5:00
 
 # number of frames per loop
-num_frames=20
+num_frames=180
 
 # timestamp
 timestamp=$(date +"%y%m%d-%H%M%S")
@@ -46,13 +46,13 @@ mkdir -p sessions/$output_folder
 # run loops
 # ==================================================================================
 
-# $ ./record_video_1b.sh [device] [resolution] [brightness] [exposure_auto] [exposure_absolute] [recording time]   [output folder]
-# $ ./capture_loop_2b.sh [device] [resolution] [brightness] [exposure_auto] [exposure_absolute] [number of frames] [output folder]
+# $ ./record_video_1b.sh [device] [resolution] [brightness] [gamma] [exposure_auto] [exposure_absolute] [recording time]   [output folder]
+# $ ./capture_loop_2b.sh [device] [resolution] [brightness] [gamma] [exposure_auto] [exposure_absolute] [number of frames] [output folder]
 
 #-----------------------------------------------------------------------------------
-./record_video_1b.sh "$device" 1280x1024 8 3 4 "$rec_time" "$output_folder"
+./record_video_1b.sh "$device" 640x480 8 7 3 4 "$rec_time" "$output_folder"
 #-----------------------------------------------------------------------------------
-./capture_loop_2b.sh "$device" 2048x1536 8 3 4 "$num_frames" "$output_folder"
+./capture_loop_2b.sh "$device" 2048x1536 8 7 3 4 "$num_frames" "$output_folder"
 #-----------------------------------------------------------------------------------
-./capture_loop_2b.sh "$device" 2048x1536 12 1 20 "$num_frames" "$output_folder"
+./capture_loop_2b.sh "$device" 2048x1536 9 10 1 20 "$num_frames" "$output_folder"
 #-----------------------------------------------------------------------------------

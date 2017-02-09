@@ -11,10 +11,11 @@
 # ARG 1 : target device
 # ARG 2 : frame size
 # ARG 3 : brightness
-# ARG 4 : exposure_auto
-# ARG 5 : exposure_absolute
-# ARG 6 : number of frames
-# ARG 7 : folder name
+# ARG 4 : gamma
+# ARG 5 : exposure_auto
+# ARG 6 : exposure_absolute
+# ARG 7 : number of frames
+# ARG 8 : folder name
 #
 # Two programs are needed for this script:
 #	- v4l-utils ('$ sudo apt-get install v4l-utils')
@@ -34,14 +35,16 @@ device=$1
 resolution=$2
 # ARG 3 : brightness
 brightness=$3
-# ARG 4 : exposure_auto
-exposure_auto=$4
-# ARG 5 : exposure_absolute
-exposure_absolute=$5
-# ARG 6 : number of frames
-num_frames=$6
-# ARG 7 : folder name
-out_folder=$7
+# ARG 4 : gamma
+gamma=$4
+# ARG 5 : exposure_auto
+exposure_auto=$5
+# ARG 6 : exposure_absolute
+exposure_absolute=$6
+# ARG 7 : number of frames
+num_frames=$7
+# ARG 8 : folder name
+out_folder=$8
 
 # driver to use for communication with device
 driver=libv4l
@@ -68,13 +71,13 @@ output=./sessions/$out_folder/$timestamp\_0000.jpeg
 if (( "$exposure_auto" == 3 )); then
 # 	exposure_auto: 3 (aperture priority mode)
 	v4l2-ctl -d $device \
-	-c brightness=$brightness,exposure_auto=$exposure_auto
-	echo \>\>\> camera configuration: brightness=$brightness, exposure_auto=$exposure_auto
+	-c brightness=$brightness,gamma=$gamma,exposure_auto=$exposure_auto
+	echo \>\>\> camera configuration: brightness=$brightness, gamma=$gamma, exposure_auto=$exposure_auto
 else
 # 	exposure_auto: 1 (manual mode)
 	v4l2-ctl -d $device \
-	-c brightness=$brightness,exposure_auto=$exposure_auto,exposure_absolute=$exposure_absolute
-	echo \>\>\> camera configuration: brightness=$brightness, exposure_auto=$exposure_auto, exposure_absolute=$exposure_absolute
+	-c brightness=$brightness,gamma=$gamma,exposure_auto=$exposure_auto,exposure_absolute=$exposure_absolute
+	echo \>\>\> camera configuration: brightness=$brightness, gamma=$gamma, exposure_auto=$exposure_auto, exposure_absolute=$exposure_absolute
 fi
 
 # ==================================================================================
