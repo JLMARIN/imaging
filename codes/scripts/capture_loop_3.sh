@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Usage: capture_loop_2
+# Usage: capture_loop_3
 
 #-----------------------------------------------------------------------------------
 # Configures a UVC compatible device and captures frames
@@ -8,7 +8,7 @@
 #
 # Two programs are needed for this script:
 #	- v4l-utils ('$ sudo apt-get install v4l-utils')
-#	- streamer ('$ sudo apt-get install streamer')
+#	- gstreamer ('$ sudo apt-get install gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly')
 #
 # Remember to give execute permission to the script by:
 # $ chmod +x /path/to/script.sh
@@ -22,24 +22,25 @@
 device=$1
 
 # driver to use for communication with device
-driver=libv4l
+driver=v4l2src
 
 # video format. Check with '$ v4l2-ctl -d /dev/video1 --list-formats'.
 # Uncomment the desired option
-input_format=jpeg
+input_format=image/jpeg
+#input_format=video/x-raw
 
 # frame sizes. Check with '$ v4l2-ctl -d /dev/video1 --list-formats-ext'.
 # Uncomment the desired option
-#resolution=320x240
-#resolution=640x480
-#resolution=800x600
-#resolution=1024x768
-#resolution=1280x720
-#resolution=1280x1024
-#resolution=1600x1200
-#resolution=1920x1080
-resolution=2048x1536
-#resolution=2592x1944
+#resolution="width=320,height=240"
+#resolution="width=640,height=480"
+#resolution="width=800,height=600"
+#resolution="width=1024,height=768"
+#resolution="width=1280,height=720"
+#resolution="width=1280,height=1024"
+#resolution="width=1600,height=1200"
+#resolution="width=1920,height=1080"
+#resolution="width=2048,height=1536"
+resolution="width=2592,height=1944"
 
 # camera settings. Check options and values with '$ v4l2-ctl -d /dev/video1 --list-ctrls'
 
@@ -70,25 +71,17 @@ exposure_auto=3
 #		@ note		used only when exposure_auto=1
 exposure_absolute=15
 
-# image quality. Sets the quality of the image and is a number from 0-100,
-# with 100 being highest quality/largest filesize and 0 being the lowest
-# quality/smallest filesize. Default is 75
-quality=95
-
 # frames per second
-fps=1
-
-# number of frames
-frames=1000
+fps=1/1
 
 # timestamp and output name for files
 timestamp=$(date +"%y%m%d-%H%M%S")
-output=./sessions/$timestamp\_streamer/$timestamp\_0000.jpeg
+output=./sessions/$timestamp\_gstreamer/$timestamp\_%04d.jpg
 
 # ==================================================================================
 # create session folder
 # ==================================================================================
-mkdir -p sessions/$timestamp\_streamer
+mkdir -p sessions/$timestamp\_gstreamer
 
 # ==================================================================================
 # run v4l2-ctl to configure camera settings
@@ -106,16 +99,14 @@ else
 fi
 
 # ==================================================================================
-# run streamer and start a loop to capture and save images
+# run gstreamer and start a loop to capture and save images
 # ==================================================================================
 
-exec streamer \
--D $driver \
--c $device \
--s $resolution \
--f $input_format \
--t $frames \
--b 30 \
--j $quality \
--r $fps \
--o $output
+VSOURCE="$driver device=$device ! $input_format,$resolution"
+VDECODE="videorate ! $input_format,framerate=$fps"
+VSINK="multifilesink location=$output"
+
+exec gst-launch-1.0 -e \
+$VSOURCE \
+! $VDECODE \
+! $VSINK

@@ -109,5 +109,6 @@ Examples:
 Examples:
 
 streamer -D libv4l -c /dev/video0 -s 2592x1944 -f jpeg -j 80 -t 10 -r 1 -o test000.jpeg
+streamer -D libv4l -c /dev/video1 -s 2048x1536 -f jpeg -j 95 -t 3 -r 1 -o test000.jpeg
 
 streamer -D libv4l -c /dev/video0 -s 2048x1536 -f jpeg -t 0:20 -o movie.avi
