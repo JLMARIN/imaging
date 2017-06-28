@@ -1,0 +1,96 @@
+Usage:
+  gst-launch-1.0 [OPTION...] PIPELINE-DESCRIPTION
+
+Help Options:
+  -h, --help                        Show help options
+  --help-all                        Show all help options
+  --help-gst                        Show GStreamer Options
+
+GStreamer Options
+  --gst-version                     Print the GStreamer version
+  --gst-fatal-warnings              Make all warnings fatal
+  --gst-debug-help                  Print available debug categories and exit
+  --gst-debug-level=LEVEL           Default debug level from 1 (only error) to 9 (anything) or 0 for no output
+  --gst-debug=LIST                  Comma-separated list of category_name:level pairs to set specific levels for the individual categories. Example: GST_AUTOPLUG:5,GST_ELEMENT_*:3
+  --gst-debug-no-color              Disable colored debugging output
+  --gst-debug-color-mode            Changes coloring mode of the debug log. Possible modes: off, on, disable, auto, unix
+  --gst-debug-disable               Disable debugging
+  --gst-plugin-spew                 Enable verbose plugin loading diagnostics
+  --gst-plugin-path=PATHS           Colon-separated paths containing plugins
+  --gst-plugin-load=PLUGINS         Comma-separated list of plugins to preload in addition to the list stored in environment variable GST_PLUGIN_PATH
+  --gst-disable-segtrap             Disable trapping of segmentation faults during plugin loading
+  --gst-disable-registry-update     Disable updating the registry
+  --gst-disable-registry-fork       Disable spawning a helper process while scanning the registry
+
+Application Options:
+  -t, --tags                        Output tags (also known as metadata)
+  -c, --toc                         Output TOC (chapters and editions)
+  -v, --verbose                     Output status information and property notifications
+  -q, --quiet                       Do not print any progress information
+  -m, --messages                    Output messages
+  -X, --exclude=PROPERTY-NAME       Do not output status information for the specified property if verbose output is enabled (can be used multiple times)
+  -f, --no-fault                    Do not install a fault handler
+  -e, --eos-on-shutdown             Force EOS on sources before shutting the pipeline down
+  --version                         Print version information and exit
+
+-------------------------------------------------------------------------------------------------------------
+Gstreamer response. First 4 lines when pipeline is set, the rest occuras after EOS is received (Ctrl+C)
+
+Setting pipeline to PAUSED ...
+Pipeline is live and does not need PREROLL ...
+Setting pipeline to PLAYING ...
+New clock: GstSystemClock
+handling interrupt.
+Interrupt: Stopping pipeline ...
+EOS on shutdown enabled -- Forcing EOS on the pipeline
+Waiting for EOS...
+Got EOS from element "pipeline0".
+EOS received - stopping pipeline...
+Execution ended after 0:00:04.935085391
+Setting pipeline to PAUSED ...
+Setting pipeline to READY ...
+Setting pipeline to NULL ...
+Freeing pipeline ...
+
+-------------------------------------------------------------------------------------------------------------
+# display video
+
+gst-launch-1.0 v4l2src ! xvimagesink
+
+# select device and set format and resolution
+
+gst-launch-1.0 v4l2src device=/dev/video1 ! video/x-raw,width=800,height=600 ! xvimagesink
+
+# use mjpeg format
+
+gst-launch-1.0 v4l2src device=/dev/video1 ! image/jpeg,width=800,height=600,framerate=30/1 ! jpegparse ! jpegdec ! xvimagesink
+
+-------------------------------------------------------------------------------------------------------------
+
+# Capture single frame and save (jpeg)
+
+gst-launch-1.0 -e v4l2src device=/dev/video1 ! video/x-raw,width=2592,height=1944 ! videoconvert ! jpegenc ! filesink location="image1.jpg"
+
+# png
+
+gst-launch-1.0 -e v4l2src device=/dev/video1 ! video/x-raw,width=2592,height=1944 ! videoconvert ! pngenc ! filesink location="image2.png"
+
+-------------------------------------------------------------------------------------------------------------
+
+# Capture multiple frames and save (mjpeg)
+
+gst-launch-1.0 -e v4l2src device=/dev/video1 ! image/jpeg,width=800,height=600 ! videorate ! image/jpeg,framerate=1/2 ! multifilesink location="image-%06d.jpg"
+
+# raw video
+
+gst-launch-1.0 -e v4l2src device=/dev/video1 ! video/x-raw,width=2592,height=1944 ! videorate ! video/x-raw,framerate=1/2 ! videoconvert ! jpegenc ! multifilesink location="image-%06d.jpg"
+
+-------------------------------------------------------------------------------------------------------------
+
+# record and save video
+
+gst-launch-1.0 -e v4l2src device=/dev/video1 ! video/x-raw,width=800,height=600 ! videorate ! video/x-raw ! videoconvert ! jpegenc ! avimux ! filesink location=video1.avi
+
+# record and save video while displaying the video live feed
+
+gst-launch-1.0 -e v4l2src device=/dev/video1 ! video/x-raw,width=800,height=600 ! tee name=t_vid ! queue ! xvimagesink sync=false t_vid. ! queue ! videorate ! video/x-raw ! jpegenc ! queue ! avimux ! filesink location=video2.avi

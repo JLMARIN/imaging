@@ -1,0 +1,69 @@
+fswebcam --help
+Usage: fswebcam [<options>] <filename> [[<options>] <filename> ... ]
+
+ Options:
+
+ -?, --help                   Display this help page and exit.
+ -c, --config <filename>      Load configuration from file.
+ -q, --quiet                  Hides all messages except for errors.
+ -v, --verbose                Displays extra messages while capturing
+     --version                Displays the version and exits.
+ -l, --loop <seconds>         Run in loop mode.
+ -b, --background             Run in the background.
+ -o, --output <filename>      Output the log to a file.
+ -d, --device <name>          Sets the source to use.
+ -i, --input <number/name>    Selects the input to use.
+ -t, --tuner <number>         Selects the tuner to use.
+ -f, --frequency <number>     Selects the frequency use.
+ -p, --palette <name>         Selects the palette format to use.
+ -D, --delay <number>         Sets the pre-capture delay time. (seconds)
+ -r, --resolution <size>      Sets the capture resolution.
+     --fps <framerate>        Sets the capture frame rate.
+ -F, --frames <number>        Sets the number of frames to capture.
+ -S, --skip <number>          Sets the number of frames to skip.
+     --dumpframe <filename>   Dump a raw frame to file.
+ -s, --set <name>=<value>     Sets a control value.
+     --revert                 Restores original captured image.
+     --flip <direction>       Flips the image. (h, v)
+     --crop <size>[,<offset>] Crop a part of the image.
+     --scale <size>           Scales the image.
+     --rotate <angle>         Rotates the image in right angles.
+     --deinterlace            Reduces interlace artifacts.
+     --invert                 Inverts the images colours.
+     --greyscale              Removes colour from the image.
+     --swapchannels <c1c2>    Swap channels c1 and c2.
+     --no-banner              Hides the banner.
+     --top-banner             Puts the banner at the top.
+     --bottom-banner          Puts the banner at the bottom. (Default)
+     --banner-colour <colour> Sets the banner colour. (#AARRGGBB)
+     --line-colour <colour>   Sets the banner line colour.
+     --text-colour <colour>   Sets the text colour.
+     --font <[name][:size]>   Sets the font and/or size.
+     --no-shadow              Disables the text shadow.
+     --shadow                 Enables the text shadow.
+     --title <text>           Sets the main title. (top left)
+     --no-title               Clears the main title.
+     --subtitle <text>        Sets the sub-title. (bottom left)
+     --no-subtitle            Clears the sub-title.
+     --timestamp <format>     Sets the timestamp format. (top right)
+     --no-timestamp           Clears the timestamp.
+     --gmt                    Use GMT instead of local timezone.
+     --info <text>            Sets the info text. (bottom right)
+     --no-info                Clears the info text.
+     --underlay <PNG image>   Sets the underlay image.
+     --no-underlay            Clears the underlay.
+     --overlay <PNG image>    Sets the overlay image.
+     --no-overlay             Clears the overlay.
+     --jpeg <factor>          Outputs a JPEG image. (-1, 0 - 95)
+     --png <factor>           Outputs a PNG image. (-1, 0 - 10)
+     --save <filename>        Save image to file.
+     --exec <command>         Execute a command and wait for it to complete.
+
+
+Online help: http://manpages.ubuntu.com/manpages/zesty/en/man1/fswebcam.1.html
+
+Examples:
+
+# take one frame
+
+fswebcam -d /dev/video1 -p MJPEG -r 2592x1944 --jpeg 85 $(date +\%Y\%m\%d\%H\%M).jpeg

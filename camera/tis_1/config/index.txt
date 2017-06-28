@@ -1,0 +1,8 @@
+===============================================================================
+Configuration files index (generated automatically using makeindex.sh)
+Do not modify manually. If updates are required, run makeindex.sh
+===============================================================================
+
+filename        brightness    gain    exp_abs
+---------------------------------------------
+config0.cfg         12         36        127

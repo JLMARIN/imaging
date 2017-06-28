@@ -1,0 +1,15 @@
+# Ignore Mac specific files
+.DS_Store
+
+# sub-folders
+camera/elp_1/sessions
+camera/elp_2/sessions
+camera/tis_1/sessions
+spec3/sessions
+tests/cam1
+tests/cam2
+tests/cam3
+
+# C build files
+spec3/msgparser_uart/pprz
+spec3/msgparser_usb/pprz

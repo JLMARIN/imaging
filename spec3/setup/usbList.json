@@ -1,0 +1,18 @@
+{
+	"usb":
+	[
+		{
+			"tag":	"falcon_laptop_usb3-1_exhub_1:3",
+			"usb1": " ../../devices/pci0000:00/0000:00:10.0/usb3/3-1/3-1.1/3-1.1:1.0",
+			"usb2": " ../../devices/pci0000:00/0000:00:10.0/usb3/3-1/3-1.2/3-1.2:1.0",
+			"usb3": " ../../devices/pci0000:00/0000:00:10.0/usb3/3-1/3-1.3/3-1.3:1.0"
+		},
+
+		{
+			"tag":	"odroid_c2_usb1-2:4",
+			"usb1": " ../../devices/platform/dwc2_b/usb1/1-1/1-1.2/1-1.2:1.0",
+			"usb2": " ../../devices/platform/dwc2_b/usb1/1-1/1-1.4/1-1.4:1.0",
+			"usb3": " ../../devices/platform/dwc2_b/usb1/1-1/1-1.3/1-1.3:1.0"
+		}
+	]
+}

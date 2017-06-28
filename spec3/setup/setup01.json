@@ -1,0 +1,39 @@
+{
+    "fps":      "1/1",
+    
+    "cameras":
+    [
+        {
+            "enable":   false,
+            "cam":      "tis_1",
+            "config":   "config0",
+            "width":    1280,
+            "height":   960,
+            "format":   "video/x-raw,format=GRAY8",
+            "frate":    "10/1",
+            "output":   "jpg"
+        },
+
+        {
+            "enable":   true,
+            "cam":      "elp_1",
+            "config":   "config0",
+            "width":    2592,
+            "height":   1944,
+            "format":   "image/jpeg",
+            "frate":    "",
+            "output":   "jpg"
+        },
+
+        {
+            "enable":   true,
+            "cam":      "elp_2",
+            "config":   "config0",
+            "width":    1280,
+            "height":   960,
+            "format":   "image/jpeg",
+            "frate":    "",
+            "output":   "jpg"
+        }
+    ]
+}

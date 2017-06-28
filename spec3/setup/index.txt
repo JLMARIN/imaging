@@ -1,0 +1,60 @@
+===============================================================================
+Setup files index (generated automatically using makeindex.sh)
+Do not modify manually. If updates are required, run makeindex.sh
+===============================================================================
+
+===============================================================================
+Note: the four settings shown in the table for each camera are:
+  [CAMERA DESIGNATOR] [ENABLE FLAG]
+  [CONFIGURATION FILE]
+  [RESOLUTION] [FRAMERATE]
+  [FORMAT] [OUTPUT]
+===============================================================================
+
+filename      fps     cam1              cam2               cam3
+===============================================================================
+setup01.json  1/1     tis_1 (false)     elp_1 (true)      elp_2 (true)      
+                      config0           config0           config0           
+                      1280x960  (10/1)  2592x1944 ()      1280x960  ()      
+                      video/x-raw (jpg) image/jpeg  (jpg) image/jpeg  (jpg) 
+-------------------------------------------------------------------------------
+setup02.json  1/1     elp_2 (true)      elp_1 (true)      elp_2 (true)      
+                      config2           config0           config0           
+                      1280x960  (15/1)  2592x1944 ()      1280x960  (15/1)  
+                      image/jpeg  (jpg) image/jpeg  (jpg) image/jpeg  (jpg) 
+-------------------------------------------------------------------------------
+setup03.json  1/1     elp_2 (true)      elp_1 (false)     elp_2 (true)      
+                      config0           config0           config0           
+                      1280x960  ()      2592x1944 ()      1280x960  ()      
+                      image/jpeg  (jpg) image/jpeg  (jpg) image/jpeg  (jpg) 
+-------------------------------------------------------------------------------
+setup04.json  1/1     elp_2 (true)      elp_1 (false)     elp_2 (true)      
+                      config0           config0           config0           
+                      1280x960  ()      2592x1944 ()      1280x960  ()      
+                      video/x-raw (png) image/jpeg  (jpg) image/jpeg  (jpg) 
+-------------------------------------------------------------------------------
+setup05.json  1/1     elp_2 (true)      elp_1 (false)     elp_2 (true)      
+                      config0           config0           config0           
+                      1280x960  (15/1)  2592x1944 ()      1280x960  (15/1)  
+                      video/x-raw (png) image/jpeg  (jpg) video/x-raw (png) 
+-------------------------------------------------------------------------------
+setup06.json  1/1     elp_2 (true)      elp_1 (true)      elp_2 (true)      
+                      config0           config0           config0           
+                      1280x960  (15/1)  2592x1944 ()      1280x960  (15/1)  
+                      video/x-raw (png) image/jpeg  (jpg) video/x-raw (png) 
+-------------------------------------------------------------------------------
+setupX1.json  1/1     elp_2 (true)      elp_2 (true)      elp_2 (true)      
+                      config0           config0           config0           
+                      1280x960  ()      1280x960  ()      1280x960  ()      
+                      image/jpeg  (jpg) image/jpeg  (jpg) image/jpeg  (jpg) 
+-------------------------------------------------------------------------------
+setupX2.json  1/1     elp_2 (true)      elp_2 (true)      elp_2 (true)      
+                      config0           config0           config0           
+                      1280x960  ()      1280x960  ()      1280x960  ()      
+                      video/x-raw (png) video/x-raw (png) video/x-raw (png) 
+-------------------------------------------------------------------------------
+setupX3.json  1/1     tis_1 (true)      tis_1 (true)      tis_1 (true)      
+                      config0           config0           config0           
+                      1280x960  (10/1)  1280x960  (10/1)  1280x960  (10/1)  
+                      video/x-raw (png) video/x-raw (png) video/x-raw (png) 
+-------------------------------------------------------------------------------
