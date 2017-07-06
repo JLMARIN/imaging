@@ -45,7 +45,7 @@ sleep 2
 
 # ==================================================================================
 # Launch script in background
-./cap_loop_raw.sh ${DEVICE} config1 &
+./cap_loop_raw_png.sh ${DEVICE} config1 &
 # Get its PID
 PID=$!
 # Wait
