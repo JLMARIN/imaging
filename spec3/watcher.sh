@@ -33,7 +33,9 @@ do
 	if [ "${FILENAME}" != "${LASTFILENAME}" ]; then
 		LASTFILENAME=${FILENAME}		
    		#echo ${LASTFILENAME}
+
+   		FULLFILENAME=${FOLDER}/${LASTFILENAME}.txt
 		
-		cp log.txt ${FOLDER}/${LASTFILENAME}
+		cp log.txt ${FULLFILENAME}
 	fi
 done
