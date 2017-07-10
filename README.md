@@ -19,6 +19,8 @@ The following packages are required to run the scripts:
 - gstreamer-1.0
 - jq
 - inotify
+- geographiclib
+- exiftool
 
 On a Debian / Ubuntu system, the following command line instructions could be used to install all required packages:
 
@@ -34,6 +36,12 @@ sudo apt-get install jq
 
 # inotify
 sudo apt-get install inotify-tools
+
+# geographiclib
+sudo apt-get install geographiclib-tools
+
+# exiftool
+sudo apt-get install libimage-exiftool-perl
 ```
 
 ## Repository Structure ##

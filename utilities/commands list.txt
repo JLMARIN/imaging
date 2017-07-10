@@ -3,3 +3,9 @@ sudo minicom -b 115200 -D /dev/ttyUSB0
 
 # add extension to all files without extension inside a folder
 find . -type f ! -name "*.*" -exec mv {} {}.txt \;
+
+# read all data from image file (using imagemagick)
+identify -verbose path-to-file
+
+# read exif data from image file (using imagemagick)
+identify -verbose path-to-file | grep "exif:"

@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------------------
 # Usage: ./extractImageSet.sh [PATH] [CAMERA INDEX] [FLAG]
 #
-# [PATH]            path of the fodler containing the pictures
+# [PATH]            path of the folder containing the pictures
 #                   (e.g. ../../saved\ sessions/clean\ sessions/spec3/folder)
 # [CAMERA INDEX]    camera index of the set of pictures to fix
 #                   (e.g. cam_1 or cam_2 or cam_3)
