@@ -7,7 +7,7 @@
 #                   (e.g. ../../saved\ sessions/clean\ sessions/spec3/folder)
 #-----------------------------------------------------------------------------------
 # Checks for empty telemetry files and deletes them together with the associated
-# files, including images
+# files, including images.
 #
 # Remember to give execute permission to the script by:
 # $ chmod +x /path/to/script.sh

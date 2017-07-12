@@ -75,7 +75,7 @@ do
             CONFIG="$( jq -r ".cameras[$i].config" "setup/${SETUP}.json" )"
             #echo "$i , ${CAMERA} , ${CONFIG} , ${DEVICE}"
 
-            # run configuration script (and save output to log file)
+            # run configuration script and save output to log file
             ../camera/${CAMERA}/config/config.sh ${DEVICE} "../camera/${CAMERA}/config/${CONFIG}.cfg" > >(tee -a ${FOLDER}/${TIMESTAMP}\_log.log)
 
             # load camera info relevant to gst pipeline
