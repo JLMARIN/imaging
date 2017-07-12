@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ----------------------------------------------------------------------------------
-# Usage: ./addExifData.sh [PATH]
+# Usage: ./addExifDataGeo.sh [PATH]
 #
 # [PATH]            path of the folder containing the pictures
 #                   (e.g. ../../saved\ sessions/clean\ sessions/spec3/folder)

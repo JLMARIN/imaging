@@ -77,6 +77,9 @@ FOCLENGTH=$3
 # run configuration script and save output to log file
 ./config/config.sh ${DEVICE} "config/${CONFIG}.cfg" ${FOCLENGTH} > >(tee -a ${FOLDER}/${TIMESTAMP}\_log.log)
 
+# move short log to folder and rename
+mv short_log.log ${FOLDER}/${TIMESTAMP}\_short_log.log
+
 # ==================================================================================
 # RUN gstreamer AND START A LOOP TO CAPTURE AND SAVE IMAGES
 # ==================================================================================

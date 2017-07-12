@@ -32,7 +32,7 @@ fi
 
 # ==================================================================================
 # launch script in background
-./cap_loop_mjpg.sh ${DEVICE} config0 &
+./cap_loop_mjpg.sh ${DEVICE} config0 6.0 &
 # Get its PID
 PID=$!
 # Wait
@@ -45,7 +45,7 @@ sleep 2
 
 # ==================================================================================
 # Launch script in background
-./cap_loop_raw_png.sh ${DEVICE} config1 &
+./cap_loop_raw_png.sh ${DEVICE} config1 6.0 &
 # Get its PID
 PID=$!
 # Wait

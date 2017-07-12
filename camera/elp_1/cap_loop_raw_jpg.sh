@@ -1,13 +1,15 @@
 #!/bin/bash
 
 # ----------------------------------------------------------------------------------
-# Usage: ./cap_loop_raw.sh [DEVICE] [CONFIGURATION FILE]
+# Usage: ./cap_loop_raw_jpg.sh [DEVICE] [CONFIGURATION FILE] [FOCAL LENGTH]
 #
 # [DEVICE]			for a list of devices run '$ v4l2-ctl --list-devices'
 #					(e.g. /dev/video0)
 # [CONFIG FILE]		name of configuration file to use without extension. Check
 #					configuration files (.cfg) in 'config' folder
 #					(e.g. config0)
+# [FOCAL LENGTH]	focal lenght of the lens in mm with one decimal place
+#					(e.g. 6.0, 3.6, 4.4)
 # ----------------------------------------------------------------------------------
 # Configures a UVC compatible device and captures frames
 # at a certain rate while saving them in a local folder.
@@ -69,8 +71,14 @@ mkdir -p sessions/${TIMESTAMP}
 # target configuration file as an argument
 CONFIG=$2
 
-# run configuration script
-./config/config.sh ${DEVICE} "config/${CONFIG}.cfg"
+# focal length used as an argument
+FOCLENGTH=$3
+
+# run configuration script and save output to log file
+./config/config.sh ${DEVICE} "config/${CONFIG}.cfg" ${FOCLENGTH} > >(tee -a ${FOLDER}/${TIMESTAMP}\_log.log)
+
+# move short log to folder and rename
+mv short_log.log ${FOLDER}/${TIMESTAMP}\_short_log.log
 
 # ==================================================================================
 # RUN gstreamer AND START A LOOP TO CAPTURE AND SAVE IMAGES
@@ -82,17 +90,14 @@ echo "* Saving images to: ${FOLDER}"
 echo "* Press CTRL+C to end script"
 echo "**"
 
+# build gst command
+GSTCMD="${DRIVER} device=${DEVICE} \
+! ${FORMAT},${RESOLUTION} \
+! videorate ! ${FORMAT},framerate=${FPS} \
+! videoconvert ! jpegenc ! multifilesink location=${OUTPUT}"
+
 # echo for debugging purposes (true : enabled, false : disabled)
-if (false); then
-	echo gst-launch-1.0 -e ${DRIVER} device=${DEVICE} \
-		! ${FORMAT},${RESOLUTION} \
-		! videorate ! ${FORMAT},framerate=${FPS} \
-		! multifilesink location=${OUTPUT}
-fi
+echo "${GSTCMD}" > >(tee -a ${FOLDER}/${TIMESTAMP}\_log.log)
 
 # -e switch makes gst to close properly when exited with CTRL+C
-exec gst-launch-1.0 -e ${DRIVER} device=${DEVICE} \
-	! ${FORMAT},${RESOLUTION} \
-	! videorate ! ${FORMAT},framerate=${FPS} \
-	! videoconvert ! jpegenc ! multifilesink location=${OUTPUT}
-	
+gst-launch-1.0 -e ${GSTCMD}
