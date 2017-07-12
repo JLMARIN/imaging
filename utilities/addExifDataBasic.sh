@@ -33,6 +33,8 @@ for file in *short_log.log; do
         for i in *.jpg; do
             printf "%s,%s\n" ${i} ${data}
         done
+    elif [ "${LINES}" > "1" ]; then
+        
     fi
 done
 

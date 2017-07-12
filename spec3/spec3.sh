@@ -42,6 +42,17 @@ USB[1]="$( jq -r ".usb[$USBSET].usb2" "setup/usbList.json" )"
 USB[2]="$( jq -r ".usb[$USBSET].usb3" "setup/usbList.json" )"
 
 # ==================================================================================
+# LOAD LENS FOCAL LENGTHS FROM 'lens_setup.txt' FILE
+# ==================================================================================
+FOCLENGTH[0]=$(sed '1q;d' setup/lens_setup.txt)
+FOCLENGTH[1]=$(sed '1q;d' setup/lens_setup.txt)
+FOCLENGTH[2]=$(sed '1q;d' setup/lens_setup.txt)
+
+FOCLENGTH[0]=${FOCLENGTH[0]##*=}
+FOCLENGTH[1]=${FOCLENGTH[1]##*=}
+FOCLENGTH[2]=${FOCLENGTH[2]##*=}
+
+# ==================================================================================
 # CREATE SESSION FOLDER
 # ==================================================================================
 mkdir -p sessions
@@ -76,7 +87,7 @@ do
             #echo "$i , ${CAMERA} , ${CONFIG} , ${DEVICE}"
 
             # run configuration script and save output to log file
-            ../camera/${CAMERA}/config/config.sh ${DEVICE} "../camera/${CAMERA}/config/${CONFIG}.cfg" > >(tee -a ${FOLDER}/${TIMESTAMP}\_log.log)
+            ../camera/${CAMERA}/config/config.sh ${DEVICE} "../camera/${CAMERA}/config/${CONFIG}.cfg" ${FOCLENGTH[$i]} > >(tee -a ${FOLDER}/${TIMESTAMP}\_log.log)
 
             # load camera info relevant to gst pipeline
             WIDTH="$( jq -r ".cameras[$i].width" "setup/${SETUP}.json" )"
@@ -102,6 +113,9 @@ do
         fi
     fi
 done
+
+# move short log to folder and rename
+mv short_log.log ${FOLDER}/${TIMESTAMP}\_short_log.log
 
 # ==================================================================================
 # RUN AUTOPILOT UART MESSAGES READER AND PARSER
