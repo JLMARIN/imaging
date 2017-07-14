@@ -28,7 +28,7 @@ do
     FILELOCATION="${file}"
     FILENAME=${FILELOCATION##$PREFIX}
     FILENAME=${FILENAME%%$SUFFIX}
-    FILENAME="${FILENAME}.txt"
+    #FILENAME="${FILENAME}.txt"
 
     # make sure there is only one log file for each frame set
     if [ "${FILENAME}" != "${LASTFILENAME}" ]; then

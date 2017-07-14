@@ -158,3 +158,9 @@ if [ "${FULLMODE}" == "1" ]; then
     echo "msgparser background process terminated (PID=${PID_MSGPARSER})"
     echo "watcher background process terminated (PID=${PID_WATCHER})"
 fi
+
+# ==================================================================================
+# TEMPORARY FIX FOR TELEMETRY FILES WITHOUT .TXT EXTENSION
+# ==================================================================================
+
+find ./sessions/${TIMESTAMP} -type f ! -name "*.*" -exec mv {} {}.txt \;
