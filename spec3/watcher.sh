@@ -32,9 +32,9 @@ do
 
     # make sure there is only one log file for each frame set
     if [ "${FILENAME}" != "${LASTFILENAME}" ]; then
-        LASTFILENAME=${FILENAME}        
+        LASTFILENAME=${FILENAME}
         #echo ${LASTFILENAME}
-        
+
         cp log.txt ${FOLDER}/${LASTFILENAME}
     fi
 done
