@@ -72,7 +72,7 @@ void dl_parse_print_msg(int print, int fprint)
 				fprintf(f, "utm_north=%d\n", DL_WALDO_MSG_utm_north(parsed_message_buffer));
 				fprintf(f, "utm_zone=%u\n", DL_WALDO_MSG_utm_zone(parsed_message_buffer));
 				fprintf(f, "week=%u\n", DL_WALDO_MSG_week(parsed_message_buffer));
-				fprintf("altitude:  %u\n", altitude);
+				fprintf(f, "altitude:  %u\n", altitude);
 				fprintf(f, "fix=%u\n", DL_WALDO_MSG_fix(parsed_message_buffer));	
 				fprintf(f, "itow=%u\n", DL_WALDO_MSG_itow(parsed_message_buffer));
 
