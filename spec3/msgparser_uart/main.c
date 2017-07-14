@@ -9,6 +9,7 @@
 
 
 FILE *f;
+int32_t altitude;
 
 /***************************************************************************//**
  * @brief   Opens text file.
@@ -51,6 +52,7 @@ void dl_parse_print_msg(int print, int fprint)
 			printf("utm_north: %d\n", DL_WALDO_MSG_utm_north(parsed_message_buffer));
 			printf("utm_zone:  %u\n", DL_WALDO_MSG_utm_zone(parsed_message_buffer));
 			printf("week:      %u\n", DL_WALDO_MSG_week(parsed_message_buffer));
+			printf("altitude:  %u\n", altitude);
 			printf("fix:       %u\n", DL_WALDO_MSG_fix(parsed_message_buffer));	
 			printf("itow:      %u\n", DL_WALDO_MSG_itow(parsed_message_buffer));
 		}
@@ -70,12 +72,18 @@ void dl_parse_print_msg(int print, int fprint)
 				fprintf(f, "utm_north=%d\n", DL_WALDO_MSG_utm_north(parsed_message_buffer));
 				fprintf(f, "utm_zone=%u\n", DL_WALDO_MSG_utm_zone(parsed_message_buffer));
 				fprintf(f, "week=%u\n", DL_WALDO_MSG_week(parsed_message_buffer));
+				fprintf("altitude:  %u\n", altitude);
 				fprintf(f, "fix=%u\n", DL_WALDO_MSG_fix(parsed_message_buffer));	
 				fprintf(f, "itow=%u\n", DL_WALDO_MSG_itow(parsed_message_buffer));
 
 				fclose(f);
 			}
 		}
+	}
+
+	if (msg_id == DL_GPS)
+	{
+		altitude = DL_GPS_alt(parsed_message_buffer);
 	}
 }
 
