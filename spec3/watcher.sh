@@ -25,17 +25,16 @@ SUFFIX="_cam*"
 # use 'inotifywait' to monitor folder in search for new files
 inotifywait -m -e create -r ${FOLDER} | while read file
 do
-	FILELOCATION="${file}"
-	FILENAME=${FILELOCATION##$PREFIX}
-	FILENAME=${FILENAME%%$SUFFIX}
+    FILELOCATION="${file}"
+    FILENAME=${FILELOCATION##$PREFIX}
+    FILENAME=${FILENAME%%$SUFFIX}
+    FILENAME="${FILENAME}.txt"
 
-	# make sure there is only one log file for each frame set
-	if [ "${FILENAME}" != "${LASTFILENAME}" ]; then
-		LASTFILENAME=${FILENAME}		
-   		#echo ${LASTFILENAME}
-
-   		FULLFILENAME=${FOLDER}/${LASTFILENAME}.txt
-		
-		cp log.txt ${FULLFILENAME}
-	fi
+    # make sure there is only one log file for each frame set
+    if [ "${FILENAME}" != "${LASTFILENAME}" ]; then
+        LASTFILENAME=${FILENAME}        
+        #echo ${LASTFILENAME}
+        
+        cp log.txt ${FOLDER}/${LASTFILENAME}
+    fi
 done
