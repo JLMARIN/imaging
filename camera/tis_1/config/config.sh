@@ -59,5 +59,5 @@ echo "*                     exposure_absolute   = ${EXPOSURE_ABSOLUTE}"
 echo "**"
 
 # save short csv log file
-LOG="${CAMID},elp_1,ELP,ELP-USB500W02M,${FOCLENGTH}"
+LOG="${CAMID},tis_1,The Imaging Source,DMM 42BUC03-ML,${FOCLENGTH}"
 echo "${LOG}" >> short_log.log

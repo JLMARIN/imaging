@@ -21,7 +21,7 @@ host=odroid
 
 # host ip address
 if [ -z "$1" ]; then
-    ip=10.42.0.75
+    ip=10.42.0.104
 else
     ip="$1"
 fi

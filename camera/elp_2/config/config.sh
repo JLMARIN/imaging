@@ -69,5 +69,5 @@ else
 fi
 
 # save short csv log file
-LOG="${CAMID},elp_1,ELP,ELP-USB500W02M,${FOCLENGTH}"
+LOG="${CAMID},elp_2,ELP,ELP-USB130W01MT-B/W,${FOCLENGTH}"
 echo "${LOG}" >> short_log.log
