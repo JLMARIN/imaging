@@ -50,7 +50,7 @@ for i in *.jpg; do
     utm_north=${utm_north##*=}
     utm_north=$(bc -l <<< "${utm_north}/100")           # convert from cm to m
 
-    gps_altitude=${altitude##*=}
+    gps_altitude=${gps_altitude##*=}
     gps_altitude=$(bc -l <<< "${gps_altitude}/1000")    # convert from mm to m
 
     # convert UTM to lat/long
