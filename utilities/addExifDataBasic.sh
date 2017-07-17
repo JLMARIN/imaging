@@ -33,8 +33,20 @@ for file in *short_log.log; do
         for i in *.jpg; do
             printf "%s,%s\n" ${i} ${data}
         done
+    
     elif [ "${LINES}" > "1" ]; then
-        
+
+        for i in $(seq 1 $LINES); do
+            line=$(sed "${i}q;d" $file)
+            data=${line#*,}
+            data=${data#*,}
+            
+            camId=${line:0:1}
+
+            for j in *cam_${camId}.jpg; do
+                printf "%s,%s\n" ${j} ${data}
+            done
+        done
     fi
 done
 
@@ -45,5 +57,8 @@ exiftool -csv=exif_data.txt -overwrite_original .
 
 # remove temporary exif_data.txt file
 rm exif_data.txt
+
+# remove strange empty file created with name "1"
+rm 1
 
 echo "Basic EXIF data added to pictures"

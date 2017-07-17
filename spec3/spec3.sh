@@ -87,7 +87,7 @@ do
             #echo "$i , ${CAMERA} , ${CONFIG} , ${DEVICE}"
 
             # run configuration script and save output to log file
-            ../camera/${CAMERA}/config/config.sh ${DEVICE} "../camera/${CAMERA}/config/${CONFIG}.cfg" ${FOCLENGTH[$i]} > >(tee -a ${FOLDER}/${TIMESTAMP}\_log.log)
+            ../camera/${CAMERA}/config/config.sh ${DEVICE} "../camera/${CAMERA}/config/${CONFIG}.cfg" ${FOCLENGTH[$i]} ${((i+1))} > >(tee -a ${FOLDER}/${TIMESTAMP}\_log.log)
 
             # load camera info relevant to gst pipeline
             WIDTH="$( jq -r ".cameras[$i].width" "setup/${SETUP}.json" )"
