@@ -58,4 +58,7 @@ fi
 cp ${current_dir}_log.log ../${new_dir}
 echo "-> copying log file: ${current_dir}_log.log"
 
+cp ${current_dir}_short_log.log ../${new_dir}
+echo "-> copying short log file: ${current_dir}_short_log.log"
+
 echo "done!"

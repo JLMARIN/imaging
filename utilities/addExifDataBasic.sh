@@ -6,8 +6,8 @@
 # [PATH]            path of the folder containing the pictures
 #                   (e.g. ../../saved\ sessions/clean\ sessions/spec3/folder)
 #-----------------------------------------------------------------------------------
-# Scans folder and generates geodata textfile with GPS information according to the
-# exiftool requirements.
+# Reads basic camera and lens data from short log file and writes data to each
+# picture in the especified folder.
 #
 # Remember to give execute permission to the script by:
 # $ chmod +x /path/to/script.sh

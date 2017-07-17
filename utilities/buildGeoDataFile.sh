@@ -34,20 +34,24 @@ for i in *.jpg; do
     utm_east=$(sed '6q;d' $textfile)
     utm_north=$(sed '7q;d' $textfile)
     utm_zone=$(sed '8q;d' $textfile)
+    gps_altitude=$(sed '10q;d' $textfile)
 
     # clean strings and convert units
     yaw=${yaw##*=}
-    track=$(bc -l <<< "${yaw}*57.2957795131")   # convert from rads to degrees
+    track=$(bc -l <<< "${yaw}*57.2957795131")           # convert from rads to degrees
 
     height=${height##*=}
 
     utm_zone=${utm_zone##*=}
 
     utm_east=${utm_east##*=}
-    utm_east=$(bc -l <<< "${utm_east}/100")     # convert from cm to m
+    utm_east=$(bc -l <<< "${utm_east}/100")             # convert from cm to m
 
     utm_north=${utm_north##*=}
-    utm_north=$(bc -l <<< "${utm_north}/100")   # convert from cm to m
+    utm_north=$(bc -l <<< "${utm_north}/100")           # convert from cm to m
+
+    gps_altitude=${altitude##*=}
+    gps_altitude=$(bc -l <<< "${gps_altitude}/1000")    # convert from mm to m
 
     # convert UTM to lat/long
     latlong=$(echo ${utm_zone}N ${utm_east} ${utm_north} | GeoConvert -g)
@@ -55,7 +59,7 @@ for i in *.jpg; do
     long=${latlong##* }
 
     # print line
-    printf "%s,%s,%s,%s,%.6f\n" ${i} ${lat} ${long} ${height} ${track}
+    printf "%s,%s,%s,%.4f,%.4f\n" ${i} ${lat} ${long} ${gps_altitude} ${track}
 done
 
 } | tee "geo_data.txt"

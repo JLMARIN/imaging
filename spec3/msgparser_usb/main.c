@@ -9,6 +9,7 @@
 
 
 FILE *f;
+int32_t altitude;
 
 /***************************************************************************//**
  * @brief   Opens text file.
@@ -51,6 +52,7 @@ void dl_parse_print_msg(int print, int fprint)
 			printf("utm_north: %d\n", DL_WALDO_MSG_utm_north(parsed_message_buffer));
 			printf("utm_zone:  %u\n", DL_WALDO_MSG_utm_zone(parsed_message_buffer));
 			printf("week:      %u\n", DL_WALDO_MSG_week(parsed_message_buffer));
+			printf("altitude:  %u\n", altitude);
 			printf("fix:       %u\n", DL_WALDO_MSG_fix(parsed_message_buffer));	
 			printf("itow:      %u\n", DL_WALDO_MSG_itow(parsed_message_buffer));
 		}
@@ -59,19 +61,20 @@ void dl_parse_print_msg(int print, int fprint)
 		{	
 			if (!open_text_file())
 			{
-				fprintf(f, "yaw:       %f\n", DL_WALDO_MSG_yaw(parsed_message_buffer));
-				fprintf(f, "pitch:     %f\n", DL_WALDO_MSG_pitch(parsed_message_buffer));
-				fprintf(f, "roll:      %f\n", DL_WALDO_MSG_roll(parsed_message_buffer));
+				fprintf(f, "yaw=%f\n", DL_WALDO_MSG_yaw(parsed_message_buffer));
+				fprintf(f, "pitch=%f\n", DL_WALDO_MSG_pitch(parsed_message_buffer));
+				fprintf(f, "roll=%f\n", DL_WALDO_MSG_roll(parsed_message_buffer));
 
-				fprintf(f, "height:    %f\n", DL_WALDO_MSG_est_height(parsed_message_buffer));
-				fprintf(f, "speed:     %u\n", DL_WALDO_MSG_speed(parsed_message_buffer));
+				fprintf(f, "height=%f\n", DL_WALDO_MSG_est_height(parsed_message_buffer));
+				fprintf(f, "speed=%u\n", DL_WALDO_MSG_speed(parsed_message_buffer));
 
-				fprintf(f, "utm_east:  %d\n", DL_WALDO_MSG_utm_east(parsed_message_buffer));
-				fprintf(f, "utm_north: %d\n", DL_WALDO_MSG_utm_north(parsed_message_buffer));
-				fprintf(f, "utm_zone:  %u\n", DL_WALDO_MSG_utm_zone(parsed_message_buffer));
-				fprintf(f, "week:      %u\n", DL_WALDO_MSG_week(parsed_message_buffer));
-				fprintf(f, "fix:       %u\n", DL_WALDO_MSG_fix(parsed_message_buffer));	
-				fprintf(f, "itow:      %u\n", DL_WALDO_MSG_itow(parsed_message_buffer));
+				fprintf(f, "utm_east=%d\n", DL_WALDO_MSG_utm_east(parsed_message_buffer));
+				fprintf(f, "utm_north=%d\n", DL_WALDO_MSG_utm_north(parsed_message_buffer));
+				fprintf(f, "utm_zone=%u\n", DL_WALDO_MSG_utm_zone(parsed_message_buffer));
+				fprintf(f, "week=%u\n", DL_WALDO_MSG_week(parsed_message_buffer));
+				fprintf(f, "altitude:%u\n", altitude);
+				fprintf(f, "fix=%u\n", DL_WALDO_MSG_fix(parsed_message_buffer));	
+				fprintf(f, "itow=%u\n", DL_WALDO_MSG_itow(parsed_message_buffer));
 
 				fclose(f);
 			}
