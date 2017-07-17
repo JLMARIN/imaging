@@ -121,6 +121,7 @@ mv short_log.log ${FOLDER}/${TIMESTAMP}\_short_log.log
 # RUN AUTOPILOT UART MESSAGES READER AND PARSER
 # ==================================================================================
 
+{
 if [ "${FULLMODE}" == "1" ]; then
     ./msgparser_uart/pprz &
 
@@ -158,6 +159,8 @@ if [ "${FULLMODE}" == "1" ]; then
     echo "msgparser background process terminated (PID=${PID_MSGPARSER})"
     echo "watcher background process terminated (PID=${PID_WATCHER})"
 fi
+
+} | tee -a ${FOLDER}/${TIMESTAMP}\_log.log
 
 # ==================================================================================
 # TEMPORARY FIX FOR TELEMETRY FILES WITHOUT .TXT EXTENSION
