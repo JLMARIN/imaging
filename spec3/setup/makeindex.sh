@@ -10,12 +10,17 @@
 # $ chmod +x /path/to/script.sh
 # ----------------------------------------------------------------------------------
 
+# get date and time
+TIMESTAMP=$(date +"%y/%m/%d-%H:%M:%S")
+
 {
 
 echo "==============================================================================="
 echo "Setup files index (generated automatically using makeindex.sh)"
 echo "Do not modify manually. If updates are required, run makeindex.sh"
 echo "==============================================================================="
+echo ""
+printf "Last update: %s\n" ${TIMESTAMP}
 echo ""
 echo "==============================================================================="
 echo "Note: the four settings shown in the table for each camera are:"
