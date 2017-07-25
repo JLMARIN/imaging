@@ -59,6 +59,8 @@ exiftool -csv=exif_data.txt -overwrite_original .
 rm exif_data.txt
 
 # remove strange empty file created with name "1"
-rm 1
+if [ -f 1 ]; then
+    rm 1
+fi
 
 echo "Basic EXIF data added to pictures"
