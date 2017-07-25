@@ -41,11 +41,12 @@ function [corr, img1Cut, img2Cut, img3Cut] = getBestAlignmentThree(img1, img2, i
     %% align image 1 with combined image (2 and 3)
     [img1_1, img23_1] = align(img1Temp, comb_23, range);
     
-    %% cut images 2 and 3 according to new dimensions
+    %% cut images according to new dimensions
     newH = size(img23_1, 1);
     
     rect = [1 1 w newH-1];
     
+    img1Cut = imcrop(img1_1, rect);
     img2Cut = imcrop(img2_1, rect);
     img3Cut = imcrop(img3_1, rect);
     
@@ -57,7 +58,7 @@ function [corr, img1Cut, img2Cut, img3Cut] = getBestAlignmentThree(img1, img2, i
         img2Cut = imcrop(img2_1, rect);
         img3Cut = imcrop(img3_1, rect);
     else
-        fprintf('ERROR: desired height is greater than cut images\n');
+        fprintf('WARNING: desired height is greater than cut images\n');
         return;
     end
     
