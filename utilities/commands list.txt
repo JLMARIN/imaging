@@ -1,6 +1,9 @@
 # open minicom
 sudo minicom -b 115200 -D /dev/ttyUSB0
 
+# set date
+sudo date -s '2017-08-01 08:02:35'
+
 # add extension to all files without extension inside a folder
 find . -type f ! -name "*.*" -exec mv {} {}.txt \;
 
