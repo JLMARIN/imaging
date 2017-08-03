@@ -149,10 +149,8 @@ if [ "${FULLMODE}" == "1" ]; then
 
     # kill background processes
     kill ${PID_MSGPARSER}
-    kill ${PID_WATCHER}
 
     echo "msgparser background process terminated (PID=${PID_MSGPARSER})"
-    echo "watcher background process terminated (PID=${PID_WATCHER})"
 fi
 
 # ==================================================================================
