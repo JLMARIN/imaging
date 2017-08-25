@@ -12,3 +12,6 @@ identify -verbose path-to-file
 
 # read exif data from image file (using imagemagick)
 identify -verbose path-to-file | grep "exif:"
+
+# rename files inside folder
+for f in *.{jpg,txt}; do mv $f ${f/${f:0:9}/170824-14}; done
