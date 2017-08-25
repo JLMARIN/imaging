@@ -42,6 +42,10 @@ fi
 location_source=/home/odroid/Documents/imaging/spec3/sessions/*
 location_destination=/home/falcon/Documents/jorge/imaging/spec3/sessions
 
+# host and destination folders (spec3_rijesh)
+#location_source=/home/odroid/Documents/imaging/spec3_rijesh/sessions/*
+#location_destination=/home/falcon/Documents/jorge/imaging/spec3_rijesh/sessions
+
 # ==================================================================================
 # COPY FILES TO LOCAL COMPUTER
 # ==================================================================================
