@@ -44,7 +44,7 @@ source ${CONFIG}
 # RUN v4l2-ctl TO CONFIGURE CAMERA SETTINGS
 # ==================================================================================
 v4l2-ctl -d ${DEVICE} \
--c brightness=${BRIGHTNESS},gain=${GAIN},exposure_absolute=${EXPOSURE_ABSOLUTE}
+-c brightness=${BRIGHTNESS},gain=${GAIN},exposure_absolute=${EXPOSURE_ABSOLUTE},privacy=${PRIVACY}
 echo "**"
 echo "* CAMERA CONFIGURATION"
 echo "* Camera info:        camera              = tis_1"
@@ -56,6 +56,7 @@ echo "* Lens info:          focal length        = ${FOCLENGTH}"
 echo "* v4l2-ctl settings:  brightness          = ${BRIGHTNESS}"
 echo "*                     gain                = ${GAIN}"
 echo "*                     exposure_absolute   = ${EXPOSURE_ABSOLUTE}"
+echo "*                     privacy             = ${PRIVACY}"
 echo "**"
 
 # save short csv log file

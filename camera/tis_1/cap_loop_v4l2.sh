@@ -1,13 +1,15 @@
 #!/bin/bash
 
 # ----------------------------------------------------------------------------------
-# Usage: ./cap_loop_v4l2.sh [DEVICE] [CONFIGURATION FILE]
+# Usage: ./cap_loop_v4l2_2.sh [DEVICE] [CONFIGURATION FILE] [FOCAL LENGTH]
 #
 # [DEVICE]          for a list of devices run '$ v4l2-ctl --list-devices'
 #                   (e.g. /dev/video0)
 # [CONFIG FILE]     name of configuration file to use without extension. Check
 #                   configuration files (.cfg) in 'config' folder
 #                   (e.g. config0)
+# [FOCAL LENGTH]    focal lenght of the lens in mm with one decimal place
+#                   (e.g. 6.0, 3.6, 4.4)
 # ----------------------------------------------------------------------------------
 # Configures a UVC compatible device and captures frames
 # at a certain rate while saving them in a local folder.
@@ -40,8 +42,8 @@ FORMAT=video/x-raw,format=GRAY8
 RESOLUTION="width=1280,height=960"
 
 # frame per second on camera output (uncomment the desired option)
-#	- 10fps is only available for 1280x960
-#	- 60fps is only available for 320x240, 640x480
+#   - 10fps is only available for 1280x960
+#   - 60fps is only available for 320x240, 640x480
 #FPS_CAM=60/1
 #FPS_CAM=30/1
 #FPS_CAM=25/1
@@ -49,7 +51,7 @@ RESOLUTION="width=1280,height=960"
 FPS_CAM=10/1
 
 # frames per second (on final gst pipeline output)
-FPS=1/1
+FPS=1/5
 
 # timestamp and output name for files
 TIMESTAMP=$(date +"%y%m%d-%H%M%S")
@@ -69,8 +71,14 @@ mkdir -p sessions/${TIMESTAMP}
 # target configuration file as an argument
 CONFIG=$2
 
+# focal length used as an argument
+FOCLENGTH=$3
+
 # run configuration script
-./config/config.sh ${DEVICE} "config/${CONFIG}.cfg"
+./config/config.sh ${DEVICE} "config/${CONFIG}.cfg" ${FOCLENGTH} > >(tee -a ${FOLDER}/${TIMESTAMP}\_log.log)
+
+# move short log to folder and rename
+mv short_log.log ${FOLDER}/${TIMESTAMP}\_short_log.log
 
 # ==================================================================================
 # RUN gstreamer AND START A LOOP TO CAPTURE AND SAVE IMAGES
@@ -82,16 +90,14 @@ echo "* Saving images to: ${FOLDER}"
 echo "* Press CTRL+C to end script"
 echo "**"
 
+# build gst command
+GSTCMD="${DRIVER} device=${DEVICE} \
+! ${FORMAT},${RESOLUTION},framerate=${FPS_CAM} \
+! videorate ! ${FORMAT},framerate=${FPS} \
+! videoconvert ! jpegenc ! multifilesink location=${OUTPUT}"
+
 # echo for debugging purposes (true : enabled, false : disabled)
-if (false); then
-    echo gst-launch-1.0 -e ${DRIVER} device=${DEVICE} \
-        ! ${FORMAT},${RESOLUTION},framerate=${FPS_CAM} \
-        ! videorate ! ${FORMAT},framerate=${FPS} \
-        ! videoconvert ! jpegenc ! multifilesink location=${OUTPUT}
-fi
+echo "${GSTCMD}" > >(tee -a ${FOLDER}/${TIMESTAMP}\_log.log)
 
 # -e switch makes gst to close properly when exited with CTRL+C
-exec gst-launch-1.0 -e ${DRIVER} device=${DEVICE} \
-    ! ${FORMAT},${RESOLUTION},framerate=${FPS_CAM} \
-    ! videorate ! ${FORMAT},framerate=${FPS} \
-    ! videoconvert ! jpegenc ! multifilesink location=${OUTPUT}
+gst-launch-1.0 -e ${GSTCMD}

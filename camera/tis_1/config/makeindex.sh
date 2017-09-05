@@ -22,8 +22,8 @@ echo "==========================================================================
 echo ""
 printf "Last update: %s\n" ${TIMESTAMP}
 echo ""
-echo "filename        brightness    gain    exp_abs"
-echo "---------------------------------------------"
+echo "filename        brightness    gain    exp_abs     privacy"
+echo "---------------------------------------------------------"
 
 shopt -s nullglob
 
@@ -31,7 +31,7 @@ for f in *.cfg
 do
 	# load configuration file
 	source ${f}
-	printf "%s %10s %10s %10s\n" ${f} ${BRIGHTNESS} ${GAIN} ${EXPOSURE_ABSOLUTE}
+	printf "%s %10s %10s %10s %10s\n" ${f} ${BRIGHTNESS} ${GAIN} ${EXPOSURE_ABSOLUTE} ${PRIVACY}
 done
 
 } | tee "index.txt"
