@@ -3,7 +3,7 @@ Setup files index (generated automatically using makeindex.sh)
 Do not modify manually. If updates are required, run makeindex.sh
 ===============================================================================
 
-Last update: 17/07/20-09:08:21
+Last update: 17/09/06-16:22:59
 
 ===============================================================================
 Note: the four settings shown in the table for each camera are:
@@ -60,8 +60,8 @@ setup09.json  1/1     elp_2 (true)      elp_2 (true)      elp_2 (true)
                       1280x960  ()      1280x960  ()      1280x960  ()      
                       video/x-raw (png) video/x-raw (png) video/x-raw (png) 
 -------------------------------------------------------------------------------
-setupX3.json  1/1     tis_1 (true)      tis_1 (true)      tis_1 (true)      
-                      config0           config0           config0           
+setupX1.json  1/1     tis_1 (true)      tis_1 (true)      tis_1 (false)     
+                      config1           config1           config0           
                       1280x960  (10/1)  1280x960  (10/1)  1280x960  (10/1)  
-                      video/x-raw (png) video/x-raw (png) video/x-raw (png) 
+                      video/x-raw (jpg) video/x-raw (jpg) video/x-raw (jpg) 
 -------------------------------------------------------------------------------
