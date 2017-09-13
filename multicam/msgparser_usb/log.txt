@@ -1,0 +1,11 @@
+yaw:       -344596.343750
+pitch:     -0.000000
+roll:      -0.000000
+height:    15.000000
+speed:     32768
+utm_east:  852983616
+utm_north: 1863699906
+utm_zone:  66
+week:      17457
+fix:       180
+itow:      1077936128

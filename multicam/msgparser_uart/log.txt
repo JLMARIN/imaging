@@ -1,0 +1,11 @@
+yaw=0.223393
+pitch=-0.019355
+roll=1.583796
+height=-3.402161
+speed=0
+utm_east=0
+utm_north=0
+utm_zone=0
+week=0
+fix=0
+itow=0

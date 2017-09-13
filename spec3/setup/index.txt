@@ -6,7 +6,7 @@ Do not modify manually. If updates are required, run makeindex.sh
 Last update: 17/09/06-16:22:59
 
 ===============================================================================
-Note: the four settings shown in the table for each camera are:
+Note: the settings shown in the table for each camera are:
   [CAMERA DESIGNATOR] [ENABLE FLAG]
   [CONFIGURATION FILE]
   [RESOLUTION] [FRAMERATE]

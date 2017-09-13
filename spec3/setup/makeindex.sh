@@ -23,7 +23,7 @@ echo ""
 printf "Last update: %s\n" ${TIMESTAMP}
 echo ""
 echo "==============================================================================="
-echo "Note: the four settings shown in the table for each camera are:"
+echo "Note: the settings shown in the table for each camera are:"
 echo "  [CAMERA DESIGNATOR] [ENABLE FLAG]"
 echo "  [CONFIGURATION FILE]"
 echo "  [RESOLUTION] [FRAMERATE]"

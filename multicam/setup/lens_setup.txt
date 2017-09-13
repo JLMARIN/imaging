@@ -1,0 +1,4 @@
+cam1_focal_length=3.6
+cam2_focal_length=3.6
+cam3_focal_length=3.6
+cam4_focal_length=3.6

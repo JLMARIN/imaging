@@ -45,9 +45,9 @@ source ${CONFIG}
 # ==================================================================================
 echo "**"
 echo "* CAMERA CONFIGURATION"
-echo "* Camera info:        camera              = tis_1"
+echo "* Camera info:        camera              = tis_2"
 echo "*                     make                = The Imaging Source"
-echo "*                     model               = DMM 42BUC03-ML"
+echo "*                     model               = DMM 72BUC02-ML"
 echo "*                     device              = ${DEVICE}"
 echo "*                     config file         = ${CONFIG}"
 echo "* Lens info:          focal length        = ${FOCLENGTH}"
@@ -61,5 +61,5 @@ v4l2-ctl -d ${DEVICE} \
 -c brightness=${BRIGHTNESS},gain=${GAIN},exposure_absolute=${EXPOSURE_ABSOLUTE},privacy=${PRIVACY}
 
 # save short csv log file
-LOG="${CAMID},tis_1,The Imaging Source,DMM 42BUC03-ML,${FOCLENGTH}"
+LOG="${CAMID},tis_2,The Imaging Source,DMM 72BUC02-ML,${FOCLENGTH}"
 echo "${LOG}" >> short_log.log
