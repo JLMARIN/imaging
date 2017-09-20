@@ -12,7 +12,7 @@
 # [FORMAT]			Output format from the camera
 #					(e.g. image/jpeg, video/x-raw, video/x-raw,format=GRAY8)
 # [OUTPUT]			Output picture format
-#					(e.g. jpg, png)
+#					(e.g. jpg, png, tiff)
 # [FRATEOUT]		Output framerate from gst sub-command
 #					(e.g. 1/1)
 # [FRATEIN]			Output framerate from the camera [optional]
@@ -58,6 +58,9 @@ if [ "${FORMAT}" != "image/jpeg" ]; then
     fi
     if [ "${OUTPUT}" == "png" ]; then
     	VSINK="${VSINK} ! videoconvert ! pngenc"
+    fi
+    if [ "${OUTPUT}" == "tiff" ]; then
+    	VSINK="${VSINK} ! videoconvert ! avenc_tiff"
     fi
 fi
 
