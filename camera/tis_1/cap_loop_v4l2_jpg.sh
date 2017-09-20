@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ----------------------------------------------------------------------------------
-# Usage: ./cap_loop_v4l2_2.sh [DEVICE] [CONFIGURATION FILE] [FOCAL LENGTH]
+# Usage: ./cap_loop_v4l2_jpg.sh [DEVICE] [CONFIGURATION FILE] [FOCAL LENGTH]
 #
 # [DEVICE]          for a list of devices run '$ v4l2-ctl --list-devices'
 #                   (e.g. /dev/video0)
@@ -37,30 +37,18 @@ FORMAT=video/x-raw,format=GRAY8
 
 # frame sizes. Check with '$ v4l2-ctl -d /dev/video1 --list-formats-ext'.
 # Uncomment the desired option
+#RESOLUTION="width=320,height=240"
 #RESOLUTION="width=640,height=480"
-#RESOLUTION="width=1280,height=720"
-#RESOLUTION="width=1920,height=1080"
-RESOLUTION="width=2592,height=1944"
+RESOLUTION="width=1280,height=960"
 
 # frame per second on camera output (uncomment the desired option)
-#   - 60fps is only available for 640x480
-#   - 30fps is only available for 640x480, 1280x720
-#   - 25fps is only available for 640x480, 1280x720
-#   - 15fps is only available for 640x480, 1280x720, 1920x1080
-#   - 10fps is only available for          1280x720, 1920x1080
-#   - 7.5fps is only available for                   1920x1080, 2592x1944
-#   - 7fps is only available for                                2592x1944
-#   - 5fps is only available for                     1920x1080, 2592x1944
-#   - 4fps is only available for                                2592x1944
+#   - 10fps is only available for 1280x960
+#   - 60fps is only available for 320x240, 640x480
 #FPS_CAM=60/1
 #FPS_CAM=30/1
 #FPS_CAM=25/1
 #FPS_CAM=15/1
-#FPS_CAM=10/1
-#FPS_CAM=75/10
-FPS_CAM=7/1
-#FPS_CAM=5/1
-#FPS_CAM=4/1
+FPS_CAM=10/1
 
 # frames per second (on final gst pipeline output)
 FPS=1/1

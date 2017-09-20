@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ----------------------------------------------------------------------------------
-# Usage: ./cap_loop_v4l2_2.sh [DEVICE] [CONFIGURATION FILE] [FOCAL LENGTH]
+# Usage: ./cap_loop_v4l2_tiff.sh [DEVICE] [CONFIGURATION FILE] [FOCAL LENGTH]
 #
 # [DEVICE]          for a list of devices run '$ v4l2-ctl --list-devices'
 #                   (e.g. /dev/video0)
@@ -51,12 +51,12 @@ RESOLUTION="width=1280,height=960"
 FPS_CAM=10/1
 
 # frames per second (on final gst pipeline output)
-FPS=1/5
+FPS=1/1
 
 # timestamp and output name for files
 TIMESTAMP=$(date +"%y%m%d-%H%M%S")
 FOLDER=./sessions/${TIMESTAMP}
-OUTPUT=${FOLDER}/${TIMESTAMP}\_frame_%04d.jpg
+OUTPUT=${FOLDER}/${TIMESTAMP}\_frame_%04d.tiff
 
 # ==================================================================================
 # CREATE SESSION FOLDER
@@ -94,7 +94,7 @@ echo "**"
 GSTCMD="${DRIVER} device=${DEVICE} \
 ! ${FORMAT},${RESOLUTION},framerate=${FPS_CAM} \
 ! videorate ! ${FORMAT},framerate=${FPS} \
-! videoconvert ! jpegenc ! multifilesink location=${OUTPUT}"
+! videoconvert ! avenc_tiff ! multifilesink location=${OUTPUT}"
 
 # echo for debugging purposes (true : enabled, false : disabled)
 echo "${GSTCMD}" > >(tee -a ${FOLDER}/${TIMESTAMP}\_log.log)
