@@ -1,0 +1,50 @@
+{
+    "fps":      "1/1",
+    
+    "cameras":
+    [
+        {
+            "enable":   true,
+            "cam":      "elp_2",
+            "config":   "config0",
+            "width":    1280,
+            "height":   960,
+            "format":   "image/jpeg",
+            "frate":    "15/1",
+            "output":   "jpg"
+        },
+
+        {
+            "enable":   true,
+            "cam":      "elp_2",
+            "config":   "config0",
+            "width":    1280,
+            "height":   960,
+            "format":   "image/jpeg",
+            "frate":    "15/1",
+            "output":   "jpg"
+        },
+
+        {
+            "enable":   true,
+            "cam":      "elp_2",
+            "config":   "config0",
+            "width":    1280,
+            "height":   960,
+            "format":   "image/jpeg",
+            "frate":    "15/1",
+            "output":   "jpg"
+        },
+
+        {
+            "enable":   true,
+            "cam":      "elp_2",
+            "config":   "config0",
+            "width":    1280,
+            "height":   960,
+            "format":   "image/jpeg",
+            "frate":    "15/1",
+            "output":   "jpg"
+        }
+    ]
+}
