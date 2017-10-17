@@ -19,7 +19,7 @@ videoconvert ! xvimagesink \
 videotestsrc ! \
 video/x-raw,format=AYUV,framerate=5/1,width=320,height=240 ! mix.
 
-# videomixer example 2 (order matter: bottom-right corner first and then inverted z pattern)
+# videomixer example 2 (order matters: bottom-right corner first and then inverted z pattern)
 gst-launch-1.0 \
 videomixer name=mix ! \
 videoconvert ! xvimagesink \

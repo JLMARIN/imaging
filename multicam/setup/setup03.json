@@ -27,7 +27,7 @@
 
         {
             "enable":   false,
-            "cam":      "tis_2",
+            "cam":      "tis_1",
             "config":   "config1",
             "width":    1280,
             "height":   720,
@@ -38,7 +38,7 @@
 
         {
             "enable":   false,
-            "cam":      "tis_2",
+            "cam":      "tis_1",
             "config":   "config1",
             "width":    1280,
             "height":   720,
