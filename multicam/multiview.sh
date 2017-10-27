@@ -90,10 +90,13 @@ done
 # ==================================================================================
 
 # initialize GST command as empty string
-GSTCMD="videomixer name=mix ! videoconvert ! xvimagesink"
+GSTCMD="videomixer name=mix ! videoconvert ! autovideosink"
 
 # read framerate from setup file
 FPS="$( jq -r ".fps" "setup/${SETUP}.json" )"
+
+# calculate grid
+GRID="$( ./grid_calculator.sh ${CAMNUM} )"
 
 # loop through the cameras, setup and build GST command
 for ((i=0; i<$CAMNUM; i++));
@@ -122,6 +125,9 @@ do
             HEIGHT="$( jq -r ".cameras[$i].height" "setup/${SETUP}.json" )"
             FORMAT="$( jq -r ".cameras[$i].format" "setup/${SETUP}.json" )"
             FRATEIN="$( jq -r ".cameras[$i].frate" "setup/${SETUP}.json" )"
+
+            # calculate grid
+            ./grid_calculator.sh ${CAMNUM}  
 
             # build preliminary gst command
             gst_builder_local_func ${DEVICE} ${WIDTH} ${HEIGHT} ${FORMAT} ${FRATEIN} -320 -180
