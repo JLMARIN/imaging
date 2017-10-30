@@ -65,7 +65,7 @@ mkdir -p sessions
 mkdir -p sessions/${TIMESTAMP}
 
 # ==================================================================================
-# CONFIGURE CAMERAS SETTINGS AND BUILD GST COMMAND
+# CONFIGURE CAMERAS AND BUILD GST COMMAND
 # ==================================================================================
 
 # initialize GST command as empty string

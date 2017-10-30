@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ----------------------------------------------------------------------------------
-# Usage: ./multiview.sh [SETUP FILE] [USB SET] [CAM NUM]
+# Usage: ./multiview.sh [SETUP FILE] [USB SET] [CAM NUM] [WIDTH] [HEIGHT]
 #
 # [SETUP FILE]      name of the json setup file to use without extension. Check
 #                   setup files (.json) in 'setup' folder
@@ -10,6 +10,10 @@
 #                   (e.g. 0, 1, ...)
 # [CAM NUM]         number of cameras to be used
 #                   (e.g. 2, 3, 5, ...)
+# [WIDTH]           width of the images in pixels
+#                   (e.g. 320)
+# [HEIGHT]          height of the images in pixels
+#                   (e.g. 240)
 # ----------------------------------------------------------------------------------
 # Creates and runs pipelines using gstreamer for live camera visualization.
 # Bandwidth consideration must be taken into account when selecting the number of
@@ -56,10 +60,8 @@ gst_builder_local_func()
 SETUP=$1
 USBSET=$2
 CAMNUM=$3
-
-# get timestamp and define location and output name for files
-TIMESTAMP=$(date +"%y%m%d-%H%M%S")
-FOLDER=./sessions/${TIMESTAMP}
+WIDTH=$4
+HEIGHT=$5
 
 # ==================================================================================
 # LOAD USB PORT ID FROM 'usbList.json' FILE
@@ -71,48 +73,41 @@ do
 done
 
 # ==================================================================================
-# LOAD LENS FOCAL LENGTHS FROM 'lens_setup.txt' FILE
+# CALCULATE GRID
 # ==================================================================================
-for ((i=0; i<$CAMNUM; i++));
+GRID="$( ./grid_calculator.sh ${CAMNUM} ${WIDTH} ${HEIGHT} )"
+
+GRID=$(echo $GRID | tr "," "\n")
+
+k=0
+for i in $GRID
 do
-    FOCLENGTH[$i]=$(sed '1q;d' setup/lens_setup.txt)
-    FOCLENGTH[$i]=${FOCLENGTH[$i]##*=}
+    GRIDVAL[$k]=$i
+    k=$((k+1))
 done
 
 # ==================================================================================
-# CREATE SESSION FOLDER
-# ==================================================================================
-#--> mkdir -p sessions
-#--> mkdir -p sessions/${TIMESTAMP}
-
-# ==================================================================================
-# CONFIGURE CAMERAS SETTINGS AND BUILD GST COMMAND
+# CONFIGURE CAMERAS AND BUILD GST COMMAND
 # ==================================================================================
 
 # initialize GST command as empty string
 GSTCMD="videomixer name=mix ! videoconvert ! autovideosink"
 
-# read framerate from setup file
-FPS="$( jq -r ".fps" "setup/${SETUP}.json" )"
-
-# calculate grid
-GRID="$( ./grid_calculator.sh ${CAMNUM} )"
-
 # loop through the cameras, setup and build GST command
-for ((i=0; i<$CAMNUM; i++));
+for ((i=$CAMNUM-1; i>=0; i--));
 do
     ENABLE="$( jq -r ".cameras[$i].enable" "setup/${SETUP}.json" )"
 
     if (${ENABLE}); then
         # find video device id from USB port
         #--> DEVID="$( ./usbdev/usbVideoFind.sh "${USB[$i]}" )"
-        DEVID=1
+        DEVID=$i
 
         if [ -n "$DEVID" ]; then
             # define full video device name
             DEVICE="/dev/${DEVID}"
 
-            # load camera info relevant to camera configuartion
+            # load camera info relevant to camera configuration
             CAMERA="$( jq -r ".cameras[$i].cam" "setup/${SETUP}.json" )"
             CONFIG="$( jq -r ".cameras[$i].config" "setup/${SETUP}.json" )"
             #echo "$i , ${CAMERA} , ${CONFIG} , ${DEVICE}"
@@ -121,22 +116,18 @@ do
             ##--> ../camera/${CAMERA}/config/config.sh ${DEVICE} "../camera/${CAMERA}/config/${CONFIG}.cfg" ${FOCLENGTH[$i]} $((i+1))
 
             # load camera info relevant to gst pipeline
-            WIDTH="$( jq -r ".cameras[$i].width" "setup/${SETUP}.json" )"
-            HEIGHT="$( jq -r ".cameras[$i].height" "setup/${SETUP}.json" )"
             FORMAT="$( jq -r ".cameras[$i].format" "setup/${SETUP}.json" )"
             FRATEIN="$( jq -r ".cameras[$i].frate" "setup/${SETUP}.json" )"
 
-            # calculate grid
-            ./grid_calculator.sh ${CAMNUM}  
+            # get top and left offset position for grid
+            TOPOS=${GRIDVAL[$i*2+2]}
+            LEFTOS=${GRIDVAL[$i*2+3]}
 
             # build preliminary gst command
-            gst_builder_local_func ${DEVICE} ${WIDTH} ${HEIGHT} ${FORMAT} ${FRATEIN} -320 -180
+            gst_builder_local_func ${DEVICE} ${WIDTH} ${HEIGHT} ${FORMAT} ${FRATEIN} ${TOPOS} ${LEFTOS}
         fi
     fi
 done
-
-# move short log to folder and rename
-#mv short_log.log ${FOLDER}/${TIMESTAMP}\_short_log.log
 
 # ==================================================================================
 # RUN gstreamer AND START PIPELINES
