@@ -100,8 +100,7 @@ do
 
     if (${ENABLE}); then
         # find video device id from USB port
-        #--> DEVID="$( ./usbdev/usbVideoFind.sh "${USB[$i]}" )"
-        DEVID=$i
+        DEVID="$( ./usbdev/usbVideoFind.sh "${USB[$i]}" )"
 
         if [ -n "$DEVID" ]; then
             # define full video device name
@@ -113,7 +112,7 @@ do
             #echo "$i , ${CAMERA} , ${CONFIG} , ${DEVICE}"
 
             # run configuration script
-            ##--> ../camera/${CAMERA}/config/config.sh ${DEVICE} "../camera/${CAMERA}/config/${CONFIG}.cfg" ${FOCLENGTH[$i]} $((i+1))
+            ../camera/${CAMERA}/config/config.sh ${DEVICE} "../camera/${CAMERA}/config/${CONFIG}.cfg" 0 $((i+1))
 
             # load camera info relevant to gst pipeline
             FORMAT="$( jq -r ".cameras[$i].format" "setup/${SETUP}.json" )"
@@ -129,12 +128,15 @@ do
     fi
 done
 
+# delete short log
+rm short_log.log
+
 # ==================================================================================
 # RUN gstreamer AND START PIPELINES
 # ==================================================================================
 
 # echo for debugging purposes
-echo gst-launch-1.0 -e ${GSTCMD}
+#echo gst-launch-1.0 -e ${GSTCMD}
 
 # run command
-#--> gst-launch-1.0 -e ${GSTCMD}
+gst-launch-1.0 -e ${GSTCMD}

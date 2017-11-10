@@ -5,45 +5,12 @@
     [
         {
             "enable":   true,
-            "cam":      "elp_2",
-            "config":   "config0",
+            "cam":      "tis_1",
+            "config":   "config1",
             "width":    1280,
             "height":   960,
-            "format":   "image/jpeg",
-            "frate":    "15/1",
-            "output":   "jpg"
-        },
-
-        {
-            "enable":   true,
-            "cam":      "elp_2",
-            "config":   "config0",
-            "width":    1280,
-            "height":   960,
-            "format":   "image/jpeg",
-            "frate":    "15/1",
-            "output":   "jpg"
-        },
-
-        {
-            "enable":   true,
-            "cam":      "elp_2",
-            "config":   "config0",
-            "width":    1280,
-            "height":   960,
-            "format":   "image/jpeg",
-            "frate":    "15/1",
-            "output":   "jpg"
-        },
-
-        {
-            "enable":   false,
-            "cam":      "elp_2",
-            "config":   "config0",
-            "width":    1280,
-            "height":   960,
-            "format":   "image/jpeg",
-            "frate":    "15/1",
+            "format":   "video/x-raw,format=GRAY8",
+            "frate":    "10/1",
             "output":   "jpg"
         }
     ]

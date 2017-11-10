@@ -3,32 +3,37 @@ Setup files index (generated automatically using makeindex.sh)
 Do not modify manually. If updates are required, run makeindex.sh
 ===============================================================================
 
-Last update: 17/10/17-15:15:39
+Last update: 17/11/10-13:41:32
 
 ====================================================================================================
 filename      fps     cam   | en    | model  | cfg file  | resolution | src fps| output format| img
 ====================================================================================================
-setup01.json  1/1     cam0  | true  | elp_2  | config0   | 1280x960   | 15/1   | image/jpeg   | jpg
-                      cam1  | true  | elp_2  | config0   | 1280x960   | 15/1   | image/jpeg   | jpg
-                      cam2  | true  | elp_2  | config0   | 1280x960   | 15/1   | image/jpeg   | jpg
-                      cam3  | false | elp_2  | config0   | 1280x960   | 15/1   | image/jpeg   | jpg
+setup01.json  1/1     cam0  | true  | tis_1  | config1   | 1280x960   | 10/1   | video/x-raw  | jpg
 ----------------------------------------------------------------------------------------------------
 setup02.json  1/1     cam0  | true  | tis_1  | config1   | 1280x960   | 10/1   | video/x-raw  | jpg
                       cam1  | true  | tis_1  | config1   | 1280x960   | 10/1   | video/x-raw  | jpg
-                      cam2  | false | tis_1  | config1   | 1280x720   | 10/1   | video/x-raw  | jpg
-                      cam3  | false | tis_1  | config1   | 1280x720   | 10/1   | video/x-raw  | jpg
 ----------------------------------------------------------------------------------------------------
-setup03.json  1/1     cam0  | true  | tis_1  | config1   | 1280x960   | 10/1   | video/x-raw  | tiff
-                      cam1  | true  | tis_1  | config1   | 1280x960   | 10/1   | video/x-raw  | tiff
+setup03.json  1/1     cam0  | true  | tis_1  | config1   | 1280x960   | 30/1   | video/x-raw  | jpg
+                      cam1  | true  | tis_1  | config1   | 1280x960   | 30/1   | video/x-raw  | jpg
                       cam2  | false | tis_1  | config1   | 1280x720   | 10/1   | video/x-raw  | jpg
                       cam3  | false | tis_1  | config1   | 1280x720   | 10/1   | video/x-raw  | jpg
 ----------------------------------------------------------------------------------------------------
 setup04.json  1/1     cam0  | true  | tis_1  | config1   | 1280x960   | 10/1   | video/x-raw  | jpg
                       cam1  | true  | tis_1  | config1   | 1280x960   | 10/1   | video/x-raw  | jpg
+                      cam2  | false | tis_1  | config1   | 1280x720   | 10/1   | video/x-raw  | jpg
+                      cam3  | false | tis_1  | config1   | 1280x720   | 10/1   | video/x-raw  | jpg
+----------------------------------------------------------------------------------------------------
+setup05.json  1/1     cam0  | true  | tis_1  | config1   | 1280x960   | 10/1   | video/x-raw  | tiff
+                      cam1  | true  | tis_1  | config1   | 1280x960   | 10/1   | video/x-raw  | tiff
+                      cam2  | false | tis_1  | config1   | 1280x720   | 10/1   | video/x-raw  | jpg
+                      cam3  | false | tis_1  | config1   | 1280x720   | 10/1   | video/x-raw  | jpg
+----------------------------------------------------------------------------------------------------
+setup06.json  1/1     cam0  | true  | tis_1  | config1   | 1280x960   | 10/1   | video/x-raw  | jpg
+                      cam1  | true  | tis_1  | config1   | 1280x960   | 10/1   | video/x-raw  | jpg
                       cam2  | true  | tis_1  | config1   | 1280x720   | 10/1   | video/x-raw  | jpg
                       cam3  | true  | tis_1  | config1   | 1280x720   | 10/1   | video/x-raw  | jpg
 ----------------------------------------------------------------------------------------------------
-setup05.json  1/1     cam0  | true  | tis_1  | config1   | 1280x960   | 10/1   | video/x-raw  | tiff
+setup07.json  1/1     cam0  | true  | tis_1  | config1   | 1280x960   | 10/1   | video/x-raw  | tiff
                       cam1  | true  | tis_1  | config1   | 1280x960   | 10/1   | video/x-raw  | tiff
                       cam2  | true  | tis_1  | config1   | 1280x720   | 10/1   | video/x-raw  | tiff
                       cam3  | true  | tis_1  | config1   | 1280x720   | 10/1   | video/x-raw  | tiff

@@ -26,7 +26,7 @@
         },
 
         {
-            "enable":   false,
+            "enable":   true,
             "cam":      "tis_1",
             "config":   "config1",
             "width":    1280,
@@ -37,7 +37,7 @@
         },
 
         {
-            "enable":   false,
+            "enable":   true,
             "cam":      "tis_1",
             "config":   "config1",
             "width":    1280,
