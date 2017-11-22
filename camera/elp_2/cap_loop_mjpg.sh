@@ -45,6 +45,18 @@ FORMAT=image/jpeg
 #RESOLUTION="width=1280,height=720"
 RESOLUTION="width=1280,height=960"
 
+# frame per second on camera output (uncomment the desired option)
+#
+#				320x240  640x480  800x600  1280x720  1280x960
+#  -----------------------------------------------------------
+#   MJPG		 30/15    30/15    30/15     30/15     30/15
+#   YUYV           30       30       20        10         9
+#FPS_CAM=30/1
+#FPS_CAM=20/1
+FPS_CAM=15/1
+#FPS_CAM=10/1
+#FPS_CAM=9/1
+
 # frames per second
 FPS=1/1
 
@@ -80,14 +92,14 @@ mv short_log.log ${FOLDER}/${TIMESTAMP}\_short_log.log
 # ==================================================================================
 echo "**"
 echo "* gstreamer settings: resolution          = ${RESOLUTION}"
-echo "*                     framerate           = ${FPS}"
+echo "*                     framerate           = ${FPS_CAM}"
 echo "* Saving images to: ${FOLDER}"
 echo "* Press CTRL+C to end script"
 echo "**"
 
 # build gst command
 GSTCMD="${DRIVER} device=${DEVICE} \
-! ${FORMAT},${RESOLUTION} \
+! ${FORMAT},${RESOLUTION},framerate=${FPS_CAM} \
 ! videorate ! ${FORMAT},framerate=${FPS} \
 ! multifilesink location=${OUTPUT}"
 

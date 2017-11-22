@@ -42,8 +42,10 @@ FORMAT=video/x-raw,format=GRAY8
 RESOLUTION="width=1280,height=960"
 
 # frame per second on camera output (uncomment the desired option)
-#   - 10fps is only available for 1280x960
-#   - 60fps is only available for 320x240, 640x480
+#
+#				320x240      640x480      1280x960
+#  --------------------------------------------------
+#   Y800	  60/30/25/15  60/30/25/15  30/25/15/10  
 #FPS_CAM=60/1
 #FPS_CAM=30/1
 #FPS_CAM=25/1
