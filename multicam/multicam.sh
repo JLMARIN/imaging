@@ -13,11 +13,14 @@
 # [FULL MODE]       Full mode flag [optional / default is TRUE]
 #                   (e.g. 1 or 0)
 # ----------------------------------------------------------------------------------
-# Creates  pipelines using gstreamer 
+# Creates and runs pipelines using gstreamer for image capture and saving from
+# multiple cameras.
 #
 # Additional programs needed for this script:
 #   - v4l-utils ('$ sudo apt-get install v4l-utils')
 #   - gstreamer ('$ sudo apt-get install gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly')
+#   - jq        ('$ sudo apt-get install jq')
+#   - inotify   ('$ sudo apt-get install inotify-tools')
 #
 # Remember to give execute permission to the script by:
 # $ chmod +x /path/to/script.sh
@@ -62,7 +65,7 @@ mkdir -p sessions
 mkdir -p sessions/${TIMESTAMP}
 
 # ==================================================================================
-# CONFIGURE CAMERAS SETTINGS AND BUILD GST COMMAND
+# CONFIGURE CAMERAS AND BUILD GST COMMAND
 # ==================================================================================
 
 # initialize GST command as empty string

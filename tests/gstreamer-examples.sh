@@ -19,10 +19,19 @@ videoconvert ! xvimagesink \
 videotestsrc ! \
 video/x-raw,format=AYUV,framerate=5/1,width=320,height=240 ! mix.
 
-# videomixer example 2 (order matter: bottom-right corner first and then inverted z pattern)
+# videomixer example 2 (order matters: bottom-right corner first and then inverted z pattern)
 gst-launch-1.0 \
 videomixer name=mix ! \
 videoconvert ! xvimagesink \
+videotestsrc pattern=ball ! video/x-raw,width=320,height=180,framerate=15/1 ! videobox border-alpha=0 top=-180 left=-320 ! mix. \
+videotestsrc pattern=gradient ! video/x-raw,width=320,height=180,framerate=5/1 ! videobox border-alpha=0 top=-180 left=0 ! mix. \
+videotestsrc pattern=smpte ! video/x-raw,width=320,height=180,framerate=5/1 ! videobox border-alpha=0 top=0 left=-320 ! mix. \
+videotestsrc pattern=snow ! video/x-raw,width=320,height=180,framerate=10/1 ! videobox border-alpha=0 top=0 left=0 ! mix.
+
+# videomixer example 3 (using autovideosink)
+gst-launch-1.0 \
+videomixer name=mix ! \
+videoconvert ! autovideosink \
 videotestsrc pattern=ball ! video/x-raw,width=320,height=180,framerate=15/1 ! videobox border-alpha=0 top=-180 left=-320 ! mix. \
 videotestsrc pattern=gradient ! video/x-raw,width=320,height=180,framerate=5/1 ! videobox border-alpha=0 top=-180 left=0 ! mix. \
 videotestsrc pattern=smpte ! video/x-raw,width=320,height=180,framerate=5/1 ! videobox border-alpha=0 top=0 left=-320 ! mix. \
