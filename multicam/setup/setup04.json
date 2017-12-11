@@ -26,11 +26,11 @@
         },
 
         {
-            "enable":   false,
+            "enable":   true,
             "cam":      "tis_1",
             "config":   "config1",
             "width":    1280,
-            "height":   720,
+            "height":   960,
             "format":   "video/x-raw,format=GRAY8",
             "frate":    "10/1",
             "output":   "jpg"
@@ -41,7 +41,18 @@
             "cam":      "tis_1",
             "config":   "config1",
             "width":    1280,
-            "height":   720,
+            "height":   960,
+            "format":   "video/x-raw,format=GRAY8",
+            "frate":    "10/1",
+            "output":   "jpg"
+        },
+
+        {
+            "enable":   false,
+            "cam":      "tis_1",
+            "config":   "config1",
+            "width":    1280,
+            "height":   960,
             "format":   "video/x-raw,format=GRAY8",
             "frate":    "10/1",
             "output":   "jpg"
