@@ -55,7 +55,8 @@ do
             if (( $i > 0 )); then
                 printf "                      "
             fi
-            printf "cam%-2s | %-5s | %-6s | %-9s | %-10s | %-6s | %-12s | %-3s\n" ${i} ${ENABLE} ${CAMERA} ${CONFIG} ${RESOLUTION} ${FRATECAM} ${FORMAT} ${OUTPUT}
+            j=$((i+1))
+            printf "cam%-2s | %-5s | %-6s | %-9s | %-10s | %-6s | %-12s | %-3s\n" ${j} ${ENABLE} ${CAMERA} ${CONFIG} ${RESOLUTION} ${FRATECAM} ${FORMAT} ${OUTPUT}
         done
         echo ----------------------------------------------------------------------------------------------------
     fi

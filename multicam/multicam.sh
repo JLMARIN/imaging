@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # ----------------------------------------------------------------------------------
-# Usage: ./multicam.sh [SETUP FILE] [USB SET] [CAM NUM] [FULL MODE]
+# Usage: ./multicam.sh [SETUP FILE] [CAM SET] [CAM NUM] [FULL MODE]
 #
 # [SETUP FILE]      name of the json setup file to use without extension. Check
 #                   setup files (.json) in 'setup' folder
 #                   (e.g. setup1)
-# [USB SET]         predefined usb set. Check usbList.json in 'setup' folder
+# [CAM SET]         predefined camera set. Check cameraList.json in 'setup' folder
 #                   (e.g. 0, 1, ...)
 # [CAM NUM]         number of cameras to be used
 #                   (e.g. 2, 3, 5, ...)
@@ -27,7 +27,7 @@
 # ----------------------------------------------------------------------------------
 
 SETUP=$1
-USBSET=$2
+CAMSET=$2
 CAMNUM=$3
 
 if [ -z "$4" ]; then
@@ -41,12 +41,12 @@ TIMESTAMP=$(date +"%y%m%d-%H%M%S")
 FOLDER=./sessions/${TIMESTAMP}
 
 # ==================================================================================
-# LOAD USB PORT ID FROM 'usbList.json' FILE
+# LOAD CAMERA USB ID FROM 'cameraList.json' FILE
 # ==================================================================================
 for ((i=1; i<=$CAMNUM; i++));
 do
     j=$((i-1))
-    USB[$j]="$( jq -r ".usb[$USBSET].usb$i" "setup/usbList.json" )"
+    DEVICE[$j]="$( jq -r ".camera_array[$CAMSET].cam$i" "setup/cameraList.json" )"
 done
 
 # ==================================================================================
@@ -80,43 +80,35 @@ do
     ENABLE="$( jq -r ".cameras[$i].enable" "setup/${SETUP}.json" )"
 
     if (${ENABLE}); then
-        # find video device id from USB port
-        DEVID="$( ./usbdev/usbVideoFind.sh "${USB[$i]}" )"
+        # load camera info relevant to camera configuartion
+        CAMERA="$( jq -r ".cameras[$i].cam" "setup/${SETUP}.json" )"
+        CONFIG="$( jq -r ".cameras[$i].config" "setup/${SETUP}.json" )"
+        #echo "$i , ${CAMERA} , ${CONFIG} , ${DEVICE[$i]}"
 
-        if [ -n "$DEVID" ]; then
-            # define full video device name
-            DEVICE="/dev/${DEVID}"
+        # run configuration script and save output to log file
+        ../camera/${CAMERA}/config/config.sh ${DEVICE[$i]} "../camera/${CAMERA}/config/${CONFIG}.cfg" ${FOCLENGTH[$i]} $((i+1)) > >(tee -a ${FOLDER}/${TIMESTAMP}\_log.log)
 
-            # load camera info relevant to camera configuartion
-            CAMERA="$( jq -r ".cameras[$i].cam" "setup/${SETUP}.json" )"
-            CONFIG="$( jq -r ".cameras[$i].config" "setup/${SETUP}.json" )"
-            #echo "$i , ${CAMERA} , ${CONFIG} , ${DEVICE}"
+        # load camera info relevant to gst pipeline
+        WIDTH="$( jq -r ".cameras[$i].width" "setup/${SETUP}.json" )"
+        HEIGHT="$( jq -r ".cameras[$i].height" "setup/${SETUP}.json" )"
+        FORMAT="$( jq -r ".cameras[$i].format" "setup/${SETUP}.json" )"
+        FRATEIN="$( jq -r ".cameras[$i].frate" "setup/${SETUP}.json" )"
+        PICFORMAT="$( jq -r ".cameras[$i].output" "setup/${SETUP}.json" )"
 
-            # run configuration script and save output to log file
-            ../camera/${CAMERA}/config/config.sh ${DEVICE} "../camera/${CAMERA}/config/${CONFIG}.cfg" ${FOCLENGTH[$i]} $((i+1)) > >(tee -a ${FOLDER}/${TIMESTAMP}\_log.log)
+        # build preliminary gst command
+        TEMP="$( ./gst_builder.sh ${DEVICE[$i]} ${WIDTH} ${HEIGHT} ${FORMAT} ${PICFORMAT} ${FPS} ${FRATEIN} )"
 
-            # load camera info relevant to gst pipeline
-            WIDTH="$( jq -r ".cameras[$i].width" "setup/${SETUP}.json" )"
-            HEIGHT="$( jq -r ".cameras[$i].height" "setup/${SETUP}.json" )"
-            FORMAT="$( jq -r ".cameras[$i].format" "setup/${SETUP}.json" )"
-            FRATEIN="$( jq -r ".cameras[$i].frate" "setup/${SETUP}.json" )"
-            PICFORMAT="$( jq -r ".cameras[$i].output" "setup/${SETUP}.json" )"
+        # define output file location and file names
+        OUTPUT="${FOLDER}/${TIMESTAMP}\_frame_%04d_cam_$((i+1)).${PICFORMAT}"
 
-            # build preliminary gst command
-            TEMP="$( ./gst_builder.sh ${DEVICE} ${WIDTH} ${HEIGHT} ${FORMAT} ${PICFORMAT} ${FPS} ${FRATEIN} )"
+        # add file location to gst command
+        TEMP="${TEMP} ! multifilesink location=${OUTPUT}"
 
-            # define output file location and file names
-            OUTPUT="${FOLDER}/${TIMESTAMP}\_frame_%04d_cam_$((i+1)).${PICFORMAT}"
+        # echo individual camera partial gst pipeline (and save output to log file)
+        echo "${TEMP}" > >(tee -a ${FOLDER}/${TIMESTAMP}\_log.log)
 
-            # add file location to gst command
-            TEMP="${TEMP} ! multifilesink location=${OUTPUT}"
-
-            # echo individual camera partial gst pipeline (and save output to log file)
-            echo "${TEMP}" > >(tee -a ${FOLDER}/${TIMESTAMP}\_log.log)
-
-            # append individual camera gst command to global gst command
-            GSTCMD="${GSTCMD} ${TEMP}"
-        fi
+        # append individual camera gst command to global gst command
+        GSTCMD="${GSTCMD} ${TEMP}"
     fi
 done
 
