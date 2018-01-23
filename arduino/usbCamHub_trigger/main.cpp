@@ -26,6 +26,7 @@ uint16_t 	period_ms;
 bool		update_trigger_period = false;
 bool        send_single_trigger = false;
 bool        trigger_enabled = true;
+bool		update_trigger_state = false;
 
 /******************************************************************************
  * Prototypes
@@ -33,6 +34,7 @@ bool        trigger_enabled = true;
 // callback functions prototypes
 void tReadATCommandsCallback();
 void tSendTriggerCallback();
+void tButtonTriggerCallback();
 
 // private functions prototypes
 void read_eeprom();
@@ -47,6 +49,7 @@ Scheduler runner;
 // tasks
 Task tReadATCommands(100, TASK_FOREVER, &tReadATCommandsCallback, &runner, true);
 Task tSendTrigger(1000, TASK_FOREVER, &tSendTriggerCallback, &runner, false);
+Task tButtonTrigger(10, TASK_FOREVER, &tButtonTriggerCallback, &runner, false);
 
 /******************************************************************************
  * Setup
@@ -61,8 +64,9 @@ void setup()
 	Serial.print(F("Firmware version: v")); Serial.println(FIRMWARE_VERSION);
 	Serial.println(F("----------------------------------"));
 
-	// configure LED
+	// configure pins
 	pinMode(LED, OUTPUT);
+	pinMode(BUTTON, INPUT_PULLUP);
 
 	// initialize triggers
 	trigger_init();
@@ -96,13 +100,10 @@ void read_eeprom()
 {
 	EEPROM.get(EEPROM_ADDRESS, period_ms);
 	Serial.println(F("Trigger period retrieved from EEPROM"));
-	if (period_ms < 10)
-	{
+	if (period_ms < 10) {
 		Serial.println(F("Trigger period is too small (< 10ms). Setting to default (1000ms)"));
 		period_ms = 1000;	
-	}
-	else
-	{
+	} else {
 		Serial.print(F("Trigger period (ms) = ")); Serial.println(period_ms);
 	}
 }
@@ -126,10 +127,7 @@ void send_trigger()
  */
 void tSendTriggerCallback()
 {
-	if (trigger_enabled)
-	{
-		send_trigger();
-	}
+	send_trigger();
 }
 
 /**
@@ -137,17 +135,43 @@ void tSendTriggerCallback()
  */
 void tReadATCommandsCallback()
 {
-	uart_read_and_decode();
-
-	if (update_trigger_period)
+	if (uart_read_and_decode())
 	{
-		tSendTrigger.setInterval(period_ms);
-		update_trigger_period = false;
+		if (update_trigger_period) {
+			tSendTrigger.setInterval(period_ms);
+			update_trigger_period = false;
+		}
+
+		if (send_single_trigger) {
+			send_trigger();
+			send_single_trigger = false;
+		}
+
+		if (update_trigger_state) {
+			if (trigger_enabled) {
+				tSendTrigger.enable();
+				tButtonTrigger.disable();
+			} else {
+				tSendTrigger.disable();
+				tButtonTrigger.enable();
+			}
+			update_trigger_state = false;
+		}
 	}
+}
 
-	if (send_single_trigger)
-	{
+/**
+ * @brief   Checks for button press and sends trigger if true
+ */
+void tButtonTriggerCallback()
+{
+	static bool button_pressed = false;
+
+	if ( !button_pressed && (digitalRead(BUTTON) == LOW) ) {
 		send_trigger();
-		send_single_trigger = false;
+		Serial.println(F("Button press detected. Trigger signal sent"));
+		button_pressed = true;
+	} else if ( button_pressed && (digitalRead(BUTTON) == HIGH) ) {
+		button_pressed = false;
 	}
 }

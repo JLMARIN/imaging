@@ -17,8 +17,9 @@ String inputString, command, value;
 
 /**
  * @brief   Reads and decodes data comming from the uart serial port
+ * @return	True if something was received from the serial port
  */
-void uart_read_and_decode()
+bool uart_read_and_decode()
 {
 	if (Serial.available()) {
 		inputString = Serial.readStringUntil('\n');
@@ -29,7 +30,10 @@ void uart_read_and_decode()
 		uart_decode();
 
 		inputString = "";
+
+		return true;
 	}
+	return false;
 }
 
 /**
@@ -60,13 +64,15 @@ void uart_decode()
 	// --------------------------------------------------------------------------
 	else if (command == "AT+STOP") {
 		trigger_enabled = false;
-		Serial.println(F("Triggering stopped"));
+		update_trigger_state = true;
+		Serial.println(F("Automatic trigger mode stopped"));
 	}
 
 	// --------------------------------------------------------------------------
 	else if (command == "AT+START") {
 		trigger_enabled = true;
-		Serial.println(F("Triggering started"));
+		update_trigger_state = true;
+		Serial.println(F("Automatic trigger mode started"));
 	}
 
 	// --------------------------------------------------------------------------

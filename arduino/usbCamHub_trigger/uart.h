@@ -13,7 +13,7 @@
 
 #include "Arduino.h"
 
-void uart_read_and_decode();
+bool uart_read_and_decode();
 void uart_decode();
 
 #endif  /* UART_H */
