@@ -3,9 +3,10 @@ Configuration files index (generated automatically using makeindex.sh)
 Do not modify manually. If updates are required, run makeindex.sh
 ===============================================================================
 
-Last update: 17/09/01-10:58:17
+Last update: 18/01/26-10:19:58
 
 filename        brightness    gain    exp_abs     privacy
 ---------------------------------------------------------
 config0.cfg         12         36        127          0
 config1.cfg         12         36        127          1
+config2.cfg         12         36         20          1

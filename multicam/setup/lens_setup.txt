@@ -2,3 +2,7 @@ cam1_focal_length=6.0
 cam2_focal_length=6.0
 cam3_focal_length=6.0
 cam4_focal_length=6.0
+cam5_focal_length=6.0
+cam6_focal_length=6.0
+cam7_focal_length=6.0
+cam8_focal_length=6.0

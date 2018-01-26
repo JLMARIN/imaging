@@ -30,7 +30,7 @@ shopt -s nullglob
 
 for f in *.json
 do
-    if [ "${f}" != "usbList.json" ]; then
+    if [ "${f}" != "cameraList.json" ]; then
         FPS="$( jq -r ".fps" "${f}" )"
 
         CAMNUM="$( jq '.cameras | length' "${f}" )" 

@@ -6,56 +6,111 @@
         {
             "enable":   true,
             "cam":      "tis_1",
-            "config":   "config1",
-            "width":    1280,
-            "height":   960,
+            "config":   "config2",
+            "width":    640,
+            "height":   480,
             "format":   "video/x-raw,format=GRAY8",
-            "frate":    "10/1",
-            "output":   "jpg"
+            "frate":    "15/1",
+            "output":   "png"
+        },
+
+        {
+            "enable":   true,
+            "cam":      "tis_1",
+            "config":   "config2",
+            "width":    640,
+            "height":   480,
+            "format":   "video/x-raw,format=GRAY8",
+            "frate":    "15/1",
+            "output":   "png"
+        },
+
+        {
+            "enable":   true,
+            "cam":      "tis_1",
+            "config":   "config2",
+            "width":    640,
+            "height":   480,
+            "format":   "video/x-raw,format=GRAY8",
+            "frate":    "15/1",
+            "output":   "png"
         },
 
         {
             "enable":   true,
             "cam":      "tis_1",
             "config":   "config1",
-            "width":    1280,
-            "height":   960,
+            "width":    640,
+            "height":   480,
             "format":   "video/x-raw,format=GRAY8",
-            "frate":    "10/1",
-            "output":   "jpg"
+            "frate":    "15/1",
+            "output":   "png"
+        },
+        
+        {
+            "enable":   true,
+            "cam":      "tis_1",
+            "config":   "config2",
+            "width":    640,
+            "height":   480,
+            "format":   "video/x-raw,format=GRAY8",
+            "frate":    "15/1",
+            "output":   "png"
         },
 
         {
             "enable":   true,
             "cam":      "tis_1",
-            "config":   "config1",
-            "width":    1280,
-            "height":   960,
+            "config":   "config2",
+            "width":    640,
+            "height":   480,
             "format":   "video/x-raw,format=GRAY8",
-            "frate":    "10/1",
-            "output":   "jpg"
+            "frate":    "15/1",
+            "output":   "png"
         },
 
         {
-            "enable":   false,
+            "enable":   true,
             "cam":      "tis_1",
-            "config":   "config1",
-            "width":    1280,
-            "height":   960,
+            "config":   "config2",
+            "width":    640,
+            "height":   480,
             "format":   "video/x-raw,format=GRAY8",
-            "frate":    "10/1",
-            "output":   "jpg"
+            "frate":    "15/1",
+            "output":   "png"
         },
 
         {
-            "enable":   false,
+            "enable":   true,
             "cam":      "tis_1",
-            "config":   "config1",
-            "width":    1280,
-            "height":   960,
+            "config":   "config2",
+            "width":    640,
+            "height":   480,
             "format":   "video/x-raw,format=GRAY8",
-            "frate":    "10/1",
-            "output":   "jpg"
+            "frate":    "15/1",
+            "output":   "png"
+        },
+
+        {
+            "enable":   true,
+            "cam":      "tis_1",
+            "config":   "config2",
+            "width":    640,
+            "height":   480,
+            "format":   "video/x-raw,format=GRAY8",
+            "frate":    "15/1",
+            "output":   "png"
+        },
+
+        {
+            "enable":   true,
+            "cam":      "tis_1",
+            "config":   "config2",
+            "width":    640,
+            "height":   480,
+            "format":   "video/x-raw,format=GRAY8",
+            "frate":    "15/1",
+            "output":   "png"
         }
     ]
 }
