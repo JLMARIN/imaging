@@ -6,7 +6,7 @@
         {
             "enable":   true,
             "cam":      "tis_1",
-            "config":   "config1",
+            "config":   "config2",
             "width":    640,
             "height":   480,
             "format":   "video/x-raw,format=GRAY8",
@@ -17,7 +17,7 @@
         {
             "enable":   true,
             "cam":      "tis_1",
-            "config":   "config1",
+            "config":   "config2",
             "width":    640,
             "height":   480,
             "format":   "video/x-raw,format=GRAY8",
@@ -28,7 +28,7 @@
         {
             "enable":   true,
             "cam":      "tis_1",
-            "config":   "config1",
+            "config":   "config2",
             "width":    640,
             "height":   480,
             "format":   "video/x-raw,format=GRAY8",
@@ -48,9 +48,64 @@
         },
         
         {
-            "enable":   false,
+            "enable":   true,
             "cam":      "tis_1",
-            "config":   "config1",
+            "config":   "config2",
+            "width":    640,
+            "height":   480,
+            "format":   "video/x-raw,format=GRAY8",
+            "frate":    "15/1",
+            "output":   "png"
+        },
+
+        {
+            "enable":   true,
+            "cam":      "tis_1",
+            "config":   "config2",
+            "width":    640,
+            "height":   480,
+            "format":   "video/x-raw,format=GRAY8",
+            "frate":    "15/1",
+            "output":   "png"
+        },
+
+        {
+            "enable":   true,
+            "cam":      "tis_1",
+            "config":   "config2",
+            "width":    640,
+            "height":   480,
+            "format":   "video/x-raw,format=GRAY8",
+            "frate":    "15/1",
+            "output":   "png"
+        },
+
+        {
+            "enable":   true,
+            "cam":      "tis_1",
+            "config":   "config2",
+            "width":    640,
+            "height":   480,
+            "format":   "video/x-raw,format=GRAY8",
+            "frate":    "15/1",
+            "output":   "png"
+        },
+
+        {
+            "enable":   true,
+            "cam":      "tis_1",
+            "config":   "config2",
+            "width":    640,
+            "height":   480,
+            "format":   "video/x-raw,format=GRAY8",
+            "frate":    "15/1",
+            "output":   "png"
+        },
+
+        {
+            "enable":   true,
+            "cam":      "tis_1",
+            "config":   "config2",
             "width":    640,
             "height":   480,
             "format":   "video/x-raw,format=GRAY8",
