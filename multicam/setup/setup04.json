@@ -7,8 +7,8 @@
             "enable":   true,
             "cam":      "tis_1",
             "config":   "config3",
-            "width":    640,
-            "height":   480,
+            "width":    320,
+            "height":   240,
             "format":   "video/x-raw,format=GRAY8",
             "frate":    "15/1",
             "output":   "png"
@@ -18,8 +18,8 @@
             "enable":   true,
             "cam":      "tis_1",
             "config":   "config3",
-            "width":    640,
-            "height":   480,
+            "width":    320,
+            "height":   240,
             "format":   "video/x-raw,format=GRAY8",
             "frate":    "15/1",
             "output":   "png"
@@ -29,8 +29,8 @@
             "enable":   true,
             "cam":      "tis_1",
             "config":   "config3",
-            "width":    640,
-            "height":   480,
+            "width":    320,
+            "height":   240,
             "format":   "video/x-raw,format=GRAY8",
             "frate":    "15/1",
             "output":   "png"
@@ -40,8 +40,8 @@
             "enable":   true,
             "cam":      "tis_1",
             "config":   "config3",
-            "width":    640,
-            "height":   480,
+            "width":    320,
+            "height":   240,
             "format":   "video/x-raw,format=GRAY8",
             "frate":    "15/1",
             "output":   "png"
@@ -51,8 +51,8 @@
             "enable":   true,
             "cam":      "tis_1",
             "config":   "config3",
-            "width":    640,
-            "height":   480,
+            "width":    320,
+            "height":   240,
             "format":   "video/x-raw,format=GRAY8",
             "frate":    "15/1",
             "output":   "png"
@@ -62,8 +62,8 @@
             "enable":   true,
             "cam":      "tis_1",
             "config":   "config3",
-            "width":    640,
-            "height":   480,
+            "width":    320,
+            "height":   240,
             "format":   "video/x-raw,format=GRAY8",
             "frate":    "15/1",
             "output":   "png"
@@ -73,8 +73,8 @@
             "enable":   true,
             "cam":      "tis_1",
             "config":   "config3",
-            "width":    640,
-            "height":   480,
+            "width":    320,
+            "height":   240,
             "format":   "video/x-raw,format=GRAY8",
             "frate":    "15/1",
             "output":   "png"
@@ -84,8 +84,8 @@
             "enable":   true,
             "cam":      "tis_1",
             "config":   "config3",
-            "width":    640,
-            "height":   480,
+            "width":    320,
+            "height":   240,
             "format":   "video/x-raw,format=GRAY8",
             "frate":    "15/1",
             "output":   "png"
@@ -95,8 +95,8 @@
             "enable":   true,
             "cam":      "tis_1",
             "config":   "config3",
-            "width":    640,
-            "height":   480,
+            "width":    320,
+            "height":   240,
             "format":   "video/x-raw,format=GRAY8",
             "frate":    "15/1",
             "output":   "png"
@@ -106,8 +106,30 @@
             "enable":   true,
             "cam":      "tis_1",
             "config":   "config3",
-            "width":    640,
-            "height":   480,
+            "width":    320,
+            "height":   240,
+            "format":   "video/x-raw,format=GRAY8",
+            "frate":    "15/1",
+            "output":   "png"
+        },
+        
+        {
+            "enable":   true,
+            "cam":      "tis_1",
+            "config":   "config3",
+            "width":    320,
+            "height":   240,
+            "format":   "video/x-raw,format=GRAY8",
+            "frate":    "15/1",
+            "output":   "png"
+        },
+        
+        {
+            "enable":   true,
+            "cam":      "tis_1",
+            "config":   "config3",
+            "width":    320,
+            "height":   240,
             "format":   "video/x-raw,format=GRAY8",
             "frate":    "15/1",
             "output":   "png"

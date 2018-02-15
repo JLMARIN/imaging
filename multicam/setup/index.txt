@@ -3,7 +3,7 @@ Setup files index (generated automatically using makeindex.sh)
 Do not modify manually. If updates are required, run makeindex.sh
 ===============================================================================
 
-Last update: 18/02/12-13:39:33
+Last update: 18/02/15-14:48:20
 
 ====================================================================================================
 filename      fps     cam   | en    | model  | cfg file  | resolution | src fps| output format| img
@@ -12,18 +12,31 @@ setup01.json  1/1     cam1  | true  | tis_1  | config1   | 1280x960   | 10/1   |
                       cam2  | true  | tis_1  | config1   | 1280x960   | 10/1   | video/x-raw  | jpg
                       cam3  | true  | tis_1  | config1   | 1280x960   | 10/1   | video/x-raw  | jpg
 ----------------------------------------------------------------------------------------------------
-setup02.json  1/1     cam1  | true  | tis_1  | config1   | 1280x960   | 10/1   | video/x-raw  | png
-                      cam2  | true  | tis_1  | config1   | 1280x960   | 10/1   | video/x-raw  | png
-                      cam3  | true  | tis_1  | config1   | 1280x960   | 10/1   | video/x-raw  | png
+setup02.json  1/1     cam1  | true  | tis_1  | config3   | 1280x960   | 10/1   | video/x-raw  | png
+                      cam2  | true  | tis_1  | config3   | 1280x960   | 10/1   | video/x-raw  | png
+                      cam3  | true  | tis_1  | config3   | 1280x960   | 10/1   | video/x-raw  | png
 ----------------------------------------------------------------------------------------------------
-setup03.json  1/1     cam1  | true  | tis_1  | config2   | 640x480    | 15/1   | video/x-raw  | png
-                      cam2  | true  | tis_1  | config2   | 640x480    | 15/1   | video/x-raw  | png
-                      cam3  | true  | tis_1  | config2   | 640x480    | 15/1   | video/x-raw  | png
-                      cam4  | true  | tis_1  | config1   | 640x480    | 15/1   | video/x-raw  | png
-                      cam5  | true  | tis_1  | config2   | 640x480    | 15/1   | video/x-raw  | png
-                      cam6  | true  | tis_1  | config2   | 640x480    | 15/1   | video/x-raw  | png
-                      cam7  | true  | tis_1  | config2   | 640x480    | 15/1   | video/x-raw  | png
-                      cam8  | true  | tis_1  | config2   | 640x480    | 15/1   | video/x-raw  | png
-                      cam9  | true  | tis_1  | config2   | 640x480    | 15/1   | video/x-raw  | png
-                      cam10 | true  | tis_1  | config2   | 640x480    | 15/1   | video/x-raw  | png
+setup03.json  1/1     cam1  | true  | tis_1  | config3   | 640x480    | 15/1   | video/x-raw  | png
+                      cam2  | true  | tis_1  | config3   | 640x480    | 15/1   | video/x-raw  | png
+                      cam3  | true  | tis_1  | config3   | 640x480    | 15/1   | video/x-raw  | png
+                      cam4  | true  | tis_1  | config3   | 640x480    | 15/1   | video/x-raw  | png
+                      cam5  | true  | tis_1  | config3   | 640x480    | 15/1   | video/x-raw  | png
+                      cam6  | true  | tis_1  | config3   | 640x480    | 15/1   | video/x-raw  | png
+                      cam7  | true  | tis_1  | config3   | 640x480    | 15/1   | video/x-raw  | png
+                      cam8  | true  | tis_1  | config3   | 640x480    | 15/1   | video/x-raw  | png
+                      cam9  | true  | tis_1  | config3   | 640x480    | 15/1   | video/x-raw  | png
+                      cam10 | true  | tis_1  | config3   | 640x480    | 15/1   | video/x-raw  | png
+----------------------------------------------------------------------------------------------------
+setup04.json  1/1     cam1  | true  | tis_1  | config3   | 320x240    | 15/1   | video/x-raw  | png
+                      cam2  | true  | tis_1  | config3   | 320x240    | 15/1   | video/x-raw  | png
+                      cam3  | true  | tis_1  | config3   | 320x240    | 15/1   | video/x-raw  | png
+                      cam4  | true  | tis_1  | config3   | 320x240    | 15/1   | video/x-raw  | png
+                      cam5  | true  | tis_1  | config3   | 320x240    | 15/1   | video/x-raw  | png
+                      cam6  | true  | tis_1  | config3   | 320x240    | 15/1   | video/x-raw  | png
+                      cam7  | true  | tis_1  | config3   | 320x240    | 15/1   | video/x-raw  | png
+                      cam8  | true  | tis_1  | config3   | 320x240    | 15/1   | video/x-raw  | png
+                      cam9  | true  | tis_1  | config3   | 320x240    | 15/1   | video/x-raw  | png
+                      cam10 | true  | tis_1  | config3   | 320x240    | 15/1   | video/x-raw  | png
+                      cam11 | true  | tis_1  | config3   | 320x240    | 15/1   | video/x-raw  | png
+                      cam12 | true  | tis_1  | config3   | 320x240    | 15/1   | video/x-raw  | png
 ----------------------------------------------------------------------------------------------------

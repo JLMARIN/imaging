@@ -6,7 +6,7 @@
         {
             "enable":   true,
             "cam":      "tis_1",
-            "config":   "config1",
+            "config":   "config3",
             "width":    1280,
             "height":   960,
             "format":   "video/x-raw,format=GRAY8",
@@ -17,7 +17,7 @@
         {
             "enable":   true,
             "cam":      "tis_1",
-            "config":   "config1",
+            "config":   "config3",
             "width":    1280,
             "height":   960,
             "format":   "video/x-raw,format=GRAY8",
@@ -28,7 +28,7 @@
         {
             "enable":   true,
             "cam":      "tis_1",
-            "config":   "config1",
+            "config":   "config3",
             "width":    1280,
             "height":   960,
             "format":   "video/x-raw,format=GRAY8",
