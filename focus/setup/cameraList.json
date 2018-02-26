@@ -1,0 +1,19 @@
+{
+    "camera_array":
+    [
+        {
+            "tag":  "usbhubboard_0",
+            "cam1": "/dev/v4l/by-id/usb-The_Imaging_Source_Europe_GmbH_DMM_42BUC03-ML_47710685-video-index0",
+            "cam2": "/dev/v4l/by-id/usb-The_Imaging_Source_Europe_GmbH_DMM_42BUC03-ML_47710675-video-index0",
+            "cam3": "/dev/v4l/by-id/usb-The_Imaging_Source_Europe_GmbH_DMM_42BUC03-ML_47710674-video-index0",
+            "cam4": "/dev/v4l/by-id/usb-The_Imaging_Source_Europe_GmbH_DMM_42BUC03-ML_47610022-video-index0",
+            "cam5": "/dev/v4l/by-id/usb-The_Imaging_Source_Europe_GmbH_DMM_42BUC03-ML_47710673-video-index0",
+            "cam6": "/dev/v4l/by-id/usb-The_Imaging_Source_Europe_GmbH_DMM_42BUC03-ML_49710342-video-index0",
+            "cam7": "/dev/v4l/by-id/usb-The_Imaging_Source_Europe_GmbH_DMM_42BUC03-ML_49710343-video-index0",
+            "cam8": "/dev/v4l/by-id/usb-The_Imaging_Source_Europe_GmbH_DMM_42BUC03-ML_49710345-video-index0",
+            "cam9": "/dev/v4l/by-id/usb-The_Imaging_Source_Europe_GmbH_DMM_42BUC03-ML_49710347-video-index0",
+            "cam10": "/dev/v4l/by-id/usb-The_Imaging_Source_Europe_GmbH_DMM_42BUC03-ML_49710349-video-index0",
+            "cam11": "/dev/v4l/by-id/usb-The_Imaging_Source_Europe_GmbH_DMM_42BUC03-ML_49710350-video-index0"
+        }
+    ]
+}

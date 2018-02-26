@@ -1,0 +1,9 @@
+{
+    "cam":      "tis_1",
+    "config":   "config4",
+    "width":    1280,
+    "height":   960,
+    "format":   "video/x-raw,format=GRAY8",
+    "frate":    "10/1",
+    "output":   "png"
+}
