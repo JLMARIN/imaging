@@ -1,6 +1,9 @@
 # Ignore Mac specific files
 .DS_Store
 
+# Ignore VSC files
+.vscode/
+
 # sub-folders
 camera/elp_1/sessions
 camera/elp_2/sessions
