@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # ----------------------------------------------------------------------------------
-# Usage: ./capture_all.sh [CAM SET] [CAM NUM]
+# Usage: ./measure_all.sh [CAM SET] [CAM NUM]
 #
 # [CAM SET]         predefined camera set. Check cameraList.json in 'setup' folder
 #                   (e.g. 0, 1, ...)
 # [CAM NUM]         number of cameras to be used
 # ----------------------------------------------------------------------------------
 # Creates and runs pipelines using gstreamer for image capture and saving from
-# all the cameras.
+# all the cameras. After capture, focus is measured and reported for all cameras.
 #
 # This script is intended to be used with the USB Camera HUB board and the
 # DMM 42BUC03-ML cameras from The Imaging Source. 

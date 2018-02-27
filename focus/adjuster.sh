@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ----------------------------------------------------------------------------------
-# Usage: ./viewer.sh [CAM SET] [CAM INDEX]
+# Usage: ./adjuster.sh [CAM SET] [CAM INDEX]
 #
 # [CAM SET]         predefined camera set. Check cameraList.json in 'setup' folder
 #                   (e.g. 0, 1, ...)
@@ -9,7 +9,7 @@
 #                   (e.g. 0, 1, ...)
 # ----------------------------------------------------------------------------------
 # Creates and runs pipelines using gstreamer for real time image visualization and
-# contrast calculation from a camera.
+# focus measurement from a camera output.
 #
 # This script is intended to be used with the USB Camera HUB board and the
 # DMM 42BUC03-ML cameras from The Imaging Source.
