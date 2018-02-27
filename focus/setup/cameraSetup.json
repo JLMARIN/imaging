@@ -4,6 +4,6 @@
     "width":    1280,
     "height":   960,
     "format":   "video/x-raw,format=GRAY8",
-    "frate":    "10/1",
+    "frate":    "30/1",
     "output":   "png"
 }

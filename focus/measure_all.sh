@@ -112,3 +112,15 @@ do
     # Terminates the program (like Ctrl+C)
     kill -INT $PID
 done
+
+sleep 2
+
+# ==================================================================================
+# MEASURE FOCUS OF ALL IMAGES AND REPORT
+# ==================================================================================
+
+for ((i=1; i<=$CAMNUM; i++));
+do
+    printf "Focus of camera %s: " ${i}
+    ./measurefocus/fmeasure/fmeasure ${FOLDER}/${TIMESTAMP}_cam_${i}.${PICFORMAT}
+done

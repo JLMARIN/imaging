@@ -66,4 +66,15 @@ GSTCMD="v4l2src device=${DEVICE} ! ${VCAPS} ! tee name=t ! queue ! videoconvert 
 #echo gst-launch-1.0 -e ${GSTCMD}
 
 # run command
-gst-launch-1.0 -e ${GSTCMD}
+gst-launch-1.0 -e ${GSTCMD} &
+
+sleep 5
+
+while (true)
+do
+    focus=`./measurefocus/fmeasure/fmeasure tmp_img.png`
+    echo -ne "focus = $focus\r"
+    sleep 1
+done
+
+rm tmp_img.png
