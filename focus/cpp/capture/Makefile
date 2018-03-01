@@ -1,7 +1,7 @@
 CC = g++
 CFLAGS = -ggdb
-SRCS = main.cpp v4ldevice.cpp
-PROG = viewcam
+SRCS = capture.cpp v4ldevice.cpp
+PROG = capture
 
 OPENCV = `pkg-config opencv --cflags --libs`
 LIBS = $(OPENCV)
