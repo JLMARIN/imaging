@@ -10,15 +10,43 @@
 
 #include <opencv2/opencv.hpp>
 
-#include <iostream>
 #include <stdio.h>
+#include <string>
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <math.h>
 
 #include <libv4l2.h>
 #include <linux/videodev2.h>
 
-#include <math.h>       /* pow */
 
 using namespace cv;
+using namespace std;
+
+string cameraList[12];
+const uint32_t focusUpdateRatePerSec = 10;
+
+void loadCameraList(void)
+{
+    int i =0;
+    string line;
+    ifstream file("cameralist.txt");
+
+    if(file.is_open())
+    {
+        while (!file.eof())
+        {
+            getline (file, line);
+            cameraList[i] = line;
+            //cout << cameraList[i] << endl;
+            i++;
+        }
+        file.close();
+    }
+    else printf("Unable to open file\n");
+}
+
 
 /**
  * @brief   Focus measure implementation using the 'Variance of laplacian (Pech2000)'.
@@ -51,6 +79,7 @@ float fmeasure( const Mat &src )
     return static_cast<float>( pow(stddev.val[0], 2) );
 }
 
+
 void configureCamera(int fd)
 {
     struct v4l2_control ctrl;
@@ -76,25 +105,36 @@ void configureCamera(int fd)
     v4l2_ioctl(fd, VIDIOC_S_CTRL, &ctrl);
 
     // set frame rate
-    struct v4l2_streamparm setfps;
-    setfps.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    setfps.parm.capture.timeperframe.numerator = 1;
-    setfps.parm.capture.timeperframe.denominator = 10;
-    v4l2_ioctl(fd, VIDIOC_S_PARM, &setfps);
+    struct v4l2_streamparm parm;
+    parm.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    parm.parm.capture.timeperframe.numerator = 1;
+    parm.parm.capture.timeperframe.denominator = 10;
+    v4l2_ioctl(fd, VIDIOC_S_PARM, &parm);
 }
 
-int main ()
+
+int main ( int argc, char** argv )
 {
+    int camIndex = 1; // default
+    if( argc > 1)
+    {
+        camIndex = atoi(argv[1]);
+    }
+
     IplImage* pOpenCVImage;
     Mat image;
-    float focus;
+    float focus = 0;
 
     CvSize ImageSize;
     unsigned char* ImageBuffer = NULL;
     int wKey = -1;
 
+    uint8_t updateCount = 0;
+
     ImageSize.width = 1280;
     ImageSize.height = 960;
+
+    loadCameraList();
 
     cvNamedWindow( (char*)"Camera", 1 );
 
@@ -102,9 +142,21 @@ int main ()
 
     pOpenCVImage = cvCreateImage(ImageSize , IPL_DEPTH_8U, 1 ); // Grayscale
 
-    int fd = open_device((char*)"/dev/v4l/by-id/usb-The_Imaging_Source_Europe_GmbH_DMM_42BUC03-ML_47710685-video-index0");
+    const char* cameraId = cameraList[camIndex-1].c_str();
+        
+    int fd = open_device((char*)cameraId);
 
     configureCamera(fd);
+
+    struct v4l2_streamparm parm;
+    parm.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    v4l2_ioctl(fd, VIDIOC_G_PARM, &parm);
+    const struct v4l2_fract &tf = parm.parm.capture.timeperframe;
+
+    printf("Frames per second: %.3f (%d/%d)\n",
+            (1.0 * tf.denominator) / tf.numerator,
+            tf.denominator, tf.numerator);
+
 
     init_device(ImageSize.width, ImageSize.height);
 
@@ -121,13 +173,15 @@ int main ()
             memcpy( pOpenCVImage->imageData, ImageBuffer, pOpenCVImage->imageSize);
             
             image = cvarrToMat(pOpenCVImage);
-            //image = mat_frame(pOpenCVImage);
 
             cvShowImage( (char*)"Camera", pOpenCVImage);
-            //imshow( "Camera", image);
 
-            focus = fmeasure( image );
-            printf("focus = %4.4f\r", focus);
+            if (++updateCount == tf.denominator / focusUpdateRatePerSec) {
+                updateCount = 0;
+                focus = fmeasure( image );
+                cout << "\r" << focus;
+                cout.flush();
+            }
 
             wKey = cvWaitKey(10);
         }
