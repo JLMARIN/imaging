@@ -122,5 +122,5 @@ sleep 2
 for ((i=1; i<=$CAMNUM; i++));
 do
     printf "Focus of camera %s: " ${i}
-    ./measurefocus/fmeasure/fmeasure ${FOLDER}/${TIMESTAMP}_cam_${i}.${PICFORMAT}
+    ./cpp/fmeasure/fmeasure ${FOLDER}/${TIMESTAMP}_cam_${i}.${PICFORMAT}
 done

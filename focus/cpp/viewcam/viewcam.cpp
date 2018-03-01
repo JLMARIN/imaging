@@ -96,7 +96,7 @@ void configureCamera(int fd)
 
     // set exposure
     ctrl.id = V4L2_CID_EXPOSURE_ABSOLUTE;
-    ctrl.value = 10;
+    ctrl.value = 3;
     v4l2_ioctl(fd, VIDIOC_S_CTRL, &ctrl);
 
     // set trigger
