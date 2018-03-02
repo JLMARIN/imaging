@@ -226,7 +226,7 @@ int main ( int argc, char** argv )
             // display text overlay with focus measure
             stringstream stream;
             stream << focusFilt;
-            string text = stream.str();
+            string text = "focus=" + stream.str();
             putText(img_rgb, text, cvPoint(30,30), FONT_HERSHEY_DUPLEX, 1.2, CV_RGB(255,30,0), 1, CV_AA);
             
             // show image
