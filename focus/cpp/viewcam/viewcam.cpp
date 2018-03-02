@@ -1,6 +1,7 @@
 /**
  * Code for interfacing and visualizing the output of a camera from
- * The Imaging Source using opencv and without gstreamer
+ * The Imaging Source using opencv and without gstreamer. The code also
+ * calculates a focus measure of the image.
  * 
  * Based on code taken from
  * https://gist.github.com/TIS-Edgar/10f04501f49b6b3bf75e
@@ -21,12 +22,19 @@
 #include <linux/videodev2.h>
 
 
+#define FRAME_RATE      ( 30 )  // camera frame rate
+
+
 using namespace cv;
 using namespace std;
 
 string cameraList[12];
 const uint32_t focusUpdateRatePerSec = 10;
 
+
+/**
+ * @brief   Loads camera list from text file
+ */
 void loadCameraList(void)
 {
     int i =0;
@@ -48,9 +56,69 @@ void loadCameraList(void)
 }
 
 
+/**
+ * @brief   Configures camera
+ * @param   File descriptor for open camera
+ */
+void configureCamera(int fd)
+{
+    struct v4l2_control ctrl;
+
+    // set exposure
+    ctrl.id = V4L2_CID_BRIGHTNESS;
+    ctrl.value = 12;
+    v4l2_ioctl(fd, VIDIOC_S_CTRL, &ctrl);
+
+    // set gain
+    ctrl.id = V4L2_CID_GAIN;
+    ctrl.value = 36;
+    v4l2_ioctl(fd, VIDIOC_S_CTRL, &ctrl);
+
+    // set exposure
+    ctrl.id = V4L2_CID_EXPOSURE_ABSOLUTE;
+    ctrl.value = 3;
+    v4l2_ioctl(fd, VIDIOC_S_CTRL, &ctrl);
+
+    // set trigger
+    ctrl.id = V4L2_CID_PRIVACY;
+    ctrl.value = 0;
+    v4l2_ioctl(fd, VIDIOC_S_CTRL, &ctrl);
+
+    // set frame rate
+    struct v4l2_streamparm parm;
+    parm.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    parm.parm.capture.timeperframe.numerator = 1;
+    parm.parm.capture.timeperframe.denominator = FRAME_RATE;
+    v4l2_ioctl(fd, VIDIOC_S_PARM, &parm);
+}
+
+
+/**
+ * @brief   Applyes a simple low filter
+ * @param   Present raw value
+ * @param   Previous filtered value
+ * @param   Filtering factor between 0 and 1
+ * @return  Present filtered value
+ */
 float low_pass_filter(float signal_in, float signal_out, float k)
 {
     return (k * signal_in + (1-k) * signal_out);
+}
+
+
+/**
+ * @brief   Filters data discarding value jumps above a threshold
+ * @param   Previous value
+ * @param   Current value
+ * @param   Threshold
+ * @return  Filtered value
+ */
+float difffilter(float prevVal, float val, float delta)
+{
+    if ( abs(val - prevVal) > delta)
+        return prevVal;
+    else
+        return val;
 }
 
 
@@ -83,39 +151,6 @@ float fmeasure( const Mat &src )
 
     // return focus measure as the standard deviation squared
     return static_cast<float>( pow(stddev.val[0], 2) );
-}
-
-
-void configureCamera(int fd)
-{
-    struct v4l2_control ctrl;
-
-    // set exposure
-    ctrl.id = V4L2_CID_BRIGHTNESS;
-    ctrl.value = 12;
-    v4l2_ioctl(fd, VIDIOC_S_CTRL, &ctrl);
-
-    // set gain
-    ctrl.id = V4L2_CID_GAIN;
-    ctrl.value = 36;
-    v4l2_ioctl(fd, VIDIOC_S_CTRL, &ctrl);
-
-    // set exposure
-    ctrl.id = V4L2_CID_EXPOSURE_ABSOLUTE;
-    ctrl.value = 3;
-    v4l2_ioctl(fd, VIDIOC_S_CTRL, &ctrl);
-
-    // set trigger
-    ctrl.id = V4L2_CID_PRIVACY;
-    ctrl.value = 0;
-    v4l2_ioctl(fd, VIDIOC_S_CTRL, &ctrl);
-
-    // set frame rate
-    struct v4l2_streamparm parm;
-    parm.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    parm.parm.capture.timeperframe.numerator = 1;
-    parm.parm.capture.timeperframe.denominator = 10;
-    v4l2_ioctl(fd, VIDIOC_S_PARM, &parm);
 }
 
 
@@ -172,6 +207,8 @@ int main ( int argc, char** argv )
         if( ImageBuffer != NULL )
         {
             Mat image(imageHeight, imageWidth, CV_8UC1, &ImageBuffer[0]);
+
+            //image = deflicker(image);
         
             imshow("Display window", image);
 
@@ -182,7 +219,8 @@ int main ( int argc, char** argv )
                     firstIteration = false;
                     focusFilt = focus;
                 }
-                focusFilt = low_pass_filter(focus, focusFilt, 0.01);
+                //focusFilt = low_pass_filter(focus, focusFilt, 0.01);
+                focusFilt = difffilter(focusFilt, focus, 10.00);
                 cout << "\r" << focusFilt;
                 cout.flush();
             }
