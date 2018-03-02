@@ -48,6 +48,12 @@ void loadCameraList(void)
 }
 
 
+float low_pass_filter(float signal_in, float signal_out, float k)
+{
+    return (k * signal_in + (1-k) * signal_out);
+}
+
+
 /**
  * @brief   Focus measure implementation using the 'Variance of laplacian (Pech2000)'.
  *          Informatio taken from:
@@ -121,26 +127,21 @@ int main ( int argc, char** argv )
         camIndex = atoi(argv[1]);
     }
 
-    IplImage* pOpenCVImage;
-    Mat image;
-    float focus = 0;
+    float focus, focusFilt;
+    bool firstIteration = true;
 
-    CvSize ImageSize;
     unsigned char* ImageBuffer = NULL;
+    int imageWidth = 1280;
+    int imageHeight = 960;
     int wKey = -1;
 
     uint8_t updateCount = 0;
 
-    ImageSize.width = 1280;
-    ImageSize.height = 960;
-
     loadCameraList();
 
-    cvNamedWindow( (char*)"Camera", 1 );
+    namedWindow( "Display window", WINDOW_AUTOSIZE ); // Create a window for display.
 
     printf("Program started\n");
-
-    pOpenCVImage = cvCreateImage(ImageSize , IPL_DEPTH_8U, 1 ); // Grayscale
 
     const char* cameraId = cameraList[camIndex-1].c_str();
         
@@ -158,7 +159,7 @@ int main ( int argc, char** argv )
             tf.denominator, tf.numerator);
 
 
-    init_device(ImageSize.width, ImageSize.height);
+    init_device(imageWidth, imageHeight);
 
     printf("Start capturing\n");
 
@@ -170,20 +171,23 @@ int main ( int argc, char** argv )
 
         if( ImageBuffer != NULL )
         {
-            memcpy( pOpenCVImage->imageData, ImageBuffer, pOpenCVImage->imageSize);
-            
-            image = cvarrToMat(pOpenCVImage);
-
-            cvShowImage( (char*)"Camera", pOpenCVImage);
+            Mat image(imageHeight, imageWidth, CV_8UC1, &ImageBuffer[0]);
+        
+            imshow("Display window", image);
 
             if (++updateCount == tf.denominator / focusUpdateRatePerSec) {
                 updateCount = 0;
                 focus = fmeasure( image );
-                cout << "\r" << focus;
+                if (firstIteration) {
+                    firstIteration = false;
+                    focusFilt = focus;
+                }
+                focusFilt = low_pass_filter(focus, focusFilt, 0.01);
+                cout << "\r" << focusFilt;
                 cout.flush();
             }
 
-            wKey = cvWaitKey(10);
+            wKey =  waitKey(10);
         }
         else
         {
@@ -192,7 +196,7 @@ int main ( int argc, char** argv )
         }
     }
 
-    cvDestroyWindow( (char*)"Camera" );
+    destroyWindow( "Display window" );
     stop_capturing();
     uninit_device();
     close_device();
