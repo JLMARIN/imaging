@@ -22,14 +22,13 @@
 #include <linux/videodev2.h>
 
 
-#define FRAME_RATE      ( 30 )  // camera frame rate
-
+#define FRAME_RATE              ( 30 )  // camera frame rate
+#define FOCUSUPDATE_RATE_SEC    ( 10 )  // update rate in seconds for focus measure
 
 using namespace cv;
 using namespace std;
 
 string cameraList[12];
-const uint32_t focusUpdateRatePerSec = 10;
 
 
 /**
@@ -209,7 +208,7 @@ int main ( int argc, char** argv )
 
 
             // calculate focus
-            if (++updateCount == tf.denominator / focusUpdateRatePerSec) {
+            if (++updateCount == tf.denominator / FOCUSUPDATE_RATE_SEC) {
                 updateCount = 0;
                 focus = fmeasure( img );
                 if (firstIteration) {

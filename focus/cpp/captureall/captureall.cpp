@@ -21,6 +21,10 @@ using namespace std;
 
 string cameraList[12];
 
+
+/**
+ * @brief   Loads camera list from text file
+ */
 void loadCameraList(void)
 {
     int i =0;
@@ -41,6 +45,11 @@ void loadCameraList(void)
     else printf("Unable to open file\n");
 }
 
+
+/**
+ * @brief   Configures camera
+ * @param   File descriptor for open camera
+ */
 void configureCamera(int fd)
 {
     struct v4l2_control ctrl;
@@ -65,6 +74,38 @@ void configureCamera(int fd)
     ctrl.value = 0;
     v4l2_ioctl(fd, VIDIOC_S_CTRL, &ctrl);
 }
+
+/**
+ * @brief   Focus measure implementation using the 'Variance of laplacian (Pech2000)'.
+ *          Information taken from:
+ *          - S. Pertuz et al., Analysis of focus measure operators for shape-from-focus.
+ *            Pattern Recognition, 46(5):1415:1432, 2013
+ * @param   Image to process
+ * @return  Focus measure
+ */
+float fmeasure( const Mat &src )
+{
+    Point anchor( 0, 0 );
+    double delta = 0;
+    int ddepth = -1;
+    Scalar mean, stddev;
+
+    // laplacian filter kernel
+    float kernel[3][3] = { {0.1667, 0.6667, 0.1667} , {0.6667, -3.3333, 0.6667} , {0.1667, 0.6667, 0.1667} };
+
+    Mat ker = Mat( 3, 3, CV_32F, &kernel );
+    Mat dst = Mat( src.size(), src.type() );
+
+    // apply filter to image
+    filter2D( src, dst, ddepth , ker, anchor, delta, BORDER_REPLICATE );
+
+    // calculate standard deviation
+    meanStdDev(dst, mean, stddev);
+
+    // return focus measure as the standard deviation squared
+    return static_cast<float>( pow(stddev.val[0], 2) );
+}
+
 
 int main ( int argc, char** argv )
 {   
@@ -107,6 +148,10 @@ int main ( int argc, char** argv )
             stringstream imageFilename;
             imageFilename << "frame_cam" << i+1 << ".png";
             imwrite(imageFilename.str().c_str(), img);
+
+            float focus = fmeasure( img );
+
+            printf("focus = %.4f\n", focus);
         }
         else
         {

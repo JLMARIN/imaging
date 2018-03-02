@@ -89,8 +89,6 @@ The structure of the repository is as follows.
 
 ## Administrators ##
 
-Jorge Marin
-marinmar@ualberta.ca
+Jorge Marin (marinmar@ualberta.ca)
 
-Dr. Duncan Elliot
-delliott@ualberta.ca
+Dr. Duncan Elliot (delliott@ualberta.ca)
