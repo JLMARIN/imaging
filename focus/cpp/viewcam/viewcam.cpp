@@ -124,7 +124,7 @@ float difffilter(float prevVal, float val, float delta)
 
 /**
  * @brief   Focus measure implementation using the 'Variance of laplacian (Pech2000)'.
- *          Informatio taken from:
+ *          Information taken from:
  *          - S. Pertuz et al., Analysis of focus measure operators for shape-from-focus.
  *            Pattern Recognition, 46(5):1415:1432, 2013
  * @param   Image to process
@@ -204,7 +204,7 @@ int main ( int argc, char** argv )
 
         if( ImageBuffer != NULL )
         {
-            // convert image buffer ot matrix
+            // convert image buffer to matrix
             Mat img(imageHeight, imageWidth, CV_8UC1, &ImageBuffer[0]);
 
 

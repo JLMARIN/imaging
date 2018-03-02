@@ -70,26 +70,16 @@ int main ( int argc, char** argv )
 {   
     int camnum = 1; // default
     if( argc > 1)
-    {
         camnum = atoi(argv[1]);
-    }
 
-    IplImage* pOpenCVImage;
-    Mat image;
-    float focus;
-
-    CvSize ImageSize;
     unsigned char* ImageBuffer = NULL;
+    int imageWidth = 1280;
+    int imageHeight = 960;
     int wKey = -1;
-
-    ImageSize.width = 1280;
-    ImageSize.height = 960;
     
     printf("Program started\n");
 
     loadCameraList();
-    
-    pOpenCVImage = cvCreateImage(ImageSize , IPL_DEPTH_8U, 1 ); // Grayscale
 
     for (int i=0; i<camnum; i++)
     {
@@ -99,23 +89,24 @@ int main ( int argc, char** argv )
 
         configureCamera(fd);
 
-        init_device(ImageSize.width, ImageSize.height);
+        init_device(imageWidth, imageHeight);
 
         printf("Capturing from camera: %s\n", cameraId);
 
         start_capturing();
 
+        snapFrame();
+        sleep(1);
         ImageBuffer = snapFrame();
 
         if( ImageBuffer != NULL )
         {
-            memcpy( pOpenCVImage->imageData, ImageBuffer, pOpenCVImage->imageSize);
-            
-            image = cvarrToMat(pOpenCVImage);
+            // convert image buffer to matrix
+            Mat img(imageHeight, imageWidth, CV_8UC1, &ImageBuffer[0]);
 
             stringstream imageFilename;
             imageFilename << "frame_cam" << i+1 << ".png";
-            imwrite(imageFilename.str().c_str(), image);
+            imwrite(imageFilename.str().c_str(), img);
         }
         else
         {
