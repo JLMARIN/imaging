@@ -13,14 +13,15 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 ## Runtime Dependencies ##
 
-The following packages are required to run the scripts:
+The following packages are required to run the programs:
 
 - v4l-utils
 - gstreamer-1.0
 - jq
-- inotify
-- geographiclib
-- exiftool
+- inotify           (for spec3, and multicam)
+- geographiclib     (only for scripts in 'utilities' folder)
+- exiftool          (only for scripts in 'utilities' folder)
+- opencv >= v2.4    (for programs in 'focus' folder)
 
 On a Debian / Ubuntu system, the following command line instructions can be used to install all required packages:
 
@@ -42,6 +43,9 @@ sudo apt-get install geographiclib-tools
 
 # exiftool
 sudo apt-get install libimage-exiftool-perl
+
+# opencv
+check ./focus/install_opencv2_ubuntu.sh
 ```
 
 ## Repository Structure ##
@@ -54,6 +58,10 @@ The structure of the repository is as follows.
 ***camera***
 
 * Contains the code to interface with individual cameras.
+
+***focus***
+
+* Contains the code for camera focus operations.
 
 ***multicam***
 
@@ -78,3 +86,11 @@ The structure of the repository is as follows.
 ***utilities***
 
 * Contains a series of utility scripts.
+
+## Administrators ##
+
+Jorge Marin
+marinmar@ualberta.ca
+
+Dr. Duncan Elliot
+delliott@ualberta.ca
