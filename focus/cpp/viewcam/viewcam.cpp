@@ -158,9 +158,7 @@ int main ( int argc, char** argv )
 {
     int camIndex = 1; // default
     if( argc > 1)
-    {
         camIndex = atoi(argv[1]);
-    }
 
     float focus, focusFilt;
     bool firstIteration = true;
@@ -206,24 +204,33 @@ int main ( int argc, char** argv )
 
         if( ImageBuffer != NULL )
         {
-            Mat image(imageHeight, imageWidth, CV_8UC1, &ImageBuffer[0]);
+            // convert image buffer ot matrix
+            Mat img(imageHeight, imageWidth, CV_8UC1, &ImageBuffer[0]);
 
-            //image = deflicker(image);
-        
-            imshow("Display window", image);
 
+            // calculate focus
             if (++updateCount == tf.denominator / focusUpdateRatePerSec) {
                 updateCount = 0;
-                focus = fmeasure( image );
+                focus = fmeasure( img );
                 if (firstIteration) {
                     firstIteration = false;
                     focusFilt = focus;
                 }
-                //focusFilt = low_pass_filter(focus, focusFilt, 0.01);
                 focusFilt = difffilter(focusFilt, focus, 10.00);
-                cout << "\r" << focusFilt;
-                cout.flush();
             }
+
+            // convert grey image to color image
+            Mat img_rgb(img.size(), CV_8UC3);
+            cvtColor(img, img_rgb, CV_GRAY2RGB);
+
+            // display text overlay with focus measure
+            stringstream stream;
+            stream << focusFilt;
+            string text = stream.str();
+            putText(img_rgb, text, cvPoint(30,30), FONT_HERSHEY_DUPLEX, 1.2, CV_RGB(255,30,0), 1, CV_AA);
+            
+            // show image
+            imshow("Display window", img_rgb);
 
             wKey =  waitKey(10);
         }
