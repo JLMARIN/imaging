@@ -206,7 +206,6 @@ int main ( int argc, char** argv )
             // convert image buffer to matrix
             Mat img(imageHeight, imageWidth, CV_8UC1, &ImageBuffer[0]);
 
-
             // calculate focus
             if (++updateCount == tf.denominator / FOCUSUPDATE_RATE_SEC) {
                 updateCount = 0;
@@ -215,7 +214,7 @@ int main ( int argc, char** argv )
                     firstIteration = false;
                     focusFilt = focus;
                 }
-                focusFilt = difffilter(focusFilt, focus, 10.00);
+                focusFilt = difffilter(focusFilt, focus, 20.00);
             }
 
             // convert grey image to color image
