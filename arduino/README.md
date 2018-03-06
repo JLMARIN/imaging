@@ -1,6 +1,6 @@
 # Arduino Sketches for the USB Camera HUB Board #
 
-This repository contains (or will contain) Arduino sketches that are used with the on-board microcontroller in the USB Camera HUB Board. This microcontroller controls the trigger signals sent to the cameras.
+This repository contains Arduino sketches that are used with the on-board microcontroller in the USB Camera HUB Board. This microcontroller controls the trigger signals sent to the cameras.
 
 ## Libraries Dependencies ##
 
