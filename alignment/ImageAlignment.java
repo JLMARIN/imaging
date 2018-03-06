@@ -14,70 +14,89 @@ import ij.io.DirectoryChooser;
 
 import java.io.*;
 import java.util.Arrays;
+import java.util.ArrayList;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 
 public class ImageAlignment implements PlugIn {
 	
-	public static String 	location 	= "/Users/jorge/Desktop/Pics/test";
-	public static String[] 	stackNames;
-	//List<String> stackNames = new ArrayList<String>();
-	public static int		stackSize;
+	ArrayList<String> stackNames = new ArrayList<String>();
+	
+	public static int		stackCount 		= 0;
+	public static int		imagesPerStack 	= 0;
 	
 	/**
 	 * This method gets called by ImageJ / Fiji.
 	 */
 	@Override
 	public void run(String arg) {
-		IJ.log("Image Registration Program\n"
+		IJ.log("\nImage Registration Program\n"
 			 + "--------------------------\n\n");
-		
-		DirectoryChooser dirChooser = new DirectoryChooser("Select folder with the image stacks");
-		IJ.log("folder: " + dirChooser.getDirectory() + "\n");
-		
-		//final File folder = new File(location);
-		//IJ.log("folder: " + location + "\n");
 
-		//scanfiles(folder);
-		
-		//IJ.log("found " + listFilesForFolder(folder) + " image files\n");
-		
-		//align();
+		// show dialog box and get directory
+		DirectoryChooser dirChooser = new DirectoryChooser("Select folder with the image stacks");
+		String location = dirChooser.getDirectory();
+		//String location = "/Users/jorge/Desktop/Pics/test";
+		IJ.log("folder: " + location + "\n");
+
+		// scan directory
+		final File folder = new File(location);
+		scanFiles(folder);
+
+		// create folder for saving resulting images
+		String newDir = location + "/aligned";
+		File dir = new File(newDir);
+		dir.mkdir();
+
+		IJ.log("--------------------------\n");
+
+		int count = 1;
+		for (String stack : stackNames) {
+			IJ.log("aligning stack " + count + "(" + stack + ")\n");
+			align(location, stack, newDir);
+			count++;
+		}
+
+		IJ.log("Program finished.\n");
 	}
 
 	/**
-	 * Find files inside folder
+	 * Scans files inside directory
 	 */
-	public void scanfiles(final File folder) {
-		int count = 0;
+	private void scanFiles(final File folder) {
+		String 	stackName 	= "";
+		String 	temp;
+		int 	count 		= 0;
+		
 		FileFilter fileFilter = new WildcardFileFilter(Arrays.asList("*.jpg", "*.png", "*.jpeg"));
 	    for (final File fileEntry : folder.listFiles(fileFilter)) {
+	        temp = fileEntry.getName().split("_cam")[0];
+	        if (!stackName.equals(temp)) {
+	        	stackName = temp;
+	        	stackNames.add(stackName);
+	        	if (stackCount == 1 && count > 0) {
+	        		imagesPerStack = count;
+	        	}
+	        	stackCount++;
+	        	//IJ.log(stackName + "\n");
+	        }
 	        count++;
 	    }
-	    IJ.log("found " + count + " image files\n");
+	    
+	    IJ.log("stack count = " + stackCount + "\n");
+	    IJ.log("images per stack = " + imagesPerStack + "\n");
 	}
 
-	/*public Integer listFilesForFolder(final File folder) {
-	    Integer count = 0;
-	    for (final File fileEntry : folder.listFiles()) {
-	        if (fileEntry.getName().toLowerCase().endsWith(".jpg") || fileEntry.getName().toLowerCase().endsWith(".jpeg") || fileEntry.getName().toLowerCase().endsWith(".png")) {
-	        	count++;
-	        	
-	        }
-	    }
-	    return count;
-	}*/
-	
 	/**
 	 * Align image stack using StackReg
 	 */
-	public void align() {
-		IJ.run("Image Sequence...", "open=/Users/jorge/Desktop/Pics/test file=frame_0000 sort");
+	private void align(String sourceDir, String filter, String outputDir) {
+		String cmd = "open=" + sourceDir + " file=" + filter + " sort";
+		IJ.run("Image Sequence...", cmd);
 		ImagePlus imp = IJ.getImage();
 		IJ.run(imp, "StackReg ", "transformation=[Scaled Rotation]");
-		File dir = new File("/Users/jorge/Desktop/Pics/test/aligned");
-		dir.mkdir();
-		IJ.run(imp, "Image Sequence... ", "format=PNG start=1 use save=/Users/jorge/Desktop/Pics/test/aligned");
+		cmd = "format=PNG start=1 use save=" + outputDir;
+		IJ.run(imp, "Image Sequence... ", cmd);
 		imp.close();
 	}
 
