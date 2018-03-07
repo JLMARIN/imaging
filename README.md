@@ -1,6 +1,6 @@
 # University of Alberta UAV Imaging #
 
-This repository contains (or will contain) source code and relevant content for the UAV Imaging platform as part of UAV research developed at the University of Alberta
+This repository contains source code and relevant content for the UAV Imaging platform as part of UAV research developed at the University of Alberta.
 
 ## LICENSE INFORMATION ##
 
