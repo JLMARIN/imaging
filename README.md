@@ -18,11 +18,11 @@ The following packages are required to run the programs:
 - v4l-utils
 - gstreamer-1.0
 - jq
-- inotify           (for spec3, and multicam)
-- geographiclib     (only for scripts in 'utilities' folder)
-- exiftool          (only for scripts in 'utilities' folder)
-- opencv >= v2.4    (for programs in 'focus' folder)
-- ImageJ            (for programs in 'alignment' folder)
+- inotify (for spec3, and multicam)
+- geographiclib (only for scripts in 'utilities' folder)
+- exiftool (only for scripts in 'utilities' folder)
+- opencv >= v2.4 (for programs in 'focus' folder)
+- ImageJ (for programs in 'alignment' folder)
 
 On a Debian / Ubuntu system, the following command line instructions can be used to install all required packages:
 
@@ -55,45 +55,16 @@ check README inside ./alignment
 ## Repository Structure ##
 The structure of the repository is as follows.
 
-***alignment***
-
-* Contains the code for the MCU in the USB Camera HUB board.
-
-***arduino***
-
-* Contains the code for the MCU in the USB Camera HUB board.
-
-***camera***
-
-* Contains the code to interface with individual cameras.
-
-***focus***
-
-* Contains the code for camera focus operations.
-
-***matlab***
-
-* Contains matlab code for processing images.
-
-***multicam***
-
-* Contains the code to interface with multiple cameras.
-
-***spec3***
-
-* Contains the code to interface with the 3-cameras multispectral system.
-
-***spec3_rijesh***
-
-* Contains a variation of spec3 used by Rijesh.
-
-***tests***
-
-* Contains testing code under development.
-
-***utilities***
-
-* Contains a series of utility scripts.
+* **alignment:** Contains the code for the MCU in the USB Camera HUB board.
+* **arduino:** Contains the code for the MCU in the USB Camera HUB board.
+* **camera:** Contains the code to interface with individual cameras.
+* **focus:** Contains the code for camera focus operations.
+* **matlab:** Contains matlab code for processing images.
+* **multicam:** Contains the code to interface with multiple cameras.
+* **spec3:** Contains the code to interface with the 3-cameras multispectral system.
+* **spec3_rijesh:** Contains a variation of spec3 used by Rijesh.
+* **tests:** Contains testing code under development.
+* **utilities:** Contains a series of utility scripts.
 
 ## Administrators ##
 
@@ -102,4 +73,5 @@ Jorge Marin (marinmar@ualberta.ca)
 ## Collaborators ##
 
 Rijesh Augustine (rijesh@ualberta.ca)
+
 Dr. Duncan Elliot (delliott@ualberta.ca)
