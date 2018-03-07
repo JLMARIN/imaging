@@ -22,6 +22,7 @@ The following packages are required to run the programs:
 - geographiclib     (only for scripts in 'utilities' folder)
 - exiftool          (only for scripts in 'utilities' folder)
 - opencv >= v2.4    (for programs in 'focus' folder)
+- ImageJ            (for programs in 'alignment' folder)
 
 On a Debian / Ubuntu system, the following command line instructions can be used to install all required packages:
 
@@ -45,11 +46,18 @@ sudo apt-get install geographiclib-tools
 sudo apt-get install libimage-exiftool-perl
 
 # opencv
-check ./focus/install_opencv2_ubuntu.sh
+check README inside ./focus
+
+# ImageJ
+check README inside ./alignment
 ```
 
 ## Repository Structure ##
 The structure of the repository is as follows.
+
+***alignment***
+
+* Contains the code for the MCU in the USB Camera HUB board.
 
 ***arduino***
 
@@ -63,13 +71,13 @@ The structure of the repository is as follows.
 
 * Contains the code for camera focus operations.
 
+***matlab***
+
+* Contains matlab code for processing images.
+
 ***multicam***
 
 * Contains the code to interface with multiple cameras.
-
-***processing***
-
-* Contains matlab code for processing images.
 
 ***spec3***
 
@@ -91,4 +99,7 @@ The structure of the repository is as follows.
 
 Jorge Marin (marinmar@ualberta.ca)
 
+## Collaborators ##
+
+Rijesh Augustine (rijesh@ualberta.ca)
 Dr. Duncan Elliot (delliott@ualberta.ca)
