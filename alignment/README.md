@@ -1,8 +1,8 @@
-# Image Alignment Program #
+# Image Alignment Program
 
 This repository contains a script written in Java that runs on ImageJ. The script performs alignment/registration of image stacks using the ImageJ StackReg and TurboReg plugins.
 
-## Dependencies ##
+## Dependencies
 
 ***ImageJ***
 [ImageJ](https://imagej.net) is a public Java-based image processing program developed at the National Institutes of Health. ImageJ offers multiple distributions with different features. The [Fiji](https://imagej.net/Fiji) distribution is the recommended updated general purpose option to this date.
@@ -18,11 +18,19 @@ According to the StackReg instructions:
 
 "The StackReg plugin requires that a second plugin, named TurboReg, is installed. This ancillary plugin is available [here](http://bigwww.epfl.ch/thevenaz/turboreg/)."
 
-## How to Use ##
+## How to Use
 
 The current implementation of the ImageAlignment.java program uses rigid-body motion (rotation and translation) combined with isometric scaling. The script must be run inside ImageJ. Once ImageJ is open click on *File > New > Script*. This will open the Script window. Click *File > Open* and locate the ImageAlignment.java file. From here you can click *Run* to begin execution.
 
-## Known Issues ##
+### Examples
+
+Example of 3 images before and after alignment:
+
+Before Alignment           |  After Alignment
+:-------------------------:|:-------------------------:
+<img src="https://github.com/JLMARIN/imaging/blob/master/alignment/samples/raw.gif" width="400" height="300"> |  <img src="https://github.com/JLMARIN/imaging/blob/master/alignment/samples/aligned.gif" width="400" height="300">
+
+## Known Issues
 
 ImageJ comes bundled with a Java that is just a JRE (Java Runtime Environment) and not a full JDK. In some cases trying to run scripts gives an error about "javac.jar" not found.
 
@@ -32,6 +40,6 @@ On OSX and Unix, you can switch to using the system Java instead of the bundled 
 
 Answer taken from: http://forum.imagej.net/t/no-javac-jar-found/2340/5
 
-## References ##
+## References
 
 <a name="ref1">[1]</a>: P. Thévenaz, U. E. Ruttimann, and M. Unser, “[A pyramid approach to subpixel registration based on intensity](http://bigwww.epfl.ch/publications/thevenaz9801.html),” IEEE Transactions on Image Processing, vol. 7, no. 1, pp. 27–41, 1998.
