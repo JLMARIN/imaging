@@ -67,7 +67,7 @@ The structure of the repository is as follows.
 * **utilities:** Contains a series of utility scripts.
 
 ## Running Code ##
-This repository contains code written in multiple languages (Shell Scripts, C++, and Java). Most programs include instructions inside on how to execute and what arguments are needed. In some cases, information is also provided in the README files of each folder.
+This repository contains code written in multiple languages (Shell Scripts, C++, Java, Matlab). Most programs include instructions inside on how to execute and what arguments are needed. In some cases, information is also provided in the README files of each folder.
 
 ## Administrators ##
 
