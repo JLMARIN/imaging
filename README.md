@@ -55,7 +55,7 @@ check README inside ./alignment
 ## Repository Structure ##
 The structure of the repository is as follows.
 
-* **alignment:** Contains the code for the MCU in the USB Camera HUB board.
+* **alignment:** Contains the code for image alignment.
 * **arduino:** Contains the code for the MCU in the USB Camera HUB board.
 * **camera:** Contains the code to interface with individual cameras.
 * **focus:** Contains the code for camera focus operations.
