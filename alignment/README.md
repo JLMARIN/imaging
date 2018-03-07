@@ -14,7 +14,7 @@ Check [download and installation instructions](https://imagej.net/Downloads) in 
 
 [StackReg](http://bigwww.epfl.ch/thevenaz/stackreg/) is a java plugin written for ImageJ by the Biomedical Imaging Group of the École Polytechnique Fédérale de Lausanne. Refer to the official webapge for instructions on how to download and use.
 
-StackReg is based on a subpixel registration algorithm that uses intensity <a>[[1]](#ref1)</a>.The algorithm minimizes the mean square intensity difference between a reference image and a test image. The transformation of the test image, in order to achieve alignment to the reference image, can be done by rigid-body motion (rotation and translation) only, or combined with isometric scaling.
+StackReg is based on a subpixel registration algorithm that uses intensity <a>[[1]](#ref1)</a>. The algorithm minimizes the mean square intensity difference between a reference image and a test image. The transformation of the test image, in order to achieve alignment to the reference image, can be done by rigid-body motion (rotation and translation) only, or combined with isometric scaling.
 
 According to the StackReg instructions:
 
