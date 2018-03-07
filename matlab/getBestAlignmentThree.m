@@ -1,4 +1,4 @@
-function [corr, img1Cut, img2Cut, img3Cut] = getBestAlignmentThree(img1, img2, img3, range, height)
+function [corr, img1Cut, img2Cut, img3Cut] = getBestAlignmentThree_temp(img1, img2, img3, range, height)
 %GETBESTALIGNMENT
 %
 %   [corr, idx, maxCorr, img1Cut, img2Cut] = getBestAlignment(img1, img2, range)
@@ -30,7 +30,8 @@ function [corr, img1Cut, img2Cut, img3Cut] = getBestAlignmentThree(img1, img2, i
     [img2_1, img3_1] = align(img2, img3, range);
     
     %% combine aligned images 2 and 3
-    comb_23 = imfuse(img2_1, img3_1, 'falsecolor');
+    %comb_23 = imfuse(img2_1, img3_1, 'falsecolor');
+    comb_23 = rgb2gray(imfuse(img2_1, img3_1, 'falsecolor'));
     
     %% cut image 1 according to new combined image
     newH = size(comb_23, 1);
@@ -63,9 +64,9 @@ function [corr, img1Cut, img2Cut, img3Cut] = getBestAlignmentThree(img1, img2, i
     end
     
     %% get correlations between aligned images
-    corr(1) = corr2(rgb2gray(img1Cut), rgb2gray(img2Cut));
-    corr(2) = corr2(rgb2gray(img2Cut), rgb2gray(img3Cut));
-    corr(3) = corr2(rgb2gray(img1Cut), rgb2gray(img3Cut));
+    corr(1) = corr2(img1Cut, img2Cut);
+    corr(2) = corr2(img2Cut, img3Cut);
+    corr(3) = corr2(img1Cut, img3Cut);
 end
 
 function [img1Cut, img2Cut] = align(img1, img2, range)
@@ -83,7 +84,7 @@ function [img1Cut, img2Cut] = align(img1, img2, range)
         rect_2 = [1 1 w h-i-1];
         img2Cut = imcrop(img2, rect_2);
 
-        corr = corr2(rgb2gray(img1Cut), rgb2gray(img2Cut));
+        corr = corr2(img1Cut, img2Cut);
 
         if (corr < corrOld)
             i = i - 1;

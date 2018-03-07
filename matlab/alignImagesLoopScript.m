@@ -11,7 +11,7 @@ show = false;
 export = true;
 
 % range of pixel for misalignment test
-range = 30;
+range = 50;
 
 %% select folder with images
 
@@ -19,7 +19,7 @@ range = 30;
 myDir = uigetdir;
 
 % get list of files (both .jpg and .png)
-myFiles = [dir(fullfile(myDir,'*.jpg')); dir(fullfile(myDir,'*.png'))];
+myFiles = [dir(fullfile(myDir,'*.jpeg')); dir(fullfile(myDir,'*.jpg')); dir(fullfile(myDir,'*.png'))];
 
 fprintf(1, 'Found %i frames and %i image files in:\n%s\n', length(myFiles)/3, length(myFiles), myDir);
 
@@ -62,6 +62,13 @@ for k = 1:3:length(myFiles)
     img2=imread(image2fullName);
     img3=imread(image3fullName);
     
+    % convert rgb image files to gray
+    if (size(img1,3) > 1)
+        img1 = rgb2gray(img1);
+        img2 = rgb2gray(img2);
+        img3 = rgb2gray(img3);
+    end
+    
     % align images
     finalHeight = size(img1,1) - range;
     [corr, img1Cut, img2Cut, img3Cut] = getBestAlignmentThree(img1, img2, img3, range, finalHeight);
@@ -74,10 +81,6 @@ for k = 1:3:length(myFiles)
     
     % save new images as gray png
     if (export)
-        img1_gray = rgb2gray(img1Cut);
-        img2_gray = rgb2gray(img2Cut);
-        img3_gray = rgb2gray(img3Cut);
-        
         [~, oldBaseName, ~] = fileparts(image1name);
         newImage1name = sprintf('%s.png',oldBaseName);
         [~, oldBaseName, ~] = fileparts(image2name);
@@ -85,9 +88,9 @@ for k = 1:3:length(myFiles)
         [~, oldBaseName, ~] = fileparts(image3name);
         newImage3name = sprintf('%s.png',oldBaseName);
 
-        imwrite(img1_gray, strcat(newDir,'/',newImage1name));
-        imwrite(img2_gray, strcat(newDir,'/',newImage2name));
-        imwrite(img3_gray, strcat(newDir,'/',newImage3name));
+        imwrite(img1Cut, strcat(newDir,'/',newImage1name));
+        imwrite(img2Cut, strcat(newDir,'/',newImage2name));
+        imwrite(img3Cut, strcat(newDir,'/',newImage3name));
     end
     
     % show images
@@ -98,8 +101,8 @@ for k = 1:3:length(myFiles)
         subplot(3,3,7), image(img3); title('Image 3','Fontsize', 12);
         
         % combine images
-        comb = imfuse(img2_gray, img3_gray, 'falsecolor');
-        comb = imfuse(img1_gray, comb, 'falsecolor');
+        comb = imfuse(img2Cut, img3Cut, 'falsecolor');
+        comb = imfuse(img1Cut, comb, 'falsecolor');
         
         subplot(1,2,2), image(comb); title('Combined Image','Fontsize', 12);
     end
@@ -115,4 +118,4 @@ if (export)
     %copyfile matlab_alignment_log.txt newDir
 end
 
-%% end of escript
+%% end of script

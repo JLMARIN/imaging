@@ -8,7 +8,7 @@ function ndvi = ndvi(nir, red)
 %           - nir       :   NIR band image
 %           - red       :   red band image
 %
-%   Computes NDVI image.
+%   Computes Normalized Difference Vegetation Index (NDVI) image.
 %
 %	Date            Author          Notes
 %   2017/JUL/25     Jorge Marin     Initial release
