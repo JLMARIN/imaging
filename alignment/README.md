@@ -26,7 +26,7 @@ The current implementation of the ImageAlignment.java program uses rigid-body mo
 
 ImageJ comes bundled with a Java that is just a JRE (Java Runtime Environment) and not a full JDK. In some cases trying to run scripts gives an error about "javac.jar" not found.
 
-On OSX, you can switch to using the system Java instead of the bundled one by navigating to your Fiji.app package (in the Finder, right-click > *Show Package Contents*) and renaming the java folder to something like `java-old`. Then restart Fiji and check you're running the right Java version by going to *Plugins > Utilities > ImageJ Properties*, which should report something like:
+On OSX and Unix, you can switch to using the system Java instead of the bundled one by navigating to your Fiji.app package (in the OSX Finder, right-click > *Show Package Contents*) and renaming the java folder to something like `java-old`. Then restart Fiji and check you're running the right Java version by going to *Plugins > Utilities > ImageJ Properties*, which should report something like:
 
 `java.home: /Library/Java/JavaVirtualMachines/jdk1.8.0_111.jdk/Contents/Home/jre`
 
