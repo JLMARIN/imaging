@@ -1,4 +1,4 @@
-# University of Alberta UAV Imaging #
+# University of Alberta UAV Imaging Repository # [![Build Status](https://travis-ci.org/dwyl/esta.svg?branch=master)](https://travis-ci.org/)
 
 This repository contains source code and relevant content for the UAV Imaging platform as part of UAV research developed at the University of Alberta.
 
