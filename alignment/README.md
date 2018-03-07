@@ -4,12 +4,14 @@ This repository contains a script written in Java that runs on ImageJ. The scrip
 
 ## Dependencies
 
-***ImageJ***
+### ImageJ
+
 [ImageJ](https://imagej.net) is a public Java-based image processing program developed at the National Institutes of Health. ImageJ offers multiple distributions with different features. The [Fiji](https://imagej.net/Fiji) distribution is the recommended updated general purpose option to this date.
 
 Check [download and installation instructions](https://imagej.net/Downloads) in the official page.
 
-***StackReg***
+### StackReg
+
 [StackReg](http://bigwww.epfl.ch/thevenaz/stackreg/) is a java plugin written for ImageJ by the Biomedical Imaging Group of the École Polytechnique Fédérale de Lausanne. Refer to the official webapge for instructions on how to download and use.
 
 StackReg is based on a subpixel registration algorithm that uses intensity <a>[[1]](#ref1)</a>.The algorithm minimizes the mean square intensity difference between a reference image and a test image. The transformation of the test image, in order to achieve alignment to the reference image, can be done by rigid-body motion (rotation and translation) only, or combined with isometric scaling.
