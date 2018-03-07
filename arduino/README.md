@@ -4,7 +4,7 @@ This repository contains Arduino sketches that are used with the on-board microc
 
 ## Libraries Dependencies
 
-There are no dependencies on external libraries. Only the "Arduino.h" library is required.
+There are no dependencies on external libraries. Only the "Arduino.h" library is required. When using the Arduino IDE this library is already included in the path.
 
 ## Arduino Sketches
 This folder contains the following Arduino sketches.
