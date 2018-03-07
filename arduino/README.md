@@ -9,6 +9,6 @@ There are no dependencies on external libraries. Only the "Arduino.h" library is
 ## Arduino Sketches ##
 This folder contains the following Arduino sketches.
 
-***usbCamHub_trigger***
+* **usbCamHub_trigger:** Contains the main code to control the trigger to the cameras. A global trigger is sent to all cameras. The MCU starts in automatic trigger mode using the period read from the EEPROM if valid, otherwise the default period is 1 second.
 
-* Contains the main code to control the trigger to the cameras.
+* **usbCamHub_seqTrigger:** Contains a variation of the code to control the trigger to the cameras. Sequetial trigger signals are sent to groups of cameras. The MCU starts in automatic trigger mode using the period read from the EEPROM if valid, otherwise the default period is 1 second.
