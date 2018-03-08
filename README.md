@@ -53,18 +53,18 @@ check README inside ./alignment
 ```
 
 ## Repository Structure ##
-The structure of the repository is as follows.
+The structure of the repository is as follows:
 
-* **alignment:** Contains the code for image alignment.
-* **arduino:** Contains the code for the MCU in the USB Camera HUB board.
-* **camera:** Contains the code to interface with individual cameras.
-* **focus:** Contains the code for camera focus operations.
-* **matlab:** Contains matlab code for processing images.
-* **multicam:** Contains the code to interface with multiple cameras.
-* **spec3:** Contains the code to interface with the 3-cameras multispectral system.
-* **spec3_rijesh:** Contains a variation of spec3 used by Rijesh.
-* **tests:** Contains testing code under development.
-* **utilities:** Contains a series of utility scripts.
+* **alignment:** contains the code for image alignment.
+* **arduino:** contains the code for the MCU in the USB Camera HUB board.
+* **camera:** contains the code to interface with individual cameras.
+* **focus:** contains the code for camera focus operations.
+* **matlab:** contains matlab code for processing images.
+* **multicam:** contains the code to interface with multiple cameras.
+* **spec3:** contains the code to interface with the 3-cameras multispectral system.
+* **spec3_rijesh:** contains a variation of spec3 used by Rijesh.
+* **tests:** contains testing code under development.
+* **utilities:** contains a series of utility scripts.
 
 ## Running Code ##
 This repository contains code written in multiple languages (Shell Scripts, C++, Java, Matlab). Most programs include instructions inside on how to execute and what arguments are needed. In some cases, information is also provided in the README files of each folder.
