@@ -1,10 +1,16 @@
 /**
- * Code for interfacing and visualizing the output of a camera from
- * The Imaging Source using opencv and without gstreamer. The code also
- * calculates a focus measure of the image.
- * 
- * Based on code taken from
- * https://gist.github.com/TIS-Edgar/10f04501f49b6b3bf75e
+ * @brief   Code for interfacing and visualizing the output of a camera from
+ *          The Imaging Source using opencv and without gstreamer. The code also
+ *          calculates a focus measure of the image in real time while displaying
+ *          it in the video window.
+ *          
+ *          Based on code taken from
+ *          https://gist.github.com/TIS-Edgar/10f04501f49b6b3bf75e
+ * @param   Number of the camera to use according to the cameralist.txt file
+ *          included with this code. Number is 1-indexed. Default is 1.
+ * @param   If 1 the focus measures are saved in a local text file named
+ *          'focus_log.txt'. Default is 0.
+ * @example $./viewcam 4 1          (selects camera 4 and saves data to file)
  */
 
 #include "v4ldevice.h"
@@ -22,13 +28,15 @@
 #include <linux/videodev2.h>
 
 
-#define FRAME_RATE              ( 30 )  // camera frame rate
-#define FOCUSUPDATE_RATE_SEC    ( 10 )  // update rate in seconds for focus measure
+#define FRAME_RATE              ( 10 )  // camera frame rate
+#define FOCUSUPDATE_RATE        ( 10 )  // update rate focus measure in frames per second
 
 using namespace cv;
 using namespace std;
 
+
 string cameraList[12];
+FILE *f;
 
 
 /**
@@ -155,9 +163,15 @@ float fmeasure( const Mat &src )
 
 int main ( int argc, char** argv )
 {
-    int camIndex = 1; // default
+    // default configurations
+    int     camIndex    = 1;
+    int     saveToText  = 0;
+
     if( argc > 1)
         camIndex = atoi(argv[1]);
+    
+    if( argc > 2)
+        saveToText = atoi(argv[2]);
 
     float focus, focusFilt;
     bool firstIteration = true;
@@ -197,6 +211,10 @@ int main ( int argc, char** argv )
 
     start_capturing();
 
+    // if flag is set, open text file to save data
+    if (saveToText)
+        f = fopen("focus_log.txt", "w");
+
     while(wKey == -1 )
     {
         ImageBuffer = snapFrame();
@@ -207,7 +225,7 @@ int main ( int argc, char** argv )
             Mat img(imageHeight, imageWidth, CV_8UC1, &ImageBuffer[0]);
 
             // calculate focus
-            if (++updateCount == tf.denominator / FOCUSUPDATE_RATE_SEC) {
+            if (++updateCount == tf.denominator / FOCUSUPDATE_RATE) {
                 updateCount = 0;
                 focus = fmeasure( img );
                 if (firstIteration) {
@@ -215,6 +233,8 @@ int main ( int argc, char** argv )
                     focusFilt = focus;
                 }
                 focusFilt = difffilter(focusFilt, focus, 20.00);
+                if (saveToText)
+                    fprintf(f, "%f\n", focusFilt);
             }
 
             // convert grey image to color image
@@ -243,6 +263,8 @@ int main ( int argc, char** argv )
     stop_capturing();
     uninit_device();
     close_device();
+    if (saveToText)
+        fclose(f);
 
     printf("\nProgram ended\n");
 
