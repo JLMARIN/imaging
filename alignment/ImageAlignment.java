@@ -51,13 +51,20 @@ public class ImageAlignment implements PlugIn {
 		IJ.log("--------------------------\n");
 
 		int count = 1;
+		int progress;
+		String progressStr = "";
 		for (String stack : stackNames) {
-			IJ.log("aligning stack " + count + "(" + stack + ")\n");
+			progress = (100 / stackCount) * (count - 1);
+			if (progress < 10)
+				progressStr = "    " + progress;
+			else
+				progressStr = "  " + progress;
+			IJ.log("[" + progressStr + "%] aligning stack " + count + "(" + stack + ")\n");
 			align(location, stack, newDir);
 			count++;
 		}
 
-		IJ.log("Program finished.\n");
+		IJ.log("[100%] Program finished.\n");
 	}
 
 	/**
