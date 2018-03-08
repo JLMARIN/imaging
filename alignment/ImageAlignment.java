@@ -98,11 +98,11 @@ public class ImageAlignment implements PlugIn {
 	 * Align image stack using StackReg
 	 */
 	private void align(String sourceDir, String filter, String outputDir) {
-		String cmd = "open=" + sourceDir + " file=" + filter + " sort";
+		String cmd = "open=[" + sourceDir + "] file=" + filter + " sort";
 		IJ.run("Image Sequence...", cmd);
 		ImagePlus imp = IJ.getImage();
 		IJ.run(imp, "StackReg ", "transformation=[Scaled Rotation]");
-		cmd = "format=PNG start=1 use save=" + outputDir;
+		cmd = "format=PNG start=1 use save=[" + outputDir + "]";
 		IJ.run(imp, "Image Sequence... ", cmd);
 		imp.close();
 	}
