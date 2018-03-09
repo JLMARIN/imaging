@@ -13,15 +13,15 @@
  * @example $./viewcam 4 1          (selects camera 4 and saves data to file)
  */
 
-#include "v4ldevice.h"
+//#include "v4ldevice.h"
 
 #include <opencv2/opencv.hpp>
 
 #include <stdio.h>
 #include <string>
-#include <fstream>
+//#include <fstream>
 #include <iostream>
-#include <sstream>
+//#include <sstream>
 #include <math.h>
 
 #include <libv4l2.h>
@@ -101,19 +101,6 @@ void configureCamera(int fd)
 
 
 /**
- * @brief   Applyes a simple low filter
- * @param   Present raw value
- * @param   Previous filtered value
- * @param   Filtering factor between 0 and 1
- * @return  Present filtered value
- */
-float low_pass_filter(float signal_in, float signal_out, float k)
-{
-    return (k * signal_in + (1-k) * signal_out);
-}
-
-
-/**
  * @brief   Filters data discarding value jumps above a threshold
  * @param   Previous value
  * @param   Current value
@@ -163,6 +150,96 @@ float fmeasure( const Mat &src )
 
 int main ( int argc, char** argv )
 {
+    int     camIndex    = 1;    // default camera
+    int     saveToText  = 0;    // default setting
+    float   focus       = 0.0;
+    int     wKey        = -1;
+    int     updateCount = 0;
+
+    if( argc > 1)
+        camIndex = atoi(argv[1]);
+    
+    if( argc > 2)
+        saveToText = atoi(argv[2]);
+
+    printf("Program started\n");
+    
+    // load camera list from external text file
+    loadCameraList();
+
+    // build gstreamer command
+    string cmd = "v4l2src device="
+               + cameraList[camIndex-1]
+               + " ! video/x-raw,format=GRAY8,width=1280,height=960,framerate=30/1 ! videoconvert ! appsink";
+    
+    // open camera
+    VideoCapture cap(cmd);
+
+    // if not success, exit program
+    if (cap.isOpened() == false)  
+    {
+        printf("Cannot open the video camera\n");
+        return -1;
+    }
+
+    //configureCamera(fd);
+
+    // create a window for display
+    string window_name = "Display window";
+    namedWindow(window_name, WINDOW_AUTOSIZE);
+
+    printf("Start capturing\n");
+
+    // if flag is set, open text file to save data
+    if (saveToText) f = fopen("focus_log.txt", "w");
+
+    while(wKey == -1 )
+    {
+        Mat frame;
+        bool bSuccess = cap.read(frame); // read a new frame from video 
+
+        // breaking the while loop if the frames cannot be captured
+        if (bSuccess == false) 
+        {
+            printf("Video camera is disconnected\n");
+            break;
+        }
+
+        // calculate focus
+        //if (++updateCount == tf.denominator / FOCUSUPDATE_RATE) {
+        if (++updateCount == 30 / FOCUSUPDATE_RATE) {
+            updateCount = 0;
+            focus = fmeasure(frame);
+            if (saveToText) fprintf(f, "%f\n", focusFilt);
+        }
+
+        // convert grey image to color image
+        Mat frame_rgb(frame.size(), CV_8UC3);
+        cvtColor(frame, frame_rgb, CV_GRAY2RGB);
+
+        // display text overlay with focus measure
+        stringstream stream;
+        stream << focus;
+        string text = "focus=" + stream.str();
+        putText(frame_rgb, text, cvPoint(30,30), FONT_HERSHEY_DUPLEX, 1.2, CV_RGB(255,30,0), 1, CV_AA);
+        
+        // show frame
+        imshow(window_name, frame_rgb);
+
+        wKey =  waitKey(10);
+    }
+
+    destroyWindow(window_name);
+    if (saveToText) fclose(f);
+
+    printf("\nProgram ended\n");
+
+    return 0;
+}
+
+/*
+int main ( int argc, char** argv )
+{
     // default configurations
     int     camIndex    = 1;
     int     saveToText  = 0;
@@ -176,9 +253,9 @@ int main ( int argc, char** argv )
     float focus, focusFilt;
     bool firstIteration = true;
 
-    unsigned char* ImageBuffer = NULL;
-    int imageWidth = 1280;
-    int imageHeight = 960;
+    //unsigned char* ImageBuffer = NULL;
+    //int imageWidth = 1280;
+    //int imageHeight = 960;
     int wKey = -1;
 
     uint8_t updateCount = 0;
@@ -269,4 +346,4 @@ int main ( int argc, char** argv )
     printf("\nProgram ended\n");
 
     return 0;
-}
+}*/
