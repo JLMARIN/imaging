@@ -7,7 +7,7 @@
  *          included with this code. Number is 1-indexed. Default is 1.
  * @param   If 1 the focus measures are saved in a local text file named
  *          'focus_log.txt'. Default is 0.
- * @example $./viewcam2 4 1          (selects camera 4 and saves data to file)
+ * @example $./viewcam 4 1          (selects camera 4 and saves data to file)
  */
 
 
