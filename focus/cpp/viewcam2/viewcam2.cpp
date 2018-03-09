@@ -22,9 +22,11 @@
 
 #include <libv4l2.h>
 #include <linux/videodev2.h>
+#include <sys/ioctl.h>
+#include <fcntl.h>
 
 
-#define FRAME_RATE              ( 10 )  // camera frame rate
+#define FRAME_RATE              ( 30 )  // camera frame rate
 #define FOCUSUPDATE_RATE        ( 10 )  // update rate focus measure in frames per second
 
 using namespace cv;
@@ -61,10 +63,14 @@ void loadCameraList(void)
 
 /**
  * @brief   Configures camera
- * @param   File descriptor for open camera
+ * @param   String with device name
  */
-void configureCamera(int fd)
+void configureCamera(string deviceName)
 {
+    const char* cameraId = deviceName.c_str();
+    //int fd = v4l2_open(cameraId, O_RDWR);
+    int fd = open(cameraId, O_RDWR /* required */ | O_NONBLOCK, 0);
+    
     struct v4l2_control ctrl;
 
     // set exposure
@@ -79,12 +85,12 @@ void configureCamera(int fd)
 
     // set exposure
     ctrl.id = V4L2_CID_EXPOSURE_ABSOLUTE;
-    ctrl.value = 3;
+    ctrl.value = 100;
     v4l2_ioctl(fd, VIDIOC_S_CTRL, &ctrl);
 
     // set trigger
     ctrl.id = V4L2_CID_PRIVACY;
-    ctrl.value = 0;
+    ctrl.value = 1;
     v4l2_ioctl(fd, VIDIOC_S_CTRL, &ctrl);
 
     // set frame rate
@@ -93,6 +99,9 @@ void configureCamera(int fd)
     parm.parm.capture.timeperframe.numerator = 1;
     parm.parm.capture.timeperframe.denominator = FRAME_RATE;
     v4l2_ioctl(fd, VIDIOC_S_PARM, &parm);
+
+    //v4l2_close(fd);
+    close(fd);
 }
 
 
@@ -147,6 +156,9 @@ int main ( int argc, char** argv )
     // load camera list from external text file
     loadCameraList();
 
+    // configure camera
+    //configureCamera(cameraList[camIndex-1]);
+
     // build gstreamer command
     string cmd = "v4l2src device="
                + cameraList[camIndex-1]
@@ -161,8 +173,6 @@ int main ( int argc, char** argv )
         printf("Cannot open the video camera\n");
         return -1;
     }
-
-    //configureCamera(fd);
 
     // create a window for display
     string window_name = "Display window";
@@ -186,8 +196,7 @@ int main ( int argc, char** argv )
         }
 
         // calculate focus
-        //if (++updateCount == tf.denominator / FOCUSUPDATE_RATE) {
-        if (++updateCount == 30 / FOCUSUPDATE_RATE) {
+        if (++updateCount == FRAME_RATE / FOCUSUPDATE_RATE) {
             updateCount = 0;
             focus = fmeasure(frame);
             if (saveToText) fprintf(f, "%f\n", focus);
@@ -209,6 +218,7 @@ int main ( int argc, char** argv )
         wKey =  waitKey(10);
     }
 
+    cap.release();
     destroyWindow(window_name);
     if (saveToText) fclose(f);
 
@@ -216,114 +226,3 @@ int main ( int argc, char** argv )
 
     return 0;
 }
-
-/*
-int main ( int argc, char** argv )
-{
-    // default configurations
-    int     camIndex    = 1;
-    int     saveToText  = 0;
-
-    if( argc > 1)
-        camIndex = atoi(argv[1]);
-    
-    if( argc > 2)
-        saveToText = atoi(argv[2]);
-
-    float focus, focusFilt;
-    bool firstIteration = true;
-
-    //unsigned char* ImageBuffer = NULL;
-    //int imageWidth = 1280;
-    //int imageHeight = 960;
-    int wKey = -1;
-
-    uint8_t updateCount = 0;
-
-    loadCameraList();
-
-    namedWindow( "Display window", WINDOW_AUTOSIZE ); // Create a window for display.
-
-    printf("Program started\n");
-
-    const char* cameraId = cameraList[camIndex-1].c_str();
-        
-    int fd = open_device((char*)cameraId);
-
-    configureCamera(fd);
-
-    struct v4l2_streamparm parm;
-    parm.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    v4l2_ioctl(fd, VIDIOC_G_PARM, &parm);
-    const struct v4l2_fract &tf = parm.parm.capture.timeperframe;
-
-    printf("Frames per second: %.3f (%d/%d)\n",
-            (1.0 * tf.denominator) / tf.numerator,
-            tf.denominator, tf.numerator);
-
-
-    init_device(imageWidth, imageHeight);
-
-    printf("Start capturing\n");
-
-    start_capturing();
-
-    // if flag is set, open text file to save data
-    if (saveToText)
-        f = fopen("focus_log.txt", "w");
-
-    while(wKey == -1 )
-    {
-        ImageBuffer = snapFrame();
-
-        if( ImageBuffer != NULL )
-        {
-            // convert image buffer to matrix
-            Mat img(imageHeight, imageWidth, CV_8UC1, &ImageBuffer[0]);
-
-            // calculate focus
-            if (++updateCount == tf.denominator / FOCUSUPDATE_RATE) {
-                updateCount = 0;
-                focus = fmeasure( img );
-                if (firstIteration) {
-                    firstIteration = false;
-                    focusFilt = focus;
-                }
-                focusFilt = difffilter(focusFilt, focus, 20.00);
-                if (saveToText)
-                    fprintf(f, "%f\n", focusFilt);
-            }
-
-            // convert grey image to color image
-            Mat img_rgb(img.size(), CV_8UC3);
-            cvtColor(img, img_rgb, CV_GRAY2RGB);
-
-            // display text overlay with focus measure
-            stringstream stream;
-            stream << focusFilt;
-            string text = "focus=" + stream.str();
-            putText(img_rgb, text, cvPoint(30,30), FONT_HERSHEY_DUPLEX, 1.2, CV_RGB(255,30,0), 1, CV_AA);
-            
-            // show image
-            imshow("Display window", img_rgb);
-
-            wKey =  waitKey(10);
-        }
-        else
-        {
-            printf("No image buffer retrieved.\n");
-            break;
-        }
-    }
-
-    destroyWindow( "Display window" );
-    stop_capturing();
-    uninit_device();
-    close_device();
-    if (saveToText)
-        fclose(f);
-
-    printf("\nProgram ended\n");
-
-    return 0;
-}*/
