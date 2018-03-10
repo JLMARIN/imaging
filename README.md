@@ -13,7 +13,9 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 ## Runtime Dependencies ##
 
-The following packages are required to run the programs:
+All the code was developed and tested in Linux. Most tools are cross-platform and the rest should be easily portable to other platforms.
+
+The following packages are required to run the programs in Linux:
 
 - v4l-utils
 - gstreamer-1.0
