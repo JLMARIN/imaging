@@ -38,41 +38,49 @@ string cameraList[12];
 int main ( int argc, char** argv )
 {
     int     wKey        = -1;
+    Mat frame1;
+    Mat frame2;
 
-    // open camera
+    // open cameras
     VideoCapture cap1("v4l2src device=/dev/v4l/by-id/usb-The_Imaging_Source_Europe_GmbH_DMM_42BUC03-ML_47710685-video-index0 ! video/x-raw,format=GRAY8,width=1280,height=960,framerate=10/1 ! videoconvert ! appsink");
+    VideoCapture cap2("v4l2src device=/dev/v4l/by-id/usb-The_Imaging_Source_Europe_GmbH_DMM_42BUC03-ML_47710675-video-index0 ! video/x-raw,format=GRAY8,width=1280,height=960,framerate=10/1 ! videoconvert ! appsink");
 
     // if not success, exit program
-    if (cap1.isOpened() == false)  
+    if (!cap1.isOpened() || !cap2.isOpened())  
     {
-        printf("Cannot open camera 1\n");
+        printf("Cannot open cameras\n");
         return -1;
     }
 
     // create a window for display
     namedWindow("Camera 1", WINDOW_NORMAL);
+    namedWindow("Camera 2", WINDOW_NORMAL);
     resizeWindow("Camera 1", 640, 480);
+    resizeWindow("Camera 2", 640, 480);
 
      while(wKey == -1 )
     {
-        Mat frame;
-        bool bSuccess = cap1.read(frame); // read a new frame from video 
+        bool success1 = cap1.read(frame1);
+        bool success2 = cap2.read(frame2); 
 
         // breaking the while loop if the frames cannot be captured
-        if (bSuccess == false) 
+        if (!success1 || !success2) 
         {
             printf("Video camera is disconnected\n");
             break;
         }
         
         // show frame
-        imshow("Camera 1", frame);
+        imshow("Camera 1", frame1);
+        imshow("Camera 2", frame2);
 
         wKey =  waitKey(10);
     }
 
     cap1.release();
+    cap2.release();
     destroyWindow("Camera 1");
+    destroyWindow("Camera 2");
 
     printf("\nProgram ended\n");
 
